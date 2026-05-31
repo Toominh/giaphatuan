@@ -538,8 +538,7 @@
     }
 
     // ── Data Popup ──────────────────────────────────────────────────────────────
-    function DataPopup({ tree, settings, setTree, setSettings, onClose, storageKeys }) {
-      const { KEY, SETTINGS_KEY, INTRO_KEY_F } = storageKeys;
+    function DataPopup({ tree, settings, setTree, setSettings, onClose }) {
       const [status, setStatus] = React.useState(null); // { type: 'ok'|'err', msg }
       const [loadingMsg, setLoadingMsg] = React.useState('');
 
@@ -552,7 +551,7 @@
       // ── 1. Xuất data JSON ────────────────────────────────────────────────────
       const handleExport = () => {
         try {
-          const intro = localStorage.getItem(INTRO_KEY_F) || '';
+          const intro = localStorage.getItem(INTRO_KEY) || '';
           const payload = {
             version: '2',
             exportDate: new Date().toISOString(),
@@ -628,7 +627,7 @@
             localStorage.setItem(SETTINGS_KEY, JSON.stringify(ns));
           }
           if (typeof data.intro === 'string' && data.intro.trim()) {
-            localStorage.setItem(INTRO_KEY_F, data.intro);
+            localStorage.setItem(INTRO_KEY, data.intro);
           }
           const members = countDesc(data.tree) + 1;
           setStatus({ type: 'ok', msg: `✓ Đã nhập thành công · ${members} thành viên` });
@@ -650,7 +649,7 @@
         try {
           localStorage.removeItem(KEY);
           localStorage.removeItem(SETTINGS_KEY);
-          localStorage.removeItem(INTRO_KEY_F);
+          localStorage.removeItem(INTRO_KEY);
           setTree(SAMPLE);
           setSettings(DEFAULT_SETTINGS);
           setStatus({ type: 'ok', msg: '✓ Đã xóa bộ nhớ trình duyệt' });
@@ -1501,17 +1500,17 @@
 <h2>Liên hệ</h2>
 <p>Để biết thêm thông tin, vui lòng liên hệ trưởng tộc.</p>`;
 
-    function GioiThieuPopup({ onClose, introKey }) {
+    function GioiThieuPopup({ onClose }) {
       const [tab, setTab] = React.useState('view'); // 'view' | 'edit'
       const [html, setHtml] = React.useState(() => {
-        try { return localStorage.getItem(introKey) || DEFAULT_INTRO_HTML; } catch { return DEFAULT_INTRO_HTML; }
+        try { return localStorage.getItem(INTRO_KEY) || DEFAULT_INTRO_HTML; } catch { return DEFAULT_INTRO_HTML; }
       });
       const [draft, setDraft] = React.useState(html);
       const [saved, setSaved] = React.useState(false);
 
       const saveContent = () => {
         setHtml(draft);
-        try { localStorage.setItem(introKey, draft); } catch {}
+        try { localStorage.setItem(INTRO_KEY, draft); } catch {}
         setSaved(true);
         setTimeout(() => setSaved(false), 2000);
       };
@@ -1651,148 +1650,7 @@
     }
 
     // ───────────────────────────────────────────────────────────────────────────
-    // ── Multi-family storage helpers ────────────────────────────────────────────
-    const FAMILIES_INDEX_KEY = "giapha_families_v1"; // [{id, name, createdAt}]
-    function getFamiliesIndex() {
-      try { return JSON.parse(localStorage.getItem(FAMILIES_INDEX_KEY)) || []; } catch { return []; }
-    }
-    function saveFamiliesIndex(list) { localStorage.setItem(FAMILIES_INDEX_KEY, JSON.stringify(list)); }
-    function familyTreeKey(id)     { return `giapha_tree_${id}`; }
-    function familySettingsKey(id) { return `giapha_settings_${id}`; }
-    function familyIntroKey(id)    { return `giapha_intro_${id}`; }
-
-    // ── Home Screen ─────────────────────────────────────────────────────────────
-    function HomeScreen({ onOpen }) {
-      const [families, setFamilies] = useState(getFamiliesIndex);
-      const [showCreate, setShowCreate] = useState(false);
-      const [newName, setNewName] = useState('');
-      const [creating, setCreating] = useState(false);
-
-      const handleCreate = async () => {
-        const name = newName.trim();
-        if (!name) return;
-        setCreating(true);
-        const id = genId();
-        // Nạp dữ liệu mẫu từ datamau.json nếu có
-        try {
-          const res = await fetch('./datamau.json', { cache: 'no-store' });
-          if (res.ok) {
-            const data = await res.json();
-            // Hỗ trợ cả 2 định dạng: full export { tree, settings } hoặc bare tree
-            const tree = data.tree || (data.id ? data : null);
-            if (tree) localStorage.setItem(familyTreeKey(id), JSON.stringify(tree));
-            if (data.settings) localStorage.setItem(familySettingsKey(id), JSON.stringify(data.settings));
-            if (data.intro) localStorage.setItem(familyIntroKey(id), data.intro);
-          }
-        } catch { /* không có file mẫu thì thôi, App sẽ dùng SAMPLE mặc định */ }
-        const entry = { id, name, createdAt: Date.now() };
-        const next = [...families, entry];
-        saveFamiliesIndex(next);
-        setFamilies(next);
-        setNewName('');
-        setShowCreate(false);
-        setCreating(false);
-        onOpen(entry);
-      };
-
-      const handleDelete = (id, name) => {
-        if (!window.confirm(`Xóa gia phả "${name}"? Dữ liệu sẽ mất vĩnh viễn.`)) return;
-        localStorage.removeItem(familyTreeKey(id));
-        localStorage.removeItem(familySettingsKey(id));
-        localStorage.removeItem(familyIntroKey(id));
-        const next = families.filter(f => f.id !== id);
-        saveFamiliesIndex(next);
-        setFamilies(next);
-      };
-
-      return (
-        <div style={{ background: '#060e1c', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-          {/* Header */}
-          <div style={{ background: '#08121e', borderBottom: '1px solid #0e2040', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 22 }}>🌳</span>
-            <span style={{ color: '#6aaaf0', fontWeight: 700, fontSize: 18 }}>Quản Lý Gia Phả</span>
-          </div>
-
-          {/* Body */}
-          <div style={{ flex: 1, padding: '32px 24px', maxWidth: 640, margin: '0 auto', width: '100%' }}>
-            {families.length === 0 ? (
-              <div style={{ textAlign: 'center', color: '#1e3858', marginTop: 80 }}>
-                <div style={{ fontSize: 48, marginBottom: 16 }}>🌿</div>
-                <div style={{ fontSize: 16, marginBottom: 8 }}>Chưa có gia phả nào</div>
-                <div style={{ fontSize: 13 }}>Nhấn "Tạo gia phả mới" để bắt đầu</div>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {families.map(f => {
-                  // Count members
-                  let memberCount = 0;
-                  try { const t = JSON.parse(localStorage.getItem(familyTreeKey(f.id))); if (t) memberCount = countDesc(t) + 1; } catch {}
-                  const date = new Date(f.createdAt).toLocaleDateString('vi-VN');
-                  return (
-                    <div key={f.id} style={{ background: '#09162a', border: '1px solid #152a4a', borderRadius: 10, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer', transition: 'border-color 0.15s' }}
-                      onClick={() => onOpen(f)}
-                      onMouseEnter={e => e.currentTarget.style.borderColor = '#2a4a80'}
-                      onMouseLeave={e => e.currentTarget.style.borderColor = '#152a4a'}
-                    >
-                      <span style={{ fontSize: 28, flexShrink: 0 }}>🌳</span>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ color: '#a0c8f0', fontWeight: 700, fontSize: 16, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name}</div>
-                        <div style={{ color: '#2a5070', fontSize: 12, marginTop: 3 }}>{memberCount} thành viên · Tạo {date}</div>
-                      </div>
-                      <button
-                        onClick={e => { e.stopPropagation(); handleDelete(f.id, f.name); }}
-                        style={{ background: '#180a08', color: '#905050', border: '1px solid #3a1818', borderRadius: 6, padding: '4px 10px', fontSize: 12, flexShrink: 0 }}
-                      >🗑 Xóa</button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Footer */}
-          <div style={{ padding: '20px 24px', borderTop: '1px solid #0a1e38', display: 'flex', justifyContent: 'center' }}>
-            <button
-              onClick={() => setShowCreate(true)}
-              style={{ background: '#0e2e14', color: '#50c878', border: '1px solid #1e6030', borderRadius: 8, padding: '10px 28px', fontSize: 15, fontWeight: 600 }}
-            >+ Tạo gia phả mới</button>
-          </div>
-
-          {/* Create modal */}
-          {showCreate && (
-            <div className="modal" onMouseDown={e => { if (e.target === e.currentTarget) setShowCreate(false); }}>
-              <div className="modal-content" style={{ width: 360 }}>
-                <div className="modal-header">
-                  <span>Tạo gia phả mới</span>
-                  <button className="modal-close" onClick={() => setShowCreate(false)}>×</button>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Tên gia phả *</label>
-                  <input
-                    value={newName}
-                    onChange={e => setNewName(e.target.value)}
-                    placeholder="VD: Gia phả họ Lê, Dòng họ Nguyễn..."
-                    autoFocus
-                    onKeyDown={e => e.key === 'Enter' && handleCreate()}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 18 }}>
-                  <button onClick={() => setShowCreate(false)} style={{ background: 'transparent', color: '#5a7898' }}>Hủy</button>
-                  <button onClick={handleCreate} disabled={!newName.trim() || creating} style={{ background: newName.trim() ? '#1440a0' : '#0c1a30', color: newName.trim() ? '#a0c8f8' : '#3a5070', opacity: newName.trim() ? 1 : 0.5 }}>{creating ? 'Đang tạo...' : 'Tạo'}</button>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // ───────────────────────────────────────────────────────────────────────────
-    function App({ familyId, familyName, onBack }) {
-      const KEY          = familyTreeKey(familyId);
-      const SETTINGS_KEY = familySettingsKey(familyId);
-      const INTRO_KEY_F  = familyIntroKey(familyId);
+    function App() {
       const [tree, setTree] = useState(null);
       const [loading, setLoading] = useState(true);
       const [modal, setModal] = useState(null);
@@ -1944,9 +1802,8 @@
           <div style={{ background: "#060e1c", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }} className={dragMode ? "drag-mode-active" : ""}>
             <div className="header">
               <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}>
-                <button onClick={onBack} style={{ fontSize: 13, background: 'transparent', border: '1px solid #1a3252', color: '#4a7898', padding: '4px 10px', marginRight: 4 }}>← Về trang chủ</button>
                 <span style={{ fontSize: 18 }}>🌳</span>
-                <span className="header-title">{familyName}</span>
+                <span className="header-title">Quản Lý Gia Phả</span>
                 <span style={{ color: "#1e3858", fontSize: 12 }}>|</span>
                 <span style={{ color: "#2a5080", fontSize: 12 }}>{totalMembers} thành viên</span>
               </div>
@@ -2038,12 +1895,11 @@
                 setTree={setTree}
                 setSettings={setSettings}
                 onClose={() => setShowData(false)}
-                storageKeys={{ KEY, SETTINGS_KEY, INTRO_KEY_F }}
               />
             )}
 
             {showGioiThieu && (
-              <GioiThieuPopup onClose={() => setShowGioiThieu(false)} introKey={INTRO_KEY_F} />
+              <GioiThieuPopup onClose={() => setShowGioiThieu(false)} />
             )}
 
             {showNoiToc && (
@@ -2092,15 +1948,7 @@
       );
     }
 
-    function Root() {
-      const [currentFamily, setCurrentFamily] = useState(null);
-      if (!currentFamily) {
-        return <HomeScreen onOpen={f => setCurrentFamily(f)} />;
-      }
-      return <App familyId={currentFamily.id} familyName={currentFamily.name} onBack={() => setCurrentFamily(null)} />;
-    }
-
-    ReactDOM.render(<Root />, document.getElementById('root'));
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
