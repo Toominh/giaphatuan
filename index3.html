@@ -44,7 +44,7 @@
     .form-label { display: block; color: #4a6888; font-size: 12px; font-weight: 500; margin-bottom: 5px; }
     .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
     .form-row > * { flex: 1; }
-    .tree-viewport { overflow: hidden; flex: 1; position: relative; user-select: none; cursor: grab; touch-action: none; }
+    .tree-viewport { overflow: hidden; flex: 1; position: relative; user-select: none; cursor: grab; }
     .tree-viewport.is-panning { cursor: grabbing; }
     .tree-canvas { position: absolute; top: 0; left: 0; padding: 14px 18px 60px 18px; white-space: nowrap; will-change: transform; min-width: max-content; }
     .legend { padding: 5px 18px; border-bottom: 1px solid #0a1e38; display: flex; gap: 16px; flex-wrap: nowrap; font-size: 11px; color: #2a4a68; overflow: hidden; flex-shrink: 0; align-items: center; }
@@ -830,7 +830,7 @@
               {node.isSpouse && <span style={{ color: '#ecbf00', marginRight: 4, fontWeight: 700 }}>+</span>}
               <span
                 style={{ color: node.gender === 'female' ? settings.colorFemale : settings.colorMale, fontWeight: 600, cursor: 'pointer', borderBottom: hover ? '1px dashed rgba(100,160,240,0.3)' : '1px solid transparent' }}
-                onClick={e => { e.stopPropagation(); if (!dragMode) showInfo(node.isSpouse && parentNode ? { node, parentNode, isRoot } : { node, isRoot }); }}
+                onClick={e => { e.stopPropagation(); if (!dragMode) showInfo(node.isSpouse && parentNode ? { node, parentNode } : { node }); }}
                 title="Click để xem chi tiết"
               >{node.name}</span>
               <span style={{ color: settings.colorGeneration, fontSize: fs * 0.87, marginLeft: 5 }}>(đời {node.generation})</span>
@@ -1138,7 +1138,7 @@
     }
 
     // ── Node Info Popup ──────────────────────────────────────────────────────────
-    function NodeInfoPopup({ node, parentNode, onClose, onEdit, onAdd, onDelete, isRoot }) {
+    function NodeInfoPopup({ node, parentNode, onClose, onEdit, onAdd }) {
       const settings = React.useContext(SettingsCtx);
 
       useEffect(() => {
@@ -1342,9 +1342,8 @@
 
             {/* Footer actions */}
             <div className="info-popup-footer">
-              <button onClick={onAdd} style={{ fontSize: 12, background: '#081828', color: '#5090d0', border: '1px solid #1a3a60' }}>+ Thêm</button>
-              <button onClick={onEdit} style={{ fontSize: 12, background: '#10180a', color: '#70a840', border: '1px solid #1e4020' }}>✎ Sửa</button>
-              {!isRoot && onDelete && <button onClick={onDelete} style={{ fontSize: 12, background: '#180808', color: '#d05060', border: '1px solid #4a1020' }}>✕ Xóa</button>}
+              <button onClick={onAdd} style={{ fontSize: 12, background: '#081828', color: '#5090d0', border: '1px solid #1a3a60' }}>+ Thêm thành viên</button>
+              <button onClick={onEdit} style={{ fontSize: 12, background: '#10180a', color: '#70a840', border: '1px solid #1e4020' }}>✎ Sửa thông tin</button>
               <button onClick={onClose} style={{ fontSize: 12, color: '#4a6888', background: 'transparent' }}>Đóng</button>
             </div>
           </div>
@@ -1922,8 +1921,7 @@
         if (!open) return;
         const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
         document.addEventListener('mousedown', h);
-        document.addEventListener('touchstart', h);
-        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
+        return () => document.removeEventListener('mousedown', h);
       }, [open]);
       const close = () => setOpen(false);
 
@@ -2227,18 +2225,9 @@
               <NodeInfoPopup
                 node={infoPopup.node}
                 parentNode={infoPopup.parentNode}
-                isRoot={infoPopup.isRoot}
                 onClose={() => setInfoPopup(null)}
                 onEdit={() => { setModal({ type: "edit", nodeId: infoPopup.node.id, node: infoPopup.node, parentGen: infoPopup.node.generation }); setInfoPopup(null); }}
                 onAdd={() => { setModal({ type: "add", nodeId: infoPopup.node.id, parentGen: infoPopup.node.generation, parentName: infoPopup.node.name }); setInfoPopup(null); }}
-                onDelete={() => {
-                  const n = infoPopup.node;
-                  const desc = countDesc(n);
-                  if (window.confirm(`Xóa "${n.name}"${desc > 0 ? ` và ${desc} con cháu` : ''}?`)) {
-                    handleDelete(n.id);
-                    setInfoPopup(null);
-                  }
-                }}
               />
             )}
 
