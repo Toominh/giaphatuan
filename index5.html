@@ -61,7 +61,7 @@
     .tab-btn.active { background: #0a2040; color: #6aacf0; border-color: #2a5080; }
     .syntax-hint { font-size: 11px; color: #1e4060; line-height: 1.6; padding: 8px 18px; border-bottom: 1px solid #08192e; background: #050d1a; }
     .syntax-hint b { color: #2a5878; }
-    .settings-panel { background: #07101e; border-bottom: 2px solid #0e2040; padding: 12px 18px; display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; position: relative; }
+    .settings-panel { background: #07101e; border-bottom: 2px solid #0e2040; padding: 12px 18px; display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
     .settings-section-title { color: #3a6888; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
     .color-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; cursor: pointer; }
     .color-row:hover .color-label { color: #8ab8d8; }
@@ -96,7 +96,7 @@
     .intro-topbar { background: #08121e; border-bottom: 1px solid #0e2040; padding: 10px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .intro-topbar-title { font-size: 16px; font-weight: 700; color: #6aaaf0; flex: 1; }
     .intro-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-    .intro-content-area { flex: 1; overflow-y: auto; padding: 1px 1px; }
+    .intro-content-area { flex: 1; overflow-y: auto; padding: 32px 48px; }
     .intro-content-area.edit-mode { padding: 0; display: flex; flex-direction: column; }
     .intro-editor { flex: 1; width: 100%; border: none; outline: none; resize: none; background: #07111f; color: #b8d0e8; font-family: "Courier New", monospace; font-size: 13px; line-height: 1.6; padding: 20px 28px; }
     .intro-tabbar { background: #07111f; border-top: 1px solid #0e2040; display: flex; align-items: center; padding: 0 20px; gap: 2px; flex-shrink: 0; }
@@ -215,251 +215,6 @@
     .hmenu-sub-item { display: flex; align-items: center; gap: 10px; padding: 7px 16px 7px 28px; font-size: 13px; color: #4a8ac8; cursor: pointer; transition: background 0.1s; white-space: nowrap; border: none; background: transparent; width: 100%; text-align: left; }
     .hmenu-sub-item:hover { background: rgba(60,120,200,0.12); color: #8ac8ff; }
     .hmenu-sub-item.is-active { color: #60c878; }
-    /* ── Home Screen ─────────────────────────────────────────────────────────── */
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
-
-    .home-root {
-      background: #04090f;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(180,140,40,0.06) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(20,40,80,0.4) 0%, transparent 70%);
-    }
-
-    .home-header {
-      padding: 36px 24px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-    .home-header-inner {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .home-logo-mark {
-      filter: drop-shadow(0 0 12px rgba(200,168,60,0.3));
-    }
-    .home-header-title {
-      font-family: 'Cinzel', 'Palatino Linotype', 'Book Antiqua', serif;
-      font-size: 34px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: #e8d090;
-      text-shadow: 0 0 40px rgba(200,168,60,0.25), 0 2px 8px rgba(0,0,0,0.6);
-      line-height: 1;
-    }
-    .home-header-sub {
-      font-family: 'IM Fell English', Georgia, serif;
-      font-style: italic;
-      font-size: 13px;
-      color: rgba(180,140,60,0.55);
-      letter-spacing: 0.06em;
-      margin-top: 5px;
-    }
-    .home-header-rule {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      max-width: 480px;
-      margin-bottom: 28px;
-    }
-    .home-header-rule-line {
-      flex: 1;
-      height: 1px;
-      background: linear-gradient(to right, transparent, rgba(180,140,60,0.35), transparent);
-    }
-    .home-header-rule-diamond {
-      color: rgba(180,140,60,0.45);
-      font-size: 8px;
-      line-height: 1;
-    }
-
-    .home-body {
-      flex: 1;
-      padding: 0 20px 16px;
-      max-width: 560px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    .home-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 60px 0 40px;
-      gap: 14px;
-    }
-    .home-empty-icon {
-      margin-bottom: 6px;
-      opacity: 0.7;
-    }
-    .home-empty-title {
-      font-family: 'Cinzel', serif;
-      font-size: 17px;
-      color: rgba(180,150,60,0.6);
-      letter-spacing: 0.06em;
-    }
-    .home-empty-desc {
-      font-size: 13px;
-      color: rgba(120,150,180,0.45);
-      text-align: center;
-      line-height: 1.7;
-    }
-
-    .home-list { display: flex; flex-direction: column; gap: 10px; }
-    .home-list-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(180,140,60,0.35);
-      margin-bottom: 6px;
-      padding-left: 2px;
-    }
-
-    .home-card {
-      background: linear-gradient(135deg, rgba(12,22,40,0.95) 0%, rgba(8,15,28,0.98) 100%);
-      border: 1px solid rgba(180,140,60,0.15);
-      border-radius: 10px;
-      padding: 14px 14px 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-      position: relative;
-    }
-    .home-card:hover {
-      border-color: rgba(180,140,60,0.4);
-      background: linear-gradient(135deg, rgba(16,28,50,0.98) 0%, rgba(10,18,34,1) 100%);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 0 40px rgba(180,140,60,0.03);
-    }
-    .home-card-accent {
-      position: absolute;
-      left: 0; top: 12%; bottom: 12%;
-      width: 2px;
-      background: linear-gradient(to bottom, transparent, rgba(180,140,60,0.5), transparent);
-      border-radius: 2px;
-    }
-    .home-card-icon {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 0 6px rgba(180,140,60,0.2));
-    }
-    .home-card-name {
-      font-family: 'Cinzel', 'Palatino Linotype', serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: #d8c080;
-      letter-spacing: 0.03em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .home-card-meta {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 5px;
-      flex-wrap: nowrap;
-    }
-    .home-card-badge {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(200,168,60,0.75);
-      background: rgba(180,140,40,0.1);
-      border: 1px solid rgba(180,140,40,0.2);
-      border-radius: 20px;
-      padding: 2px 9px;
-      white-space: nowrap;
-      letter-spacing: 0.03em;
-    }
-    .home-card-date {
-      font-size: 11px;
-      color: rgba(100,130,160,0.45);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .home-card-menu-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      border-radius: 6px;
-      color: rgba(140,110,40,0.5);
-      transition: color 0.15s, background 0.15s;
-    }
-    .home-card-menu-btn:hover { color: rgba(200,168,60,0.8); }
-
-    .home-dropdown {
-      position: absolute;
-      top: calc(100% + 4px);
-      right: 0;
-      background: #07101c;
-      border: 1px solid rgba(180,140,60,0.2);
-      border-radius: 8px;
-      min-width: 170px;
-      z-index: 9500;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-      overflow: hidden;
-    }
-    .home-dropdown-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: rgba(180,210,240,0.7);
-      background: transparent;
-      border: none;
-      width: 100%;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.1s, color 0.1s;
-    }
-    .home-dropdown-item:hover { background: rgba(180,140,60,0.08); color: #d8c080; }
-    .home-dropdown-danger { color: rgba(200,100,100,0.7) !important; }
-    .home-dropdown-danger:hover { background: rgba(180,40,40,0.1) !important; color: #e08080 !important; }
-    .home-dropdown-sep { border: none; border-top: 1px solid rgba(180,140,60,0.1); margin: 3px 0; }
-
-    .home-footer {
-      padding: 20px 24px 28px;
-      display: flex;
-      justify-content: center;
-      border-top: 1px solid rgba(180,140,60,0.08);
-    }
-    .home-create-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(180,140,40,0.1);
-      color: #c8a840;
-      border: 1px solid rgba(180,140,40,0.3);
-      border-radius: 8px;
-      padding: 11px 28px;
-      font-size: 14px;
-      font-weight: 600;
-      font-family: 'Cinzel', serif;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
-    }
-    .home-create-btn:hover {
-      background: rgba(180,140,40,0.18);
-      border-color: rgba(180,140,40,0.55);
-      color: #e8c860;
-      box-shadow: 0 0 20px rgba(180,140,40,0.15);
-    }
   </style>
 </head>
 <body>
@@ -744,7 +499,7 @@
     }
 
     // ── Settings Panel ──────────────────────────────────────────────────────────
-    function SettingsPanel({ settings, onChange, onClose }) {
+    function SettingsPanel({ settings, onChange }) {
       const colorFields = [
         { label: 'Tên Nam',      key: 'colorMale' },
         { label: 'Tên Nữ',       key: 'colorFemale' },
@@ -756,14 +511,6 @@
       const previewFont = settings.fontFamily || "'Courier New', monospace";
       return (
         <div className="settings-panel">
-          {/* Nút đóng */}
-          <button
-            onClick={onClose}
-            title="Đóng cài đặt"
-            style={{ position: 'absolute', top: 10, right: 14, background: 'transparent', border: 'none', color: '#2a4a68', fontSize: 20, lineHeight: 1, cursor: 'pointer', padding: '2px 6px', borderRadius: 5, transition: 'color 0.15s' }}
-            onMouseEnter={e => e.currentTarget.style.color = '#6a8ab0'}
-            onMouseLeave={e => e.currentTarget.style.color = '#2a4a68'}
-          >×</button>
           {/* Font size */}
           <div>
             <div className="settings-section-title">⬚ Cỡ chữ</div>
@@ -1977,110 +1724,6 @@
     function familySettingsKey(id) { return `giapha_settings_${id}`; }
     function familyIntroKey(id)    { return `giapha_intro_${id}`; }
 
-    // ── Family Card Component ────────────────────────────────────────────────────
-    function FamilyCard({ f, memberCount, date, isEditing, editName, setEditName, onOpen, onStartEdit, onSaveEdit, onCancelEdit, onDelete }) {
-      const [menuOpen, setMenuOpen] = React.useState(false);
-      const menuRef = React.useRef(null);
-
-      React.useEffect(() => {
-        if (!menuOpen) return;
-        const h = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false); };
-        document.addEventListener('mousedown', h);
-        document.addEventListener('touchstart', h);
-        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
-      }, [menuOpen]);
-
-      return (
-        <div
-          className="home-card"
-          onClick={() => !isEditing && !menuOpen && onOpen(f)}
-        >
-          {/* Left accent line */}
-          <div className="home-card-accent" />
-
-          {/* SVG Scroll icon */}
-          <div className="home-card-icon">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="19" cy="19" r="18" fill="rgba(180,140,60,0.07)" stroke="rgba(180,140,60,0.25)" strokeWidth="1"/>
-              {/* Tree symbol */}
-              <line x1="19" y1="27" x2="19" y2="18" stroke="#c8a84a" strokeWidth="1.8" strokeLinecap="round"/>
-              <line x1="19" y1="21" x2="14" y2="16" stroke="#a88030" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="19" y1="21" x2="24" y2="16" stroke="#a88030" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="14" y1="16" x2="11" y2="13" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
-              <line x1="14" y1="16" x2="16" y2="12" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
-              <line x1="24" y1="16" x2="22" y2="12" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
-              <line x1="24" y1="16" x2="27" y2="13" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
-              {/* Roots */}
-              <line x1="19" y1="27" x2="15" y2="31" stroke="#806020" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.7"/>
-              <line x1="19" y1="27" x2="23" y2="31" stroke="#806020" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.7"/>
-            </svg>
-          </div>
-
-          {/* Info */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            {isEditing ? (
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }} onClick={e => e.stopPropagation()}>
-                <input
-                  value={editName}
-                  onChange={e => setEditName(e.target.value)}
-                  autoFocus
-                  onKeyDown={e => { if (e.key === 'Enter') onSaveEdit(f.id); if (e.key === 'Escape') onCancelEdit(); }}
-                  style={{ flex: 1, fontSize: 15, fontWeight: 700, background: '#06101e', border: '1px solid #8a6a20', borderRadius: 5, padding: '5px 10px', color: '#e8d090', fontFamily: "'Palatino Linotype', serif" }}
-                />
-                <button onClick={() => onSaveEdit(f.id)} style={{ background: '#1a3818', color: '#70c870', border: '1px solid #2a6030', borderRadius: 5, padding: '5px 12px', fontSize: 13, flexShrink: 0 }}>✓</button>
-                <button onClick={onCancelEdit} style={{ background: 'transparent', color: '#5a7080', border: '1px solid #1a2a38', borderRadius: 5, padding: '5px 10px', fontSize: 13, flexShrink: 0 }}>✕</button>
-              </div>
-            ) : (
-              <div className="home-card-name">{f.name}</div>
-            )}
-            {!isEditing && (
-              <div className="home-card-meta">
-                <span className="home-card-badge">{memberCount} thành viên</span>
-                <span className="home-card-date">Tạo ngày {date}</span>
-              </div>
-            )}
-          </div>
-
-          {/* ⋯ menu */}
-          {!isEditing && (
-            <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
-              <button className="home-card-menu-btn" onClick={e => { e.stopPropagation(); setMenuOpen(v => !v); }} title="Tùy chọn"
-                style={{ background: menuOpen ? 'rgba(180,140,60,0.12)' : 'transparent', borderColor: menuOpen ? 'rgba(180,140,60,0.3)' : 'transparent' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <circle cx="8" cy="3" r="1.4" fill="currentColor"/>
-                  <circle cx="8" cy="8" r="1.4" fill="currentColor"/>
-                  <circle cx="8" cy="13" r="1.4" fill="currentColor"/>
-                </svg>
-              </button>
-              {menuOpen && (
-                <div className="home-dropdown">
-                  <button className="home-dropdown-item"
-                    onClick={e => { setMenuOpen(false); onStartEdit(e, f); }}>
-                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{flexShrink:0}}>
-                      <path d="M9 2L11 4L4.5 10.5L2 11L2.5 8.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" fill="none"/>
-                    </svg>
-                    Đổi tên
-                  </button>
-                  <div className="home-dropdown-sep" />
-                  <button className="home-dropdown-item home-dropdown-danger"
-                    onClick={e => { setMenuOpen(false); onDelete(f.id, f.name); }}>
-                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{flexShrink:0}}>
-                      <rect x="2" y="4" width="9" height="8" rx="1" stroke="currentColor" strokeWidth="1.3" fill="none"/>
-                      <line x1="1" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-                      <line x1="5" y1="2" x2="8" y2="2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-                      <line x1="5.5" y1="6.5" x2="5.5" y2="9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                      <line x1="7.5" y1="6.5" x2="7.5" y2="9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-                    </svg>
-                    Xóa gia phả
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    }
-
     // ── Home Screen ─────────────────────────────────────────────────────────────
     function HomeScreen({ onOpen }) {
       const [families, setFamilies] = useState(getFamiliesIndex);
@@ -2141,106 +1784,113 @@
       };
 
       return (
-        <div className="home-root">
+        <div style={{ background: '#060e1c', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           {/* Header */}
-          <div className="home-header">
-            <div className="home-header-inner">
-              {/* Logo mark */}
-              <div className="home-logo-mark">
-                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-                  <circle cx="18" cy="18" r="17" stroke="rgba(200,168,60,0.5)" strokeWidth="1.2"/>
-                  <circle cx="18" cy="18" r="13" stroke="rgba(200,168,60,0.2)" strokeWidth="0.8"/>
-                  <line x1="18" y1="26" x2="18" y2="16" stroke="#c8a840" strokeWidth="1.8" strokeLinecap="round"/>
-                  <line x1="18" y1="19" x2="13" y2="14" stroke="#b09030" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="18" y1="19" x2="23" y2="14" stroke="#b09030" strokeWidth="1.5" strokeLinecap="round"/>
-                  <line x1="13" y1="14" x2="10" y2="11" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
-                  <line x1="13" y1="14" x2="15" y2="10" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
-                  <line x1="23" y1="14" x2="21" y2="10" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
-                  <line x1="23" y1="14" x2="26" y2="11" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <div>
-                <div className="home-header-title">Gia Phả</div>
-                <div className="home-header-sub">Lưu giữ · Kết nối · Truyền đời</div>
-              </div>
-            </div>
-            {/* Decorative rule */}
-            <div className="home-header-rule">
-              <div className="home-header-rule-line"/>
-              <div className="home-header-rule-diamond">◆</div>
-              <div className="home-header-rule-line"/>
-            </div>
+          <div style={{ background: '#08121e', borderBottom: '1px solid #0e2040', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 24 }}>📚</span>
+            <span style={{ color: '#6aaaf0', fontWeight: 700, fontSize: 18 }}>Quản Lý Gia Phả</span>
           </div>
 
           {/* Body */}
-          <div className="home-body">
+          <div style={{ flex: 1, padding: '32px 24px', maxWidth: 640, margin: '0 auto', width: '100%' }}>
             {families.length === 0 ? (
-              <div className="home-empty">
-                <div className="home-empty-icon">
-                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
-                    <circle cx="36" cy="36" r="34" stroke="rgba(180,140,60,0.2)" strokeWidth="1.5"/>
-                    <circle cx="36" cy="36" r="26" stroke="rgba(180,140,60,0.1)" strokeWidth="1"/>
-                    <line x1="36" y1="52" x2="36" y2="32" stroke="rgba(180,140,60,0.4)" strokeWidth="2.5" strokeLinecap="round"/>
-                    <line x1="36" y1="38" x2="26" y2="28" stroke="rgba(160,120,40,0.4)" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="36" y1="38" x2="46" y2="28" stroke="rgba(160,120,40,0.4)" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="26" y1="28" x2="20" y2="22" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
-                    <line x1="26" y1="28" x2="29" y2="21" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
-                    <line x1="46" y1="28" x2="43" y2="21" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
-                    <line x1="46" y1="28" x2="52" y2="22" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="home-empty-title">Chưa có gia phả nào</div>
-                <div className="home-empty-desc">Tạo gia phả đầu tiên để bắt đầu<br/>lưu giữ lịch sử dòng họ của bạn</div>
+              <div style={{ textAlign: 'center', color: '#1e3858', marginTop: 80 }}>
+                <div style={{ fontSize: 56, marginBottom: 16 }}>📖</div>
+                <div style={{ fontSize: 16, marginBottom: 8 }}>Chưa có gia phả nào</div>
+                <div style={{ fontSize: 13 }}>Nhấn "Tạo gia phả mới" để bắt đầu</div>
               </div>
             ) : (
-              <div className="home-list">
-                <div className="home-list-label">Danh sách gia phả</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {families.map(f => {
                   let memberCount = 0;
                   try { const t = JSON.parse(localStorage.getItem(familyTreeKey(f.id))); if (t) memberCount = countDesc(t) + 1; } catch {}
                   const date = new Date(f.createdAt).toLocaleDateString('vi-VN');
                   const isEditing = editingId === f.id;
                   return (
-                    <FamilyCard
-                      key={f.id}
-                      f={f}
-                      memberCount={memberCount}
-                      date={date}
-                      isEditing={isEditing}
-                      editName={editName}
-                      setEditName={setEditName}
-                      onOpen={onOpen}
-                      onStartEdit={startEdit}
-                      onSaveEdit={saveEdit}
-                      onCancelEdit={() => setEditingId(null)}
-                      onDelete={handleDelete}
-                    />
+                    <div key={f.id}
+                      style={{ background: '#09162a', border: '1px solid #152a4a', borderRadius: 12, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 14, cursor: isEditing ? 'default' : 'pointer', transition: 'border-color 0.15s' }}
+                      onClick={() => !isEditing && onOpen(f)}
+                      onMouseEnter={e => { if (!isEditing) e.currentTarget.style.borderColor = '#2a4a80'; }}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = '#152a4a'}
+                    >
+                      {/* Icon sách cổ điển */}
+                      <div style={{ flexShrink: 0, width: 44, height: 52, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="44" height="52" viewBox="0 0 44 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="6" y="2" width="32" height="48" rx="3" fill="#1a2e10" stroke="#4a6a28" strokeWidth="1.5"/>
+                          <rect x="6" y="2" width="6" height="48" rx="2" fill="#2a4818" stroke="#4a6a28" strokeWidth="1"/>
+                          <line x1="16" y1="14" x2="33" y2="14" stroke="#4a7a30" strokeWidth="1.2" strokeLinecap="round"/>
+                          <line x1="16" y1="19" x2="33" y2="19" stroke="#3a6028" strokeWidth="1" strokeLinecap="round"/>
+                          <line x1="16" y1="24" x2="28" y2="24" stroke="#3a6028" strokeWidth="1" strokeLinecap="round"/>
+                          <line x1="16" y1="32" x2="33" y2="32" stroke="#4a7a30" strokeWidth="1.2" strokeLinecap="round"/>
+                          <line x1="16" y1="37" x2="30" y2="37" stroke="#3a6028" strokeWidth="1" strokeLinecap="round"/>
+                          <rect x="8" y="22" width="2" height="8" rx="1" fill="#6aaa40" opacity="0.5"/>
+                        </svg>
+                      </div>
+
+                      {/* Thông tin */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        {isEditing ? (
+                          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }} onClick={e => e.stopPropagation()}>
+                            <input
+                              value={editName}
+                              onChange={e => setEditName(e.target.value)}
+                              autoFocus
+                              onKeyDown={e => { if (e.key === 'Enter') saveEdit(f.id); if (e.key === 'Escape') setEditingId(null); }}
+                              style={{ flex: 1, fontSize: 15, fontWeight: 700, background: '#060f1c', border: '1px solid #2a5080', borderRadius: 5, padding: '4px 8px', color: '#a0c8f0' }}
+                            />
+                            <button onClick={() => saveEdit(f.id)} style={{ background: '#0e3020', color: '#50c878', border: '1px solid #1e6030', borderRadius: 5, padding: '4px 10px', fontSize: 12 }}>✓</button>
+                            <button onClick={() => setEditingId(null)} style={{ background: 'transparent', color: '#5a7898', border: '1px solid #1a3050', borderRadius: 5, padding: '4px 8px', fontSize: 12 }}>✕</button>
+                          </div>
+                        ) : (
+                          <div style={{ color: '#a0c8f0', fontWeight: 700, fontSize: 16, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name}</div>
+                        )}
+                        {!isEditing && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 5 }}>
+                            <span style={{ background: 'rgb(160,70,10)', color: '#fff', fontWeight: 700, fontSize: 14, padding: '2px 10px', borderRadius: 20, letterSpacing: '0.01em' }}>
+                              {memberCount} thành viên
+                            </span>
+                            <span style={{ color: '#1e3858', fontSize: 11 }}>Tạo {date}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Nút hành động */}
+                      {!isEditing && (
+                        <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                          <button
+                            onClick={e => startEdit(e, f)}
+                            style={{ background: '#0a1e38', color: '#5a9ad8', border: '1px solid #1a3a60', borderRadius: 6, padding: '4px 10px', fontSize: 12 }}
+                          >✎ Đổi tên</button>
+                          <button
+                            onClick={e => { e.stopPropagation(); handleDelete(f.id, f.name); }}
+                            style={{ background: '#180a08', color: '#905050', border: '1px solid #3a1818', borderRadius: 6, padding: '4px 10px', fontSize: 12 }}
+                          >🗑</button>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
             )}
           </div>
 
-          {/* Footer CTA */}
-          <div className="home-footer">
-            <button className="home-create-btn" onClick={() => setShowCreate(true)}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
-                <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              Tạo gia phả mới
-            </button>
+          {/* Footer */}
+          <div style={{ padding: '20px 24px', borderTop: '1px solid #0a1e38', display: 'flex', justifyContent: 'center' }}>
+            <button
+              onClick={() => setShowCreate(true)}
+              style={{ background: '#0e2e14', color: '#50c878', border: '1px solid #1e6030', borderRadius: 8, padding: '10px 28px', fontSize: 15, fontWeight: 600 }}
+            >+ Tạo gia phả mới</button>
           </div>
 
           {/* Create modal */}
           {showCreate && (
             <div className="modal" onMouseDown={e => { if (e.target === e.currentTarget) setShowCreate(false); }}>
-              <div className="modal-content" style={{ width: 380 }}>
+              <div className="modal-content" style={{ width: 360 }}>
                 <div className="modal-header">
                   <span>Tạo gia phả mới</span>
                   <button className="modal-close" onClick={() => setShowCreate(false)}>×</button>
                 </div>
-                <div className="form-group" style={{ marginTop: 4 }}>
+                <div className="form-group">
                   <label className="form-label">Tên gia phả *</label>
                   <input
                     value={newName}
@@ -2253,77 +1903,9 @@
                 </div>
                 <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 18 }}>
                   <button onClick={() => setShowCreate(false)} style={{ background: 'transparent', color: '#5a7898' }}>Hủy</button>
-                  <button onClick={handleCreate} disabled={!newName.trim() || creating}
-                    style={{ background: newName.trim() ? 'rgba(180,140,40,0.18)' : '#0c1a30', color: newName.trim() ? '#e8c860' : '#3a5070', border: newName.trim() ? '1px solid rgba(180,140,40,0.4)' : '1px solid #1a3050', opacity: newName.trim() ? 1 : 0.5 }}>
-                    {creating ? 'Đang tạo...' : 'Tạo'}
-                  </button>
+                  <button onClick={handleCreate} disabled={!newName.trim() || creating} style={{ background: newName.trim() ? '#1440a0' : '#0c1a30', color: newName.trim() ? '#a0c8f8' : '#3a5070', opacity: newName.trim() ? 1 : 0.5 }}>{creating ? 'Đang tạo...' : 'Tạo'}</button>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      );
-    }
-
-    // ── Expand Gen Dropdown (topbar) ────────────────────────────────────────────
-    function ExpandGenDropdown({ tree, transformAll }) {
-      const [open, setOpen] = React.useState(false);
-      const ref = React.useRef(null);
-
-      React.useEffect(() => {
-        if (!open) return;
-        const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-        document.addEventListener('mousedown', h);
-        document.addEventListener('touchstart', h);
-        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
-      }, [open]);
-
-      const maxGen = React.useMemo(() => {
-        if (!tree) return 1;
-        function maxDepth(n) { return Math.max(n.generation, ...(n.children || []).map(maxDepth)); }
-        return maxDepth(tree);
-      }, [tree]);
-
-      const genOptions = [];
-      for (let g = 1; g <= maxGen - 1; g++) genOptions.push(g);
-
-      const apply = (fn) => { transformAll(fn); setOpen(false); };
-
-      return (
-        <div ref={ref} style={{ position: 'relative', flexShrink: 0 }}>
-          <button
-            onClick={() => setOpen(v => !v)}
-            title="Mở rộng đến đời"
-            style={{ display: 'flex', alignItems: 'center', gap: 5, height: 32, padding: '0 9px', background: open ? '#0a2040' : '#0a1e38', color: open ? '#6aacf0' : '#5a9ad8', border: open ? '1px solid #2a5080' : '1px solid #1a3a60', borderRadius: 6, fontSize: 13 }}
-          >
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="2" y1="3.5" x2="13" y2="3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="2" y1="7.5" x2="10" y2="7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <line x1="2" y1="11.5" x2="7" y2="11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <polyline points="11,8 13.5,10.5 11,13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            </svg>
-            <svg width="9" height="9" viewBox="0 0 9 9" fill="none" style={{ opacity: 0.6 }}>
-              <polyline points="1,3 4.5,6.5 8,3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          {open && (
-            <div style={{ position: 'absolute', top: 'calc(100% + 5px)', right: 0, background: '#08121e', border: '1px solid #1a3a60', borderRadius: 8, minWidth: 160, zIndex: 9100, boxShadow: '0 8px 32px rgba(0,0,20,0.8)', overflow: 'hidden' }}>
-              <div style={{ padding: '5px 14px 3px', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', color: '#2a4a68', textTransform: 'uppercase' }}>Mở rộng đến đời</div>
-              <button
-                onClick={() => apply(n => ({ ...n, collapsed: false }))}
-                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', fontSize: 13, color: '#5a9ad8', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(60,120,200,0.14)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >↕ Tất cả</button>
-              <div style={{ borderTop: '1px solid #0e2040', margin: '2px 0' }} />
-              {genOptions.map(g => (
-                <button key={g}
-                  onClick={() => apply(n => ({ ...n, collapsed: n.generation >= g }))}
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', fontSize: 13, color: '#4a8ac8', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(60,120,200,0.12)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                >→ Đến đời {g}</button>
-              ))}
             </div>
           )}
         </div>
@@ -2333,7 +1915,7 @@
     // ── Hamburger Menu ──────────────────────────────────────────────────────────
     function HamburgerMenu({ view, setView, dragMode, setDragMode, showSettings, setShowSettings,
       showNgayGio, setShowNgayGio, showData, setShowData, showGioiThieu, setShowGioiThieu,
-      showNoiToc, setShowNoiToc }) {
+      showNoiToc, setShowNoiToc, tree, transformAll }) {
       const [open, setOpen] = React.useState(false);
       const ref = React.useRef(null);
       React.useEffect(() => {
@@ -2344,6 +1926,15 @@
         return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
       }, [open]);
       const close = () => setOpen(false);
+
+      // ExpandMenu logic inline
+      const maxGen = React.useMemo(() => {
+        if (!tree) return 1;
+        function maxDepth(n) { return Math.max(n.generation, ...(n.children || []).map(maxDepth)); }
+        return maxDepth(tree);
+      }, [tree]);
+      const genOptions = [];
+      for (let g = 1; g <= maxGen - 1; g++) genOptions.push(g);
 
       return (
         <div className="hmenu-wrap" ref={ref}>
@@ -2364,6 +1955,16 @@
                 onClick={() => { setDragMode(v => !v); close(); }}>
                 {dragMode ? '✓ Đang kéo thả' : '⠿ Kéo thả node'}
               </button>
+              {genOptions.length > 0 && <>
+                <span className="hmenu-sub-label" style={{ paddingTop: 6 }}>Mở rộng đến đời</span>
+                <button className="hmenu-sub-item" onClick={() => { transformAll(n => ({ ...n, collapsed: false })); close(); }}>↕ Tất cả</button>
+                {genOptions.map(g => (
+                  <button key={g} className="hmenu-sub-item" onClick={() => {
+                    transformAll(n => ({ ...n, collapsed: n.generation >= g }));
+                    close();
+                  }}>→ Đến đời {g}</button>
+                ))}
+              </>}
 
               <hr className="hmenu-sep" />
               {/* Nội dung */}
@@ -2544,24 +2145,17 @@
           <div style={{ background: "#0f172a", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }} className={dragMode ? "drag-mode-active" : ""}>
             <div className="header">
               <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
-                <button onClick={onBack} style={{ fontSize: 13, background: 'transparent', border: '1px solid #1a3252', color: '#4a7898', padding: '4px 10px', flexShrink: 0 }}>←</button>
+                <button onClick={onBack} style={{ fontSize: 13, background: 'transparent', border: '1px solid #1a3252', color: '#4a7898', padding: '4px 10px', flexShrink: 0 }}>← Trang chủ</button>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>🌳</span>
                 <span className="header-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{familyName}</span>
-                <span style={{ background: 'rgb(160,70,10)', color: '#fff', fontWeight: 700, fontSize: 13, padding: '2px 10px', borderRadius: 20, flexShrink: 0 }}>{totalMembers} người</span>
+                <span style={{ background: 'rgb(160,70,10)', color: '#fff', fontWeight: 700, fontSize: 13, padding: '2px 10px', borderRadius: 20, flexShrink: 0 }}>{totalMembers} thành viên</span>
               </div>
-              {/* Mở rộng đời - dropdown */}
-              <ExpandGenDropdown tree={tree} transformAll={transformAll} />
               {/* Tìm kiếm luôn hiện */}
               <button
                 onClick={() => setShowSearch(v => !v)}
                 title="Tìm kiếm (Ctrl+F)"
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 32, padding: 0, background: showSearch ? '#0a2040' : '#0a1e38', color: showSearch ? '#6aacf0' : '#5a9ad8', border: showSearch ? '1px solid #2a5080' : '1px solid #1a3a60', borderRadius: 6 }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.6"/>
-                  <line x1="10.2" y1="10.2" x2="14" y2="14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                </svg>
-              </button>
+                style={{ fontSize: 14, padding: '5px 10px', background: showSearch ? '#0a2040' : '#0a1e38', color: showSearch ? '#6aacf0' : '#5a9ad8', border: showSearch ? '1px solid #2a5080' : '1px solid #1a3a60' }}
+              >🔍</button>
               {/* Hamburger menu */}
               <HamburgerMenu
                 view={view} setView={setView}
@@ -2571,52 +2165,26 @@
                 showData={showData} setShowData={setShowData}
                 showGioiThieu={showGioiThieu} setShowGioiThieu={setShowGioiThieu}
                 showNoiToc={showNoiToc} setShowNoiToc={setShowNoiToc}
+                tree={tree} transformAll={transformAll}
               />
             </div>
 
             {showSettings && (
-              <SettingsPanel settings={settings} onChange={handleSettingsChange} onClose={() => setShowSettings(false)} />
+              <SettingsPanel settings={settings} onChange={handleSettingsChange} />
             )}
 
             {view === 'tree' && (
               <>
-                <div style={{ position: 'relative', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    ref={viewportRef}
-                    className={"tree-viewport" + (isPanning ? " is-panning" : "")}
-                    onMouseDown={handleViewportMouseDown}
-                    onClickCapture={handleViewportClickCapture}
-                    style={{ flex: 1 }}
-                  >
-                    <div className="tree-canvas" style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}>
-                      {tree && <TreeNode node={tree} onUpdate={handleUpdate} onDelete={handleDelete} isRoot={true} showModal={setModal} dragMode={dragMode} parentGen={tree.generation} showInfo={setInfoPopup} />}
-                    </div>
+                
+                <div
+                  ref={viewportRef}
+                  className={"tree-viewport" + (isPanning ? " is-panning" : "")}
+                  onMouseDown={handleViewportMouseDown}
+                  onClickCapture={handleViewportClickCapture}
+                >
+                  <div className="tree-canvas" style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}>
+                    {tree && <TreeNode node={tree} onUpdate={handleUpdate} onDelete={handleDelete} isRoot={true} showModal={setModal} dragMode={dragMode} parentGen={tree.generation} showInfo={setInfoPopup} />}
                   </div>
-                  {/* Nút về đầu cây */}
-                  {(pan.x !== 0 || pan.y !== 0) && (
-                    <button
-                      onClick={() => setPan({ x: 0, y: 0 })}
-                      title="Về đầu cây"
-                      style={{
-                        position: 'absolute', bottom: 20, right: 20,
-                        width: 44, height: 44, borderRadius: '50%',
-                        background: 'rgba(8,18,36,0.92)', border: '1.5px solid #2a5080',
-                        color: '#6aacf0', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        boxShadow: '0 4px 16px rgba(0,0,30,0.6)', cursor: 'pointer',
-                        transition: 'background 0.15s, border-color 0.15s',
-                        zIndex: 500,
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,32,64,0.98)'; e.currentTarget.style.borderColor = '#4a80c0'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(8,18,36,0.92)'; e.currentTarget.style.borderColor = '#2a5080'; }}
-                    >
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.4" strokeOpacity="0.35"/>
-                        <polyline points="10,14 10,7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                        <polyline points="6.5,10.5 10,7 13.5,10.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                        <line x1="7" y1="14" x2="13" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5"/>
-                      </svg>
-                    </button>
-                  )}
                 </div>
               </>
             )}
