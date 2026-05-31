@@ -1,0 +1,189 @@
+{
+  "version": "2",
+  "exportDate": "2026-01-01T00:00:00.000Z",
+  "tree": {
+    "id": "root",
+    "name": "Lê Văn Lăm",
+    "gender": "male",
+    "birthYear": 1897,
+    "deathYear": 1976,
+    "deathAnniversary": "5/8",
+    "generation": 6,
+    "isSpouse": false,
+    "collapsed": false,
+    "children": [
+      {
+        "id": "s1",
+        "name": "Nguyễn Thị Huệ",
+        "gender": "female",
+        "birthYear": 1896,
+        "deathYear": 1985,
+        "deathAnniversary": "12/3",
+        "generation": 6,
+        "isSpouse": true,
+        "collapsed": false,
+        "children": [
+          {
+            "id": "c1",
+            "name": "Lê Văn Đàm",
+            "gender": "male",
+            "birthYear": 1919,
+            "deathYear": 1985,
+            "deathAnniversary": "",
+            "generation": 7,
+            "isSpouse": false,
+            "collapsed": false,
+            "children": [
+              {
+                "id": "s2",
+                "name": "Nguyễn Thị Tới",
+                "gender": "female",
+                "birthYear": 1918,
+                "deathYear": 2017,
+                "deathAnniversary": "20/6",
+                "generation": 7,
+                "isSpouse": true,
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "c2",
+                    "name": "Lê Quang Đạm",
+                    "gender": "male",
+                    "birthYear": 1940,
+                    "deathYear": 1990,
+                    "deathAnniversary": "15/3",
+                    "generation": 8,
+                    "isSpouse": false,
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c3",
+                    "name": "Lê Văn Điềm",
+                    "gender": "male",
+                    "birthYear": 1942,
+                    "deathYear": 2025,
+                    "deathAnniversary": "",
+                    "generation": 8,
+                    "isSpouse": false,
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "s3",
+                        "name": "Trần Thị Lan",
+                        "gender": "female",
+                        "birthYear": 1945,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "generation": 8,
+                        "isSpouse": true,
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "c4",
+                            "name": "Lê Đình Tuấn",
+                            "gender": "male",
+                            "birthYear": 1968,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "generation": 9,
+                            "isSpouse": false,
+                            "collapsed": false,
+                            "children": []
+                          },
+                          {
+                            "id": "c5",
+                            "name": "Lê Thị Hoa",
+                            "gender": "female",
+                            "birthYear": 1972,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "generation": 9,
+                            "isSpouse": false,
+                            "collapsed": false,
+                            "children": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "c6",
+            "name": "Lê Thị Bình",
+            "gender": "female",
+            "birthYear": 1923,
+            "deathYear": 2010,
+            "deathAnniversary": "3/9",
+            "generation": 7,
+            "isSpouse": false,
+            "collapsed": false,
+            "children": []
+          },
+          {
+            "id": "c7",
+            "name": "Lê Văn Cường",
+            "gender": "male",
+            "birthYear": 1928,
+            "deathYear": 2005,
+            "deathAnniversary": "10/1",
+            "generation": 7,
+            "isSpouse": false,
+            "collapsed": false,
+            "children": [
+              {
+                "id": "s4",
+                "name": "Phạm Thị Mai",
+                "gender": "female",
+                "birthYear": 1930,
+                "deathYear": 2018,
+                "deathAnniversary": "22/10",
+                "generation": 7,
+                "isSpouse": true,
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "c8",
+                    "name": "Lê Minh Khoa",
+                    "gender": "male",
+                    "birthYear": 1955,
+                    "deathYear": null,
+                    "deathAnniversary": "",
+                    "generation": 8,
+                    "isSpouse": false,
+                    "collapsed": false,
+                    "children": []
+                  },
+                  {
+                    "id": "c9",
+                    "name": "Lê Thị Nga",
+                    "gender": "female",
+                    "birthYear": 1958,
+                    "deathYear": null,
+                    "deathAnniversary": "",
+                    "generation": 8,
+                    "isSpouse": false,
+                    "collapsed": false,
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "settings": {
+    "fontSize": 15,
+    "colorMale": "#6aacf0",
+    "colorFemale": "#f080a0",
+    "colorYears": "#7a9ab8",
+    "colorAnniversary": "#60a878",
+    "colorGeneration": "#3a6888"
+  },
+  "intro": "<h1>Gia Phả Họ Lê</h1>\n<p>Đây là dữ liệu mẫu của gia phả dòng họ Lê. Bạn có thể chỉnh sửa nội dung này trong mục <strong>Giới thiệu → Chỉnh sửa</strong>.</p>\n\n<h2>Lịch sử dòng họ</h2>\n<p>Dòng họ Lê khởi nguồn từ thế kỷ XIX, định cư tại vùng đất Hải Phòng.</p>\n\n<h2>Truyền thống</h2>\n<ul>\n  <li>Hiếu học, coi trọng đạo nghĩa</li>\n  <li>Đoàn kết, tương thân tương ái</li>\n  <li>Gìn giữ văn hóa và phong tục cha ông</li>\n</ul>\n\n<blockquote>&ldquo;Uống nước nhớ nguồn, ăn quả nhớ kẻ trồng cây&rdquo;</blockquote>"
+}
