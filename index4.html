@@ -2069,7 +2069,7 @@
         el.addEventListener('touchmove', onMove, { passive: false });
         el.addEventListener('touchend', onEnd, { passive: true });
         return () => { el.removeEventListener('touchstart', onStart); el.removeEventListener('touchmove', onMove); el.removeEventListener('touchend', onEnd); };
-      }, [pan, loading]); // re-attach when pan changes so offX/offY are fresh; also re-run when loading→false so viewport is ready
+      }, [pan]); // re-attach when pan changes so offX/offY are fresh
 
       const handleViewportMouseDown = (e) => {
         // Skip if clicking on an interactive element
