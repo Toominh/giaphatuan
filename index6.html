@@ -39,7 +39,7 @@
     .modal { position: fixed; inset: 0; background: rgba(3,8,18,0.88); display: flex; align-items: center; justify-content: center; z-index: 9999; }
     .modal-content { background: #09162a; border: 1px solid #183060; border-radius: 10px; padding: 20px 24px; width: 420px; max-width: calc(100vw - 32px); }
     .modal-header { color: #6aaaf0; font-weight: 600; margin-bottom: 18px; display: flex; justify-content: space-between; }
-    .modal-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 20px; }
+    .modal-close { background: none; border: none; color: #2a4a68; cursor: pointer; font-size: 20px; }
     .form-group { margin-bottom: 12px; }
     .form-label { display: block; color: #4a6888; font-size: 12px; font-weight: 500; margin-bottom: 5px; }
     .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
@@ -61,15 +61,7 @@
     .tab-btn.active { background: #0a2040; color: #6aacf0; border-color: #2a5080; }
     .syntax-hint { font-size: 11px; color: #1e4060; line-height: 1.6; padding: 8px 18px; border-bottom: 1px solid #08192e; background: #050d1a; }
     .syntax-hint b { color: #2a5878; }
-    .settings-panel { background: #07101e; border-bottom: 2px solid #0e2040; padding: 10px 14px 10px 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; position: relative; padding-right: 36px; }
-    .sp-row { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: flex-start; }
-    .sp-group { display: flex; flex-direction: column; gap: 5px; flex: 1 1 140px; min-width: 0; }
-    .sp-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a4a68; margin-bottom: 1px; }
-    .sp-colors { display: flex; flex-wrap: wrap; gap: 8px; }
-    .sp-color-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 5px 4px; border-radius: 6px; border: 1px solid transparent; transition: border-color 0.15s; }
-    .sp-color-item:hover { border-color: #1a3a60; background: rgba(10,30,60,0.4); }
-    .sp-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
-    .sp-color-label { font-size: 10px; color: #2a4a68; white-space: nowrap; text-align: center; }
+    .settings-panel { background: #07101e; border-bottom: 2px solid #0e2040; padding: 12px 18px; display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; position: relative; }
     .settings-section-title { color: #3a6888; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
     .color-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; cursor: pointer; }
     .color-row:hover .color-label { color: #8ab8d8; }
@@ -104,7 +96,7 @@
     .intro-topbar { background: #08121e; border-bottom: 1px solid #0e2040; padding: 10px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .intro-topbar-title { font-size: 16px; font-weight: 700; color: #6aaaf0; flex: 1; }
     .intro-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-    .intro-content-area { flex: 1; overflow-y: auto; padding: 3px 3px; }
+    .intro-content-area { flex: 1; overflow-y: auto; padding: 1px 1px; }
     .intro-content-area.edit-mode { padding: 0; display: flex; flex-direction: column; }
     .intro-editor { flex: 1; width: 100%; border: none; outline: none; resize: none; background: #07111f; color: #b8d0e8; font-family: "Courier New", monospace; font-size: 13px; line-height: 1.6; padding: 20px 28px; }
     .intro-tabbar { background: #07111f; border-top: 1px solid #0e2040; display: flex; align-items: center; padding: 0 20px; gap: 2px; flex-shrink: 0; }
@@ -133,8 +125,8 @@
     .expand-dropdown-sep { border-bottom: 1px solid #0e2040; margin: 3px 0; }
     .btn-active { background: #0e2e14 !important; color: #60c878 !important; border-color: #1e6030 !important; font-weight: 600; }
     /* Nội tộc panel */
-    .noitoc-overlay { position: fixed; inset: 0; background: rgba(3,8,18,0.78); z-index: 9997; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    .noitoc-panel { background: #07111f; width: 100%; max-width: 520px; max-height: 82vh; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid #0e2040; box-shadow: 0 16px 64px rgba(0,0,0,0.7); overflow: hidden; }
+    .noitoc-overlay { position: fixed; inset: 0; background: #07111f; z-index: 9997; display: flex; flex-direction: column; }
+    .noitoc-panel { background: #07111f; width: 100%; height: 100%; display: flex; flex-direction: column; }
     .noitoc-header { padding: 14px 18px; border-bottom: 1px solid #0e2040; display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: #08121e; }
     .noitoc-title { font-size: 20px; font-weight: 700; color: #6aaaf0; flex: 1; }
     .noitoc-badge { background: #1a3a14; color: #60c878; font-size: 15px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid #2a5a20; }
@@ -754,94 +746,106 @@
     // ── Settings Panel ──────────────────────────────────────────────────────────
     function SettingsPanel({ settings, onChange, onClose }) {
       const colorFields = [
-        { label: 'Tên Nam',   key: 'colorMale' },
-        { label: 'Tên Nữ',   key: 'colorFemale' },
-        { label: 'Năm',       key: 'colorYears' },
-        { label: 'Ngày giỗ', key: 'colorAnniversary' },
-        { label: 'Số đời',   key: 'colorGeneration' },
+        { label: 'Tên Nam',      key: 'colorMale' },
+        { label: 'Tên Nữ',       key: 'colorFemale' },
+        { label: 'Năm sinh/mất', key: 'colorYears' },
+        { label: 'Ngày giỗ',     key: 'colorAnniversary' },
+        { label: 'Số đời',       key: 'colorGeneration' },
       ];
-      const previewFs   = settings.fontSize;
-      const previewFont = settings.fontFamily || FONT_OPTIONS[0].value;
-      const currentFont = FONT_OPTIONS.find(f => f.value === previewFont) || FONT_OPTIONS[0];
-
+      const previewFs = settings.fontSize;
+      const previewFont = settings.fontFamily || "'Courier New', monospace";
       return (
         <div className="settings-panel">
-          {/* ── Nút đóng ── */}
-          <button onClick={onClose} title="Đóng"
-            style={{ position:'absolute', top:8, right:10, background:'transparent', border:'none', color:'#fff', fontSize:20, lineHeight:1, cursor:'pointer', padding:'2px 6px', borderRadius:5 }}
-            onMouseEnter={e=>e.currentTarget.style.color='#6a8ab0'}
-            onMouseLeave={e=>e.currentTarget.style.color='#2a4a68'}
+          {/* Nút đóng */}
+          <button
+            onClick={onClose}
+            title="Đóng cài đặt"
+            style={{ position: 'absolute', top: 10, right: 14, background: 'transparent', border: 'none', color: '#2a4a68', fontSize: 20, lineHeight: 1, cursor: 'pointer', padding: '2px 6px', borderRadius: 5, transition: 'color 0.15s' }}
+            onMouseEnter={e => e.currentTarget.style.color = '#6a8ab0'}
+            onMouseLeave={e => e.currentTarget.style.color = '#2a4a68'}
           >×</button>
-
-          {/* ── Hàng 1: Cỡ chữ + Kiểu chữ ── */}
-          <div className="sp-row">
-            {/* Cỡ chữ */}
-            <div className="sp-group">
-              <div className="sp-label">Cỡ chữ</div>
-              <div style={{ display:'flex', alignItems:'center', gap:5 }}>
-                <button className="font-btn" onClick={() => onChange('fontSize', Math.max(10, settings.fontSize-1))}>−</button>
-                <span className="font-display">{settings.fontSize}</span>
-                <button className="font-btn" onClick={() => onChange('fontSize', Math.min(26, settings.fontSize+1))}>+</button>
-                <input type="range" className="font-slider" min={10} max={26} value={settings.fontSize}
-                  onChange={e => onChange('fontSize', parseInt(e.target.value))} style={{ width:70 }} />
-              </div>
+          {/* Font size */}
+          <div>
+            <div className="settings-section-title">⬚ Cỡ chữ</div>
+            <div className="font-control" style={{ marginBottom: 10 }}>
+              <button className="font-btn" onClick={() => onChange('fontSize', Math.max(10, settings.fontSize - 1))}>−</button>
+              <span className="font-display">{settings.fontSize}</span>
+              <button className="font-btn" onClick={() => onChange('fontSize', Math.min(26, settings.fontSize + 1))}>+</button>
+              <input type="range" className="font-slider" min={10} max={26} value={settings.fontSize}
+                onChange={e => onChange('fontSize', parseInt(e.target.value))} />
+              <span style={{ color: '#2a4a68', fontSize: 11 }}>px</span>
             </div>
-
-            {/* Kiểu chữ — combobox */}
-            <div className="sp-group" style={{ flex:'1 1 180px' }}>
-              <div className="sp-label">Kiểu chữ</div>
-              <select
-                value={previewFont}
-                onChange={e => onChange('fontFamily', e.target.value)}
-                style={{ width:'100%', background:'#060f1c', border:'1px solid #1a3252', borderRadius:6, padding:'5px 8px', color:'#7aaad8', fontSize:13 }}
-              >
-                {FONT_OPTIONS.map(f => (
-                  <option key={f.value} value={f.value}>{f.label}</option>
-                ))}
-              </select>
-              {/* Preview tên font hiện tại */}
-              <div style={{ marginTop:4, fontFamily: previewFont, fontSize: previewFs, color:'#4a7aaa', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
-                {currentFont.sample}
-              </div>
-            </div>
-          </div>
-
-          {/* ── Hàng 2: Màu sắc ── */}
-          <div className="sp-group" style={{ width:'100%' }}>
-            <div className="sp-label">Màu sắc</div>
-            <div className="sp-colors">
-              {colorFields.map(({ label, key }) => (
-                <div key={key} className="sp-color-item" title={label}
-                  onClick={() => document.getElementById('cp_'+key).click()}>
-                  <input id={'cp_'+key} type="color" value={settings[key]}
-                    onChange={e => onChange(key, e.target.value)}
-                    style={{ width:0, height:0, opacity:0, position:'absolute', pointerEvents:'none' }} />
-                  <div className="sp-swatch" style={{ background: settings[key] }} />
-                  <div className="sp-color-label">{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Preview ── */}
-          <div className="sp-group" style={{ width:'100%' }}>
-            <div className="sp-label">Xem trước</div>
+            {/* Live preview */}
             <div className="settings-preview" style={{ fontSize: previewFs, fontFamily: previewFont }}>
-              <span style={{ color: settings.colorMale, fontWeight:600 }}>Lê Văn Lăm</span>
-              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs*0.85 }}>(đời 6)</span>
-              {' '}<span style={{ color: settings.colorYears, fontSize: previewFs*0.85, fontStyle:'italic' }}>(1897–1976)</span>
-              {' '}<span style={{ color: settings.colorAnniversary, fontSize: previewFs*0.82 }}>✦ 5/8</span>
+              <span style={{ color: settings.colorMale, fontWeight: 600 }}>Lê Văn Lăm</span>
+              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs * 0.85 }}>(đời 6)</span>
+              {' '}<span style={{ color: settings.colorYears, fontSize: previewFs * 0.85, fontStyle: 'italic' }}>(1897–1976)</span>
+              {' '}<span style={{ color: settings.colorAnniversary, fontSize: previewFs * 0.82 }}>✦ 5/8</span>
               <br/>
-              <span style={{ color: settings.colorFemale, fontWeight:600 }}>+ Nguyễn Thị Huệ</span>
-              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs*0.85 }}>(đời 6)</span>
+              <span style={{ color: settings.colorFemale, fontWeight: 600 }}>+ Nguyễn Thị Huệ</span>
+              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs * 0.85 }}>(đời 6)</span>
             </div>
           </div>
 
-          {/* ── Reset ── */}
-          <div style={{ display:'flex', alignItems:'flex-end', paddingBottom:2 }}>
+          {/* Font family picker */}
+          <div>
+            <div className="settings-section-title">𝐴 Kiểu chữ</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+              {FONT_OPTIONS.map(f => {
+                const active = (settings.fontFamily || FONT_OPTIONS[0].value) === f.value;
+                return (
+                  <div
+                    key={f.value}
+                    onClick={() => onChange('fontFamily', f.value)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      padding: '6px 10px', borderRadius: 6, cursor: 'pointer',
+                      background: active ? 'rgba(30,80,160,0.18)' : 'transparent',
+                      border: active ? '1px solid #2a4a80' : '1px solid transparent',
+                      transition: 'all 0.12s',
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <span style={{ fontFamily: f.value, fontSize: previewFs, color: active ? '#a0c8f8' : '#6a90b8' }}>
+                        Lê Văn Lăm
+                      </span>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontSize: 12, color: active ? '#6aacf0' : '#2a5070', fontWeight: active ? 600 : 400 }}>{f.label}</div>
+                      <div style={{ fontSize: 10, color: '#1a3858' }}>{f.sample}</div>
+                    </div>
+                    {active && <span style={{ color: '#4a9af0', fontSize: 14, flexShrink: 0 }}>✓</span>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Color pickers */}
+          <div>
+            <div className="settings-section-title">🎨 Màu sắc</div>
+            {colorFields.map(({ label, key }) => (
+              <div key={key} className="color-row" onClick={() => document.getElementById('cp_' + key).click()}>
+                <input
+                  id={'cp_' + key}
+                  type="color"
+                  value={settings[key]}
+                  onChange={e => onChange(key, e.target.value)}
+                  style={{ width: 0, height: 0, opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+                />
+                <div className="color-swatch" style={{ background: settings[key] }} />
+                <span className="color-label" style={{ color: settings[key] }}>{label}</span>
+                <span style={{ color: '#1a3050', fontSize: 11, fontFamily: 'monospace' }}>{settings[key]}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Reset */}
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 6 }}>
+            <div className="settings-section-title">⟳ Khác</div>
             <button onClick={() => onChange('reset')}
-              style={{ fontSize:11, color:'#3a5a78', background:'transparent', border:'1px solid #1a3050', borderRadius:5, padding:'4px 10px', whiteSpace:'nowrap' }}>
-              ⟳ Mặc định
+              style={{ fontSize: 11, color: '#4a6888', background: 'transparent', border: '1px solid #1a3050', borderRadius: 5, padding: '4px 10px' }}>
+              Đặt lại mặc định
             </button>
           </div>
         </div>
@@ -913,38 +917,12 @@
       };
 
       // ── 3. Nhập dữ liệu mẫu ─────────────────────────────────────────────────
-      const [sampleFiles, setSampleFiles] = React.useState(null); // null=ẩn, []=đang load, [...]=danh sách
-      const [samplePicking, setSamplePicking] = React.useState(false);
-
-      const handleOpenSamplePicker = async () => {
-        setSampleFiles([]);
-        setSamplePicking(true);
+      const handleLoadSample = async () => {
+        setLoadingMsg('Đang tải datamau.json…');
         setStatus(null);
         try {
-          const res = await fetch('./data/index.json', { cache: 'no-store' });
-          if (!res.ok) throw new Error(`Không tìm thấy data/index.json (HTTP ${res.status})`);
-          const list = await res.json(); // mảng { name, file } hoặc mảng string
-          const normalized = list.map(item =>
-            typeof item === 'string'
-              ? { name: item.replace(/\.json$/i, '').replace(/[-_]/g, ' '), file: item }
-              : item
-          );
-          setSampleFiles(normalized);
-        } catch (e) {
-          setSampleFiles(null);
-          setSamplePicking(false);
-          setStatus({ type: 'err', msg: '✗ ' + e.message });
-        }
-      };
-
-      const handleLoadSampleFile = async (file) => {
-        setSamplePicking(false);
-        setSampleFiles(null);
-        setLoadingMsg(`Đang tải ${file}…`);
-        setStatus(null);
-        try {
-          const res = await fetch(`./data/${file}`, { cache: 'no-store' });
-          if (!res.ok) throw new Error(`HTTP ${res.status} – không tìm thấy data/${file}`);
+          const res = await fetch('./datamau.json', { cache: 'no-store' });
+          if (!res.ok) throw new Error(`HTTP ${res.status} – không tìm thấy datamau.json`);
           const data = await res.json();
           applyImportedData(data);
           setLoadingMsg('');
@@ -1040,42 +1018,13 @@
               </button>
 
               {/* Dữ liệu mẫu */}
-              <button className="data-action-btn sample" onClick={handleOpenSamplePicker}>
+              <button className="data-action-btn sample" onClick={handleLoadSample}>
                 <span className="da-icon">📋</span>
                 <span className="da-text">
                   <span className="da-title">Nhập dữ liệu mẫu</span>
-                  <span className="da-desc">Chọn file từ thư mục <code style={{ color: '#3a8060', fontSize: 10 }}>data/</code></span>
+                  <span className="da-desc">Tải file <code style={{ color: '#3a8060', fontSize: 10 }}>datamau.json</code> cùng thư mục với file HTML này</span>
                 </span>
               </button>
-
-              {/* Picker danh sách file mẫu */}
-              {samplePicking && (
-                <div style={{ background: '#060f1c', border: '1px solid #1a3a58', borderRadius: 8, overflow: 'hidden' }}>
-                  <div style={{ padding: '7px 12px', borderBottom: '1px solid #0e2040', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2a5070' }}>Chọn dữ liệu mẫu</span>
-                    <button onClick={() => { setSamplePicking(false); setSampleFiles(null); }}
-                      style={{ background: 'transparent', border: 'none', color: '#2a4a68', fontSize: 16, padding: '0 4px', lineHeight: 1 }}>×</button>
-                  </div>
-                  {sampleFiles && sampleFiles.length === 0 && (
-                    <div style={{ padding: '12px 14px', color: '#2a5070', fontSize: 12 }}>Đang tải danh sách…</div>
-                  )}
-                  {sampleFiles && sampleFiles.length > 0 && sampleFiles.map((item, i) => (
-                    <button key={i}
-                      onClick={() => handleLoadSampleFile(item.file)}
-                      style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 14px', background: 'transparent', border: 'none', borderBottom: i < sampleFiles.length - 1 ? '1px solid #0a1e30' : 'none', textAlign: 'left', color: '#5a9ad8', fontSize: 13, transition: 'background 0.1s' }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(20,60,120,0.2)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, opacity: 0.6 }}>
-                        <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.2" fill="none"/>
-                        <path d="M3.5 5h7M3.5 7.5h5M3.5 10h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-                      </svg>
-                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
-                      <span style={{ fontSize: 10, color: '#1e4060', fontFamily: 'monospace', flexShrink: 0 }}>{item.file}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
 
               {/* Xóa */}
               <button className="data-action-btn danger" onClick={handleClearStorage}>
@@ -2595,10 +2544,10 @@
           <div style={{ background: "#0f172a", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }} className={dragMode ? "drag-mode-active" : ""}>
             <div className="header">
               <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
-                <button onClick={onBack} style={{ fontSize: 15, background: 'transparent', border: '1px solid #1a3252', color: '#fff', padding: '4px 10px', flexShrink: 0 }}>←</button>
-                <span style={{ fontSize: 18, flexShrink: 0 }}></span>
+                <button onClick={onBack} style={{ fontSize: 13, background: 'transparent', border: '1px solid #1a3252', color: '#4a7898', padding: '4px 10px', flexShrink: 0 }}>←</button>
+                <span style={{ fontSize: 18, flexShrink: 0 }}>🌳</span>
                 <span className="header-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{familyName}</span>
-                <span style={{ background: '#085700', color: '#fff', fontWeight: 700, fontSize: 13, padding: '2px 10px', borderRadius: 20, flexShrink: 0 }}>{totalMembers} người</span>
+                <span style={{ background: 'rgb(160,70,10)', color: '#fff', fontWeight: 700, fontSize: 13, padding: '2px 10px', borderRadius: 20, flexShrink: 0 }}>{totalMembers} người</span>
               </div>
               {/* Mở rộng đời - dropdown */}
               <ExpandGenDropdown tree={tree} transformAll={transformAll} />
@@ -2649,7 +2598,7 @@
                       onClick={() => setPan({ x: 0, y: 0 })}
                       title="Về đầu cây"
                       style={{
-                        position: 'absolute', bottom: 20, right: 20,
+                        position: 'absolute', bottom: 80, right: 20,
                         width: 44, height: 44, borderRadius: '50%',
                         background: 'rgba(8,18,36,0.92)', border: '1.5px solid #2a5080',
                         color: '#6aacf0', display: 'flex', alignItems: 'center', justifyContent: 'center',
