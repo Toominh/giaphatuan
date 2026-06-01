@@ -81,7 +81,7 @@
     .sp-group { display: flex; flex-direction: column; gap: 5px; flex: 1 1 140px; min-width: 0; }
     .sp-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a4a68; margin-bottom: 1px; }
     .sp-colors { display: flex; flex-wrap: wrap; gap: 8px; }
-    .sp-color-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 5px 4px; border-radius: 6px; border: 1px solid transparent; transition: border-color 0.15s; position: relative; touch-action: manipulation; }
+    .sp-color-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 5px 4px; border-radius: 6px; border: 1px solid transparent; transition: border-color 0.15s; }
     .sp-color-item:hover { border-color: #1a3a60; background: rgba(10,30,60,0.4); }
     .sp-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
     .sp-color-label { font-size: 10px; color: #2a4a68; white-space: nowrap; text-align: center; }
@@ -193,19 +193,19 @@
     .search-modal { position: fixed; inset: 0; background: rgba(3,8,18,0.88); display: flex; align-items: flex-start; justify-content: center; z-index: 9999; padding-top: 80px; }
     .search-box { background: #09162a; border: 1px solid #183060; border-radius: 12px; width: 500px; max-width: calc(100vw - 32px); box-shadow: 0 8px 40px rgba(0,0,40,0.7); overflow: hidden; }
     .search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #0e2040; }
-    .search-input-wrap .search-icon { color: #3a6888; font-size: 20px; flex-shrink: 0; }
-    .search-input-wrap input { flex: 1; background: transparent; border: none; outline: none; color: #c8d8f0; font-size: 19px; }
+    .search-input-wrap .search-icon { color: #3a6888; font-size: 16px; flex-shrink: 0; }
+    .search-input-wrap input { flex: 1; background: transparent; border: none; outline: none; color: #c8d8f0; font-size: 15px; }
     .search-input-wrap input::placeholder { color: #1e3858; }
     .search-results { max-height: 380px; overflow-y: auto; }
     .search-result-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #081828; transition: background 0.1s; }
     .search-result-item:hover, .search-result-item.active { background: rgba(60,120,200,0.12); }
     .search-result-item:last-child { border-bottom: none; }
-    .search-result-name { font-weight: 600; font-size: 18px; }
-    .search-result-meta { font-size: 15px; color: #3a6888; margin-top: 2px; }
-    .search-result-gen { font-size: 15px; color: #2a5878; margin-left: auto; flex-shrink: 0; }
-    .search-empty { padding: 24px; text-align: center; color: #1e3858; font-size: 17px; }
+    .search-result-name { font-weight: 600; font-size: 14px; }
+    .search-result-meta { font-size: 11px; color: #3a6888; margin-top: 2px; }
+    .search-result-gen { font-size: 11px; color: #2a5878; margin-left: auto; flex-shrink: 0; }
+    .search-empty { padding: 24px; text-align: center; color: #1e3858; font-size: 13px; }
     .search-highlight { background: rgba(100,180,255,0.18); border-radius: 2px; color: #a8d8ff; }
-    .search-footer { padding: 8px 16px; border-top: 1px solid #081828; font-size: 15px; color: #1a3858; display: flex; gap: 14px; }
+    .search-footer { padding: 8px 16px; border-top: 1px solid #081828; font-size: 11px; color: #1a3858; display: flex; gap: 14px; }
 
     /* ── Data Popup ─────────────────────────────────────────────────────────── */
     .data-overlay { position: fixed; inset: 0; background: rgba(2,6,18,0.78); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding-top: 68px; }
@@ -813,10 +813,11 @@
             <div className="sp-label">Màu sắc</div>
             <div className="sp-colors">
               {colorFields.map(({ label, key }) => (
-                <div key={key} className="sp-color-item" title={label} style={{ position:'relative' }}>
+                <div key={key} className="sp-color-item" title={label}
+                  onClick={() => document.getElementById('cp_'+key).click()}>
                   <input id={'cp_'+key} type="color" value={settings[key]}
                     onChange={e => onChange(key, e.target.value)}
-                    style={{ position:'absolute', inset:0, width:'100%', height:'100%', opacity:0, cursor:'pointer', zIndex:1, touchAction:'manipulation' }} />
+                    style={{ width:0, height:0, opacity:0, position:'absolute', pointerEvents:'none' }} />
                   <div className="sp-swatch" style={{ background: settings[key] }} />
                   <div className="sp-color-label">{label}</div>
                 </div>
@@ -1206,7 +1207,7 @@
       };
 
       return (
-        <div data-node-id={node.id}>
+        <div>
           <div className="node-line" onMouseEnter={() => setHover(true)} onMouseLeave={() => { setHover(false); }}>
             {/* Icon kéo thả */}
             {dragMode && !isRoot ? (
@@ -1769,7 +1770,7 @@
     }
 
     // ── Search Modal Component ───────────────────────────────────────────────────
-    function SearchModal({ tree, settings, onClose, onNavigate }) {
+    function SearchModal({ tree, onClose, onNavigate }) {
       const [query, setQuery] = useState('');
       const [activeIdx, setActiveIdx] = useState(0);
       const inputRef = useRef(null);
@@ -1797,10 +1798,7 @@
         <div className="search-modal" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
           <div className="search-box">
             <div className="search-input-wrap">
-              <svg className="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{color: '#3a6888', flexShrink: 0}}>
-                <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.8"/>
-                <line x1="12" y1="12" x2="18" y2="18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-              </svg>
+              <span className="search-icon">🔍</span>
               <input
                 ref={inputRef}
                 value={query}
@@ -1808,7 +1806,7 @@
                 onKeyDown={handleKey}
                 placeholder="Tìm kiếm thành viên theo tên..."
               />
-              {query && <button onClick={() => setQuery('')} style={{ background: 'none', border: 'none', color: '#2a4a68', fontSize: 22, padding: '0 4px', lineHeight: 1 }}>×</button>}
+              {query && <button onClick={() => setQuery('')} style={{ background: 'none', border: 'none', color: '#2a4a68', fontSize: 18, padding: '0 4px', lineHeight: 1 }}>×</button>}
             </div>
 
             <div className="search-results">
@@ -1826,11 +1824,6 @@
                   return '';
                 })();
                 const meta = [yearStr, node.deathAnniversary ? `✦ ${node.deathAnniversary}` : ''].filter(Boolean).join('  ');
-                const nameColor = node.gender === 'female' ? (settings?.colorFemale || '#d65b82') : (settings?.colorMale || '#6aacf0');
-                const yearColor = settings?.colorYears || '#4a6888';
-                const genColor = settings?.colorGeneration || '#2a5878';
-                const annColor = settings?.colorAnniversary || '#c8a040';
-                
                 return (
                   <div
                     key={node.id}
@@ -1838,26 +1831,17 @@
                     onClick={() => onNavigate(node.id)}
                     onMouseEnter={() => setActiveIdx(i)}
                   >
-                    <span style={{ color: nameColor, fontSize: 18, flexShrink: 0 }}>
+                    <span style={{ color: node.gender === 'female' ? '#d65b82' : '#6aacf0', fontSize: 16, flexShrink: 0 }}>
                       {node.isSpouse ? '⚭' : (node.gender === 'female' ? '♀' : '♂')}
                     </span>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div className="search-result-name" style={{ color: nameColor }}>
+                      <div className="search-result-name" style={{ color: node.gender === 'female' ? '#d65b82' : '#6aacf0' }}>
                         {node.isSpouse && <span style={{ color: '#d65b82', marginRight: 4 }}>+</span>}
                         {highlightMatch(node.name, query)}
                       </div>
-                      {meta && (
-                        <div className="search-result-meta" style={{ color: yearColor }}>
-                          {meta.includes('✦') 
-                            ? meta.split('✦').map((part, idx) => 
-                                idx === 0 ? part : <span key={idx} style={{color: annColor}}>✦{part}</span>
-                              )
-                            : meta
-                          }
-                        </div>
-                      )}
+                      {meta && <div className="search-result-meta">{meta}</div>}
                     </div>
-                    <span className="search-result-gen" style={{ color: genColor }}>Đời {node.generation}</span>
+                    <span className="search-result-gen">Đời {node.generation}</span>
                   </div>
                 );
               })}
@@ -2946,7 +2930,6 @@
             {showSearch && (
               <SearchModal
                 tree={tree}
-                settings={settings}
                 onClose={() => setShowSearch(false)}
                 onNavigate={handleSearchNavigate}
               />
