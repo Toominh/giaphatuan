@@ -456,53 +456,6 @@
     .home-dropdown-danger:hover { background: rgba(180,40,40,0.1) !important; color: #e08080 !important; }
     .home-dropdown-sep { border: none; border-top: 1px solid rgba(180,140,60,0.1); margin: 3px 0; }
 
-    /* ── Floating Export HTML Button (Home) ──────────────────────────── */
-    .home-export-fab {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(180,140,40,0.18) 0%, rgba(120,90,20,0.22) 100%);
-      border: 1.5px solid rgba(180,140,60,0.45);
-      color: #c8a840;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 18px rgba(180,140,40,0.12);
-      transition: all 0.22s;
-      z-index: 1000;
-      padding: 0;
-    }
-    .home-export-fab:hover {
-      background: linear-gradient(135deg, rgba(200,160,50,0.28) 0%, rgba(140,100,25,0.32) 100%);
-      border-color: rgba(220,175,60,0.7);
-      color: #e8c860;
-      box-shadow: 0 6px 32px rgba(0,0,0,0.6), 0 0 28px rgba(180,140,40,0.22);
-      transform: scale(1.07);
-    }
-    .home-export-fab:active { transform: scale(0.96); }
-    .home-export-fab-tooltip {
-      position: absolute;
-      right: 62px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #07101c;
-      border: 1px solid rgba(180,140,60,0.3);
-      border-radius: 8px;
-      padding: 6px 13px;
-      font-size: 12px;
-      color: #c8a840;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.18s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-    }
-    .home-export-fab:hover .home-export-fab-tooltip { opacity: 1; }
-
     .home-footer {
       padding: 20px 24px 28px;
       display: flex;
@@ -1134,6 +1087,20 @@
                 <span className="da-text">
                   <span className="da-title">Xuất data JSON</span>
                   <span className="da-desc">Tải về file .json chứa gia phả, cài đặt và giới thiệu</span>
+                </span>
+              </button>
+
+              {/* Xuất HTML */}
+              <button className="data-action-btn" onClick={handleExportHTML}>
+                <span className="da-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="16" height="16" rx="2.5" stroke="#5a9ad8" strokeWidth="1.4" fill="none"/>
+                    <text x="4" y="14" style={{fontSize:'7px', fontFamily:'monospace', fill:'#4a8ac8', fontWeight:'bold'}}>{'</>'}</text>
+                  </svg>
+                </span>
+                <span className="da-text">
+                  <span className="da-title">Xuất file HTML</span>
+                  <span className="da-desc">Tạo file .html độc lập, mở được offline không cần server</span>
                 </span>
               </button>
 
@@ -2344,65 +2311,6 @@
         setEditName(f.name);
       };
 
-      const [exportingHTML, setExportingHTML] = React.useState(false);
-
-      const handleExportAllHTML = async () => {
-        if (exportingHTML) return;
-        setExportingHTML(true);
-        try {
-          const res = await fetch(window.location.href, { cache: 'no-store' });
-          if (!res.ok) throw new Error('Không tải được source HTML');
-          let htmlSource = await res.text();
-
-          // Thu thập toàn bộ dữ liệu tất cả gia phả
-          const allFamilies = getFamiliesIndex();
-          const snapshot = {
-            families: allFamilies,
-            trees: {},
-            settings: {},
-            intros: {},
-          };
-          for (const f of allFamilies) {
-            try { const t = localStorage.getItem(familyTreeKey(f.id)); if (t) snapshot.trees[f.id] = JSON.parse(t); } catch {}
-            try { const s = localStorage.getItem(familySettingsKey(f.id)); if (s) snapshot.settings[f.id] = JSON.parse(s); } catch {}
-            try { const i = localStorage.getItem(familyIntroKey(f.id)); if (i) snapshot.intros[f.id] = i; } catch {}
-          }
-
-          const injectedScript = `<script id="__gia_pha_embedded__">
-(function(){
-  try {
-    var snap = ${JSON.stringify(snapshot)};
-    localStorage.setItem('giapha_families_v1', JSON.stringify(snap.families));
-    for (var id in snap.trees)    localStorage.setItem('giapha_tree_'     + id, JSON.stringify(snap.trees[id]));
-    for (var id in snap.settings) localStorage.setItem('giapha_settings_' + id, JSON.stringify(snap.settings[id]));
-    for (var id in snap.intros)   localStorage.setItem('giapha_intro_'    + id, snap.intros[id]);
-  } catch(e){ console.warn('Embedded data error:', e); }
-})();
-<\/script>`;
-
-          if (htmlSource.includes('<head>')) {
-            htmlSource = htmlSource.replace('<head>', '<head>\n' + injectedScript);
-          } else if (htmlSource.includes('</head>')) {
-            htmlSource = htmlSource.replace('</head>', injectedScript + '\n</head>');
-          } else {
-            htmlSource = injectedScript + htmlSource;
-          }
-
-          const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `gia-pha-${new Date().toISOString().slice(0, 10)}.html`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        } catch (e) {
-          alert('Lỗi xuất file: ' + e.message);
-        }
-        setExportingHTML(false);
-      };
-
       const saveEdit = (id) => {
         const name = editName.trim();
         if (!name) { setEditingId(null); return; }
@@ -2503,31 +2411,6 @@
               Tạo gia phả mới
             </button>
           </div>
-
-          {/* ── Floating Export HTML Button ── */}
-          <button
-            className="home-export-fab"
-            onClick={handleExportAllHTML}
-            title="Xuất tất cả gia phả thành file HTML"
-          >
-            <span className="home-export-fab-tooltip">
-              {exportingHTML ? 'Đang xuất…' : 'Xuất tất cả gia phả (.html)'}
-            </span>
-            {exportingHTML ? (
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ animation: 'spin 1s linear infinite' }}>
-                <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" strokeOpacity="0.25"/>
-                <path d="M20 11a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            ) : (
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2.5" y="2.5" width="17" height="17" rx="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                <text x="4.5" y="15.5" style={{fontSize:'7.5px', fontFamily:'monospace', fill:'currentColor', fontWeight:'bold', letterSpacing:'-0.5px'}}>{'</>'}</text>
-                <line x1="11" y1="6" x2="11" y2="13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                <polyline points="8,10.5 11,13.5 14,10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            )}
-          </button>
-          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
 
           {/* Create modal */}
           {showCreate && (
