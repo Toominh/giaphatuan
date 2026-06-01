@@ -29,25 +29,10 @@
     .node-line.drag-over-after  { box-shadow: 0 2px 0 0 #2a9060 inset; background: rgba(30,110,70,0.10); }
     .toggle-btn { width: 22px; height: 22px; flex-shrink: 0; border-radius: 4px; border: 1px solid #1e4070; background: #08182e; color: #4a88c8; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; }
     .toggle-btn:disabled { opacity: 0.3; cursor: default; }
-    .drag-handle { width: 16px; height: 16px; flex-shrink: 0; cursor: grab; display: flex; align-items: center; justify-content: center; color: #1e3858; font-size: 39px; border-radius: 3px; transition: color 0.15s; user-select: none; }
+    .drag-handle { width: 16px; height: 16px; flex-shrink: 0; cursor: grab; display: flex; align-items: center; justify-content: center; color: #1e3858; font-size: 12px; border-radius: 3px; transition: color 0.15s; user-select: none; }
     .drag-handle:hover { color: #3a6898; }
     .drag-handle:active { cursor: grabbing; }
     .drag-mode-active .drag-handle { color: #2a5080; }
-
-    /* ── Floating drag menu ──────────────────────────────────────────────────── */
-    .drag-menu-overlay { position: fixed; inset: 0; z-index: 9998; }
-    .drag-menu { position: fixed; z-index: 9999; background: #081830; border: 2px solid #1a4070; border-radius: 14px; padding: 8px; box-shadow: 0 8px 32px rgba(0,0,60,0.6); display: flex; flex-direction: column; align-items: center; gap: 6px; user-select: none; }
-    .drag-menu-up { grid-column: 2; }
-    .drag-menu-left { grid-column: 1; grid-row: 2; }
-    .drag-menu-center { grid-column: 2; grid-row: 2; }
-    .drag-menu-right { grid-column: 3; grid-row: 2; }
-    .drag-menu-down { grid-column: 2; grid-row: 3; }
-    .drag-menu .drag-arrow-btn { width: 56px; height: 56px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(30,80,160,0.85); border: 2px solid #2a6090; border-radius: 10px; color: #7ac8f8; font-size: 32px; font-weight: 700; cursor: pointer; transition: all 0.12s; flex-shrink: 0; line-height: 1; }
-    .drag-menu .drag-arrow-btn:hover { background: rgba(40,100,200,0.95); border-color: #3a8ac8; transform: scale(1.08); }
-    .drag-menu .drag-arrow-btn:active { transform: scale(0.95); }
-    .drag-menu .drag-close-btn { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #1a3050; border-radius: 8px; color: #2a5080; font-size: 18px; cursor: pointer; transition: all 0.12s; }
-    .drag-menu .drag-close-btn:hover { color: #4a7aaa; border-color: #2a5080; }
-    
     .name-male { color: #38bdf8; font-weight: 600; }
     .name-female { color: #d65b82; font-weight: 600; }
     .name-spouse { color: rgb(255,190,0); margin-right: 4px; font-weight: 700; }
@@ -126,7 +111,7 @@
     .intro-tab { padding: 10px 22px; font-size: 14px; font-weight: 600; color: #2a5070; border: none; background: transparent; border-top: 2px solid transparent; cursor: pointer; transition: color 0.15s; }
     .intro-tab:hover { color: #4a80b0; }
     .intro-tab.active { color: #6aaaf0; border-top-color: #6aaaf0; background: transparent; }
-    .intro-preview { color: #c8d8f0; line-height: 1.8; padding: 0px 10px; }
+    .intro-preview { color: #c8d8f0; line-height: 1.8; }
     .intro-preview h1,.intro-preview h2,.intro-preview h3 { color: #6aaaf0; margin: 1.2em 0 0.5em; font-family: serif; }
     .intro-preview h1 { font-size: 2em; border-bottom: 1px solid #0e2040; padding-bottom: 0.3em; }
     .intro-preview h2 { font-size: 1.4em; }
@@ -687,17 +672,18 @@
       { value: "'Verdana', Geneva, sans-serif",                               label: 'Verdana',       sample: 'Sans dễ đọc' },
     ];
     const DEFAULT_SETTINGS = {
-      fontSize: 22,
+      fontSize: 14,
       fontFamily: "'Courier New', monospace",
       colorMale: '#38bdf8',
-      colorFemale: '#f05687',
-      colorYears: '#c7d1dc',
-      colorAnniversary: '#4d6655',
-      colorGeneration: '#99db1f',
+      colorFemale: '#d65b82',
+      colorYears: '#7a9ab8',
+      colorAnniversary: '#60a878',
+      colorGeneration: '#3a6888',
     };
     const SettingsCtx = React.createContext(DEFAULT_SETTINGS);
     const SAMPLE = {
-      id: "root", name: "Tổ tiên", gender: "male", birthYear: null, deathYear: null, deathAnniversary: "", generation: 1, isSpouse: false, collapsed: false, children: []
+      id: "root", name: "Lê Văn Lãm", gender: "male", birthYear: 1897, deathYear: 1976, deathAnniversary: "", generation: 1, isSpouse: false, collapsed: false
+
     };
 
     function MemberForm({ initial, parentGen, isSpouseDefault, onSave, onCancel }) {
@@ -889,66 +875,7 @@
         }
       };
 
-      // ── 1b. Xuất file HTML ───────────────────────────────────────────────────
-      const handleExportHTML = async () => {
-        setLoadingMsg('Đang tạo file HTML…');
-        setStatus(null);
-        try {
-          // Fetch source HTML gốc (tránh dùng outerHTML vì React đã làm biến dạng)
-          const res = await fetch(window.location.href, { cache: 'no-store' });
-          if (!res.ok) throw new Error('Không tải được source HTML');
-          let htmlSource = await res.text();
-
-          // Snapshot dữ liệu hiện tại
-          const intro = localStorage.getItem(INTRO_KEY_F) || '';
-          const payload = JSON.stringify({ version: '2', tree, settings, intro });
-
-          // Script chạy sớm, ghi data vào localStorage trước khi React mount
-          const injectedScript = `<script id="__gia_pha_embedded__">
-(function(){
-  try {
-    var d = ${payload};
-    var families = [];
-    try { families = JSON.parse(localStorage.getItem('giapha_families') || '[]'); } catch(e){}
-    var fid = (families[0] && families[0].id) ? families[0].id : 'gp_' + Date.now();
-    if (!families.find(function(f){ return f.id === fid; })) {
-      families.unshift({ id: fid, name: d.tree ? (d.tree.name || 'Gia phả') : 'Gia phả', createdAt: Date.now() });
-      localStorage.setItem('giapha_families', JSON.stringify(families));
-    }
-    localStorage.setItem('giapha_tree_' + fid, JSON.stringify(d.tree));
-    localStorage.setItem('giapha_settings_' + fid, JSON.stringify(d.settings));
-    if (d.intro) localStorage.setItem('giapha_intro_' + fid, d.intro);
-  } catch(e){ console.warn('Embedded data error:', e); }
-})();
-<\/script>`;
-
-          // Chèn vào ngay sau <head> để chạy trước mọi thứ
-          if (htmlSource.includes('<head>')) {
-            htmlSource = htmlSource.replace('<head>', '<head>\n' + injectedScript);
-          } else if (htmlSource.includes('</head>')) {
-            htmlSource = htmlSource.replace('</head>', injectedScript + '\n</head>');
-          } else {
-            htmlSource = injectedScript + htmlSource;
-          }
-
-          const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `gia-pha-${new Date().toISOString().slice(0, 10)}.html`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-          setLoadingMsg('');
-          setStatus({ type: 'ok', msg: '✓ Đã xuất file HTML – mở file để dùng offline' });
-        } catch (e) {
-          setLoadingMsg('');
-          setStatus({ type: 'err', msg: '✗ Lỗi: ' + e.message });
-        }
-      };
-
-
+      // ── 2. Nhập data JSON ────────────────────────────────────────────────────
       const handleImport = () => {
         const input = document.createElement('input');
         input.type = 'file';
@@ -1091,20 +1018,6 @@
                 </span>
               </button>
 
-              {/* Xuất HTML */}
-              <button className="data-action-btn" onClick={handleExportHTML}>
-                <span className="da-icon">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="2" y="2" width="16" height="16" rx="2.5" stroke="#5a9ad8" strokeWidth="1.4" fill="none"/>
-                    <text x="4" y="14" style={{fontSize:'7px', fontFamily:'monospace', fill:'#4a8ac8', fontWeight:'bold'}}>{'</>'}</text>
-                  </svg>
-                </span>
-                <span className="da-text">
-                  <span className="da-title">Xuất file HTML</span>
-                  <span className="da-desc">Tạo file .html độc lập, mở được offline không cần server</span>
-                </span>
-              </button>
-
               {/* Nhập */}
               <button className="data-action-btn" onClick={handleImport}>
                 <span className="da-icon">⬆️</span>
@@ -1173,11 +1086,11 @@
     const DragCtx = React.createContext(null);
 
     function TreeNode({ node, onUpdate, onDelete, isRoot, showModal, dragMode, parentGen, showInfo, parentNode }) {
-      const { moveNode } = React.useContext(DragCtx);
+      const { dragState, setDragState, onDrop } = React.useContext(DragCtx);
       const settings = React.useContext(SettingsCtx);
       const [hover, setHover] = useState(false);
-      const [moving, setMoving] = useState(false);
-      const [mousePos, setMousePos] = useState(null);
+      const [dropZone, setDropZone] = useState(null);
+      const lineRef = useRef(null);
       const hasKids = node.children?.length > 0;
       const desc = countDesc(node);
       const fs = settings.fontSize;
@@ -1188,37 +1101,22 @@
         return "";
       })();
       const toggle = () => onUpdate(node.id, n => ({ ...n, collapsed: !n.collapsed }));
-
-      const handleDragHandleClick = (e) => {
-        e.stopPropagation();
-        setMousePos({ x: e.clientX, y: e.clientY });
-        setMoving(v => !v);
+      const isDragging = dragState?.id === node.id;
+      const isValidDropTarget = dragState && dragState.id !== node.id && !isAncestor(dragState.subtree, node.id, dragState.id);
+      const handleDragStart = (e) => { e.stopPropagation(); e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", node.id); setDragState({ id: node.id, subtree: node }); };
+      const handleDragEnd = () => { setDragState(null); setDropZone(null); };
+      const handleDragOver = (e) => {
+        if (!isValidDropTarget) return; e.preventDefault(); e.stopPropagation(); e.dataTransfer.dropEffect = "move";
+        const rect = lineRef.current.getBoundingClientRect(); const ratio = (e.clientY - rect.top) / rect.height;
+        if (isRoot) setDropZone('inside'); else if (ratio < 0.28) setDropZone('before'); else if (ratio > 0.72) setDropZone('after'); else setDropZone('inside');
       };
-
-      const handleMenuAction = (dir) => {
-        moveNode(node.id, dir);
-        setMoving(false);
-        setMousePos(null);
-      };
-
-      const closeDragMenu = () => {
-        setMoving(false);
-        setMousePos(null);
-      };
-
+      const handleDragLeave = (e) => { if (!lineRef.current.contains(e.relatedTarget)) setDropZone(null); };
+      const handleDrop = (e) => { e.preventDefault(); e.stopPropagation(); if (!isValidDropTarget || !dropZone) { setDropZone(null); return; } onDrop(dragState.id, node.id, dropZone); setDropZone(null); setDragState(null); };
+      const lineClass = ["node-line", isDragging ? "dragging" : "", isValidDropTarget && dropZone === 'inside' ? "drag-over-inside" : "", isValidDropTarget && dropZone === 'before' ? "drag-over-before" : "", isValidDropTarget && dropZone === 'after' ? "drag-over-after" : ""].filter(Boolean).join(" ");
       return (
         <div>
-          <div className="node-line" onMouseEnter={() => setHover(true)} onMouseLeave={() => { setHover(false); }}>
-            {/* Icon kéo thả */}
-            {dragMode && !isRoot ? (
-              <span
-                className="drag-handle"
-                title="Di chuyển node"
-                onClick={handleDragHandleClick}
-                style={{ cursor:'pointer', color: moving ? '#7ac8f8' : undefined, userSelect:'none' }}
-              >⠿</span>
-            ) : <span style={{ width:16, flexShrink:0 }} />}
-
+          <div ref={lineRef} data-node-id={node.id} className={lineClass} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+            {dragMode && !isRoot ? <span className="drag-handle" draggable onDragStart={handleDragStart} onDragEnd={handleDragEnd} title="Kéo để di chuyển">⠿</span> : <span style={{ width: 16, flexShrink: 0 }} />}
             <button className="toggle-btn" onClick={hasKids ? toggle : undefined} disabled={!hasKids}>{hasKids ? (node.collapsed ? "+" : "−") : "·"}</button>
             <span style={{ fontFamily: settings.fontFamily || "'Courier New', monospace", fontSize: fs, lineHeight: 2.5 }}>
               {node.isSpouse && <span style={{ color: '#ecbf00', marginRight: 4, fontWeight: 700 }}>+</span>}
@@ -1232,7 +1130,7 @@
               {node.deathAnniversary && <span style={{ color: settings.colorAnniversary, fontSize: fs * 0.83, marginLeft: 6 }}>✦ {node.deathAnniversary}</span>}
               {desc > 0 && !hover && <span style={{ color: "#1e3858", fontSize: fs * 0.82, marginLeft: 6 }}>({desc})</span>}
             </span>
-
+            {isValidDropTarget && dropZone && <span style={{ marginLeft: 8, fontSize: 10, color: dropZone === 'inside' ? '#2a9060' : '#3a8890' }}>{dropZone === 'before' ? '↑ chèn trước' : dropZone === 'after' ? '↓ chèn sau' : '→ thêm vào'}</span>}
             {hover && !dragMode && (
               <span style={{ display: "flex", gap: 4, marginLeft: 6, flexShrink: 0 }}>
                 <button onClick={() => showModal({ type: "add", nodeId: node.id, parentGen: node.generation, parentName: node.name })} style={{ fontSize: 11, padding: "1px 8px", background: "#081828", color: "#5090d0" }}>+ Thêm</button>
@@ -1241,29 +1139,6 @@
               </span>
             )}
           </div>
-
-          {/* Floating drag menu */}
-          {moving && mousePos && (
-            <>
-              <div className="drag-menu-overlay" onClick={closeDragMenu} />
-              <div className="drag-menu" style={{
-                left: Math.min(mousePos.x + 12, window.innerWidth - 180),
-                top: Math.min(mousePos.y + 12, window.innerHeight - 200)
-              }} onClick={e => e.stopPropagation()}>
-                {/* Up */}
-                <button className="drag-arrow-btn drag-menu-up" onClick={() => handleMenuAction('up')} title="Lên – cùng cấp">↑</button>
-                {/* Left, Center, Right */}
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                  <button className="drag-arrow-btn drag-menu-left" onClick={() => handleMenuAction('left')} title="Ra ngoài – lên 1 cấp">←</button>
-                  <button className="drag-close-btn" onClick={closeDragMenu} title="Đóng">✕</button>
-                  <button className="drag-arrow-btn drag-menu-right" onClick={() => handleMenuAction('right')} title="Vào trong – xuống 1 cấp">→</button>
-                </div>
-                {/* Down */}
-                <button className="drag-arrow-btn drag-menu-down" onClick={() => handleMenuAction('down')} title="Xuống – cùng cấp">↓</button>
-              </div>
-            </>
-          )}
-
           {!node.collapsed && hasKids && (
             <div className="children">{node.children.map(child =>
               child.isSpouse
@@ -2561,7 +2436,7 @@
       const [loading, setLoading] = useState(true);
       const [modal, setModal] = useState(null);
       const [dragMode, setDragMode] = useState(false);
-      const [pendingTree, setPendingTree] = useState(null); // preview trước khi Cập nhật
+      const [dragState, setDragState] = useState(null);
       const [view, setView] = useState('tree'); // 'tree' | 'text'
       const [showSettings, setShowSettings] = useState(false);
       const [showSearch, setShowSearch] = useState(false);
@@ -2684,82 +2559,15 @@
           }
         }, 80);
       }, []);
-      // Tính lại số đời cho toàn cây
-      const recalcGenerations = (node, gen) => {
-        const updated = { ...node, generation: gen };
-        updated.children = updated.children.map(child =>
-          recalcGenerations(child, child.isSpouse ? gen : gen + 1)
-        );
-        return updated;
-      };
-
-      // Tìm parent của một node
-      const findParent = (root, targetId, parent = null) => {
-        if (root.id === targetId) return parent;
-        for (const c of root.children) {
-          const found = findParent(c, targetId, root);
-          if (found !== undefined) return found;
-        }
-        return undefined;
-      };
-
-      // Di chuyển node theo hướng mũi tên, lưu vào pendingTree
-      const moveNode = useCallback((nodeId, dir) => {
-        const src = pendingTree || tree;
-        if (!src) return;
-
-        setPendingTree(prev => {
-          const base = prev || tree;
-          const parent = findParent(base, nodeId);
-          if (!parent) return base; // root không di chuyển
-
-          const idx = parent.children.findIndex(c => c.id === nodeId);
-          const node = parent.children[idx];
-          let newTree = base;
-
-          if (dir === 'up' && idx > 0) {
-            // Hoán đổi với anh/chị trước
-            const newChildren = [...parent.children];
-            [newChildren[idx - 1], newChildren[idx]] = [newChildren[idx], newChildren[idx - 1]];
-            newTree = updateNode(base, parent.id, n => ({ ...n, children: newChildren }));
-
-          } else if (dir === 'down' && idx < parent.children.length - 1) {
-            // Hoán đổi với em sau
-            const newChildren = [...parent.children];
-            [newChildren[idx], newChildren[idx + 1]] = [newChildren[idx + 1], newChildren[idx]];
-            newTree = updateNode(base, parent.id, n => ({ ...n, children: newChildren }));
-
-          } else if (dir === 'left') {
-            // Ra ngoài: tách khỏi parent, trở thành anh/em của parent (con của grandparent)
-            const grandParent = findParent(base, parent.id);
-            if (!grandParent) return base; // parent là root, không thể ra ngoài
-            const [treeWithout, extracted] = extractNode(base, nodeId);
-            const parentIdx = grandParent.children.findIndex(c => c.id === parent.id);
-            newTree = updateNode(treeWithout, grandParent.id, n => {
-              const nc = [...n.children];
-              nc.splice(parentIdx + 1, 0, extracted);
-              return { ...n, children: nc };
-            });
-
-          } else if (dir === 'right') {
-            // Vào trong: trở thành con của anh/chị liền trước (nếu có), hoặc con đầu tiên của em liền sau
-            const prevSibling = parent.children.slice(0, idx).reverse().find(c => !c.isSpouse);
-            if (!prevSibling) return base;
-            const [treeWithout, extracted] = extractNode(base, nodeId);
-            newTree = updateNode(treeWithout, prevSibling.id, n => ({ ...n, children: [...n.children, extracted] }));
-
-          } else {
-            return base;
-          }
-
-          return recalcGenerations(newTree, newTree.generation || 1);
+      const handleDrop = useCallback((draggedId, targetId, position) => {
+        setTree(prev => {
+          if (!prev || draggedId === prev.id) return prev;
+          const [treeWithout, extracted] = extractNode(prev, draggedId); if (!extracted) return prev;
+          if (position === 'inside') return insertAsChild(treeWithout, targetId, extracted);
+          if (targetId === treeWithout.id) return insertAsChild(treeWithout, targetId, extracted);
+          return insertAsSibling(treeWithout, targetId, extracted, position);
         });
-      }, [tree, pendingTree]);
-
-      const handleCommitMove = () => {
-        if (pendingTree) { setTree(pendingTree); setPendingTree(null); }
-      };
-      const handleCancelMove = () => { setPendingTree(null); };
+      }, []);
 
       const handleAdd = (form) => { const child = { id: genId(), collapsed: false, children: [], ...form }; handleUpdate(modal.nodeId, n => ({ ...n, children: [...n.children, child] })); setModal(null); };
       const handleEdit = (form) => { handleUpdate(modal.nodeId, n => ({ ...n, ...form })); setModal(null); };
@@ -2771,7 +2579,7 @@
 
       return (
         <SettingsCtx.Provider value={settings}>
-        <DragCtx.Provider value={{ moveNode }}>
+        <DragCtx.Provider value={{ dragState, setDragState, onDrop: handleDrop }}>
           <div style={{ background: "#0f172a", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }} className={dragMode ? "drag-mode-active" : ""}>
             <div className="header">
               <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
@@ -2820,31 +2628,9 @@
                     style={{ flex: 1 }}
                   >
                     <div className="tree-canvas" style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}>
-                      {(pendingTree || tree) && <TreeNode node={pendingTree || tree} onUpdate={handleUpdate} onDelete={handleDelete} isRoot={true} showModal={setModal} dragMode={dragMode} parentGen={(pendingTree || tree).generation} showInfo={setInfoPopup} />}
+                      {tree && <TreeNode node={tree} onUpdate={handleUpdate} onDelete={handleDelete} isRoot={true} showModal={setModal} dragMode={dragMode} parentGen={tree.generation} showInfo={setInfoPopup} />}
                     </div>
                   </div>
-
-                  {/* Banner Cập nhật khi có thay đổi chờ */}
-                  {pendingTree && (
-                    <div style={{ position:'absolute', bottom:20, left:'50%', transform:'translateX(-50%)', display:'flex', alignItems:'center', gap:10, background:'rgba(6,14,28,0.97)', border:'1px solid #2a5080', borderRadius:10, padding:'10px 16px', boxShadow:'0 6px 24px rgba(0,0,0,0.6)', zIndex:600, whiteSpace:'nowrap' }}>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
-                        <circle cx="8" cy="8" r="7" stroke="#e8a020" strokeWidth="1.4"/>
-                        <line x1="8" y1="4.5" x2="8" y2="8.5" stroke="#e8a020" strokeWidth="1.6" strokeLinecap="round"/>
-                        <circle cx="8" cy="11" r="0.9" fill="#e8a020"/>
-                      </svg>
-                      <span style={{fontSize:13, color:'#c0a060'}}>Chưa lưu thay đổi</span>
-                      <button onClick={handleCommitMove}
-                        style={{background:'rgba(20,80,40,0.9)', color:'#60d878', border:'1px solid #2a6030', borderRadius:6, padding:'4px 14px', fontSize:13, fontWeight:600}}
-                        onMouseEnter={e=>e.currentTarget.style.background='rgba(30,110,55,0.95)'}
-                        onMouseLeave={e=>e.currentTarget.style.background='rgba(20,80,40,0.9)'}
-                      >✓ Cập nhật</button>
-                      <button onClick={handleCancelMove}
-                        style={{background:'rgba(60,20,20,0.7)', color:'#e06070', border:'1px solid #4a1818', borderRadius:6, padding:'4px 10px', fontSize:13}}
-                        onMouseEnter={e=>e.currentTarget.style.background='rgba(90,25,25,0.9)'}
-                        onMouseLeave={e=>e.currentTarget.style.background='rgba(60,20,20,0.7)'}
-                      >✕ Hủy</button>
-                    </div>
-                  )}
                   {/* Nút về đầu cây */}
                   {(pan.x !== 0 || pan.y !== 0) && (
                     <button
