@@ -2302,63 +2302,6 @@
       const [creating, setCreating] = useState(false);
       const [editingId, setEditingId] = useState(null);
       const [editName, setEditName] = useState('');
-      const [autoLoading, setAutoLoading] = useState(false);
-
-      // Tự động tạo gia phả mẫu khi lần đầu mở (chưa có gia phả nào)
-      useEffect(() => {
-        const existing = getFamiliesIndex();
-        if (existing.length > 0) return; // Đã có gia phả, không làm gì
-
-        const loadSampleFamilies = async () => {
-          setAutoLoading(true);
-          try {
-            const res = await fetch('./data/index.json', { cache: 'no-store' });
-            if (!res.ok) return; // Không có file index, bỏ qua
-            const list = await res.json();
-            if (!Array.isArray(list) || list.length === 0) return;
-
-            const normalized = list.map(item =>
-              typeof item === 'string'
-                ? { name: item.replace(/\.json$/i, ''), file: item }
-                : item
-            );
-
-            const newFamilies = [];
-            for (const item of normalized) {
-              try {
-                const fileRes = await fetch(`./data/${item.file}`, { cache: 'no-store' });
-                if (!fileRes.ok) continue;
-                const data = await fileRes.json();
-
-                const id = genId();
-                // Tên gia phả = tên file (bỏ .json, giữ nguyên ký tự)
-                const familyName = item.name;
-
-                // Lưu cây
-                const tree = data.tree || (data.id ? data : null);
-                if (tree) localStorage.setItem(familyTreeKey(id), JSON.stringify(tree));
-                if (data.settings) localStorage.setItem(familySettingsKey(id), JSON.stringify(data.settings));
-                if (data.intro) localStorage.setItem(familyIntroKey(id), data.intro);
-
-                newFamilies.push({ id, name: familyName, createdAt: Date.now() });
-              } catch (e) {
-                // Bỏ qua file lỗi, tiếp tục
-              }
-            }
-
-            if (newFamilies.length > 0) {
-              saveFamiliesIndex(newFamilies);
-              setFamilies(newFamilies);
-            }
-          } catch (e) {
-            // Không có thư mục data hoặc lỗi mạng, bỏ qua
-          } finally {
-            setAutoLoading(false);
-          }
-        };
-
-        loadSampleFamilies();
-      }, []); // Chỉ chạy 1 lần khi mount
 
       const handleCreate = async () => {
         const name = newName.trim();
@@ -2503,18 +2446,7 @@
 
           {/* Body */}
           <div className="home-body">
-            {autoLoading ? (
-              <div className="home-empty">
-                <div className="home-empty-icon" style={{ opacity: 0.9 }}>
-                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none" style={{ animation: 'spin 1.5s linear infinite' }}>
-                    <circle cx="36" cy="36" r="30" stroke="rgba(180,140,60,0.15)" strokeWidth="3"/>
-                    <path d="M36 6a30 30 0 0 1 30 30" stroke="rgba(180,140,60,0.6)" strokeWidth="3" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div className="home-empty-title" style={{ color: 'rgba(180,150,60,0.8)' }}>Đang tải gia phả mẫu…</div>
-                <div className="home-empty-desc">Hệ thống đang tự động tạo dữ liệu từ thư mục data/</div>
-              </div>
-            ) : families.length === 0 ? (
+            {families.length === 0 ? (
               <div className="home-empty">
                 <div className="home-empty-icon">
                   <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
