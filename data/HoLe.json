@@ -1,6 +1,6 @@
 {
   "version": "2",
-  "exportDate": "2026-05-31T05:15:34.997Z",
+  "exportDate": "2026-06-01T16:51:54.587Z",
   "tree": {
     "id": "mpt764zo16h0q",
     "name": "Lê Đình Tục - ông cụ Kích",
@@ -3684,7 +3684,7 @@
                                     "deathAnniversary": "13/3",
                                     "isSpouse": false,
                                     "generation": 5,
-                                    "collapsed": false,
+                                    "collapsed": true,
                                     "children": [
                                       {
                                         "id": "mpt764zpby3jn",
@@ -4922,7 +4922,7 @@
                           {
                             "id": "mpt764zp9go2x",
                             "name": "Cụ bà cả",
-                            "gender": "male",
+                            "gender": "female",
                             "birthYear": null,
                             "deathYear": null,
                             "deathAnniversary": "",
@@ -4934,7 +4934,7 @@
                           {
                             "id": "mpt764zpk7swy",
                             "name": "Cụ bà thứ",
-                            "gender": "male",
+                            "gender": "female",
                             "birthYear": null,
                             "deathYear": null,
                             "deathAnniversary": "",
@@ -5007,11 +5007,12 @@
   },
   "settings": {
     "fontSize": 22,
-    "colorMale": "#6aacf0",
-    "colorFemale": "#f080a0",
-    "colorYears": "#a9c0d6",
-    "colorAnniversary": "#8ac79e",
-    "colorGeneration": "#afc5d5"
+    "fontFamily": "'Courier New', monospace",
+    "colorMale": "#38bdf8",
+    "colorFemale": "#f05687",
+    "colorYears": "#c7d1dc",
+    "colorAnniversary": "#4d6655",
+    "colorGeneration": "#99db1f"
   },
   "intro": "    <style>\n        :root {\n            --bg-color: #10172b;\n            --container-bg: #1e293b;\n            --text-main: #f8fafc;\n            --text-muted: #cbd5e1;\n            --primary: #38bdf8;\n            --accent: #10b981;\n            --border: #334155;\n        }\n\n        body {\n            background-color: var(--bg-color);\n            color: var(--text-main);\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            font-size: 20px;\n            line-height: 1.8;\n            margin: 0;\n\n        }\n\n        .container {\n            max-width: 900px;\n            margin: 0 auto;\n            background-color: var(--container-bg);\n            padding: 40px;\n            border-radius: 12px;\n            box-shadow: 0 10px 25px rgba(0,0,0,0.5);\n            border: 1px solid var(--border);\n        }\n\n        h1 {\n            color: var(--primary);\n            text-align: center;\n            font-size: 38px;\n            margin-bottom: 10px;\n            text-transform: uppercase;\n            letter-spacing: 1px;\n            font-weight: 800;\n        }\n\n        .subtitle {\n            text-align: center;\n            color: var(--text-muted);\n            font-size: 18px;\n            font-style: italic;\n            margin-bottom: 40px;\n            padding-bottom: 20px;\n            border-bottom: 1px solid var(--border);\n        }\n\n        h2 {\n            color: var(--accent);\n            font-size: 28px;\n            margin-top: 45px;\n            margin-bottom: 25px;\n            padding-left: 15px;\n            border-left: 5px solid var(--accent);\n            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);\n            padding-top: 8px;\n            padding-bottom: 8px;\n        }\n\n        p {\n            margin-bottom: 22px;\n            text-align: justify;\n        }\n\n        .highlight {\n            color: #fbbf24;\n            font-weight: bold;\n        }\n\n        .footer-note {\n            text-align: center;\n            margin-top: 50px;\n            padding-top: 30px;\n            border-top: 1px dashed var(--border);\n            font-style: italic;\n            color: var(--primary);\n        }\n\n        @media (max-width: 600px) {\n            body { padding: 15px 10px; font-size: 18px; }\n            .container { padding: 25px 20px; }\n            h1 { font-size: 28px; }\n            h2 { font-size: 24px; }\n        }\n    </style>\n\n\n    <div class=\"container\">\n        <h1>Gia Phả Họ Lê Văn</h1>\n        <div class=\"subtitle\">Ngành Thứ Ba - Làng Gia Lộc</div>\n\n        <h2>1. Nguồn Gốc và Sự Phân Ngành</h2>\n        <p>Ở làng Gia Lộc vào cuối thế kỷ XX, có nhiều dòng họ Lê. Có họ Lê Đình, Lê Đức và riêng Lê Văn có đến 6, 7 dòng họ. Phần lớn các họ đều từ Thái Bình ra đây. Họ Lê Văn của chúng ta cũng gốc từ <span class=\"highlight\">Hộ Đội - Thụy Anh - Thái Bình</span>. Các Cụ ra lập nghiệp ở Thiên Lộc, Hoa Phong (tên xã, huyện ngày nay), có lẽ vào cuối đời Lê đầu Nguyễn. Vào khoảng năm 1930, các Cụ trong họ đã tìm về gốc tích ở Hộ Đội, nhưng chưa tìm ra được. Đầu tiên họ là LÊ ĐÌNH; đến 5, 6 đời sau, từ thời Cụ LÊ VĂN BAO mới đổi là LÊ VĂN đến ngày nay.</p>\n        \n        <p>Ngành trưởng do ông Lê Văn Phòng thuộc đời thứ 6 là trưởng tộc cùng với các con và các cháu của Ông. Ngành thứ hai gồm 4 gia đình các ông: Lê Văn Nhạ, Lê Văn Nhẹ, Lê Văn Thành, Lê Văn Hà thuộc đời thứ 7 với gia đình các con cháu của các ông.</p>\n        \n        <p><span class=\"highlight\">NGÀNH THỨ BA</span> do Cụ Tổ đầu ngành <span class=\"highlight\">LÊ ĐÌNH TỤC (cụ KÍCH)</span> lưu truyền đến ngày nay. Ngành thứ ba là ngành đông nhất họ, nay được phát triển nhiều chi nhánh nhỏ ở Hà Nội, Hải Phòng, Quảng Ninh và có gia đình ở Miền Nam.</p>\n\n        <h2>2. Lịch Sử Phát Triển Ngành Thứ Ba</h2>\n        <p>Mấy đời đầu tiên không rõ các cụ lập nghiệp ra sao; đến đời cụ Tổ thứ tư <span class=\"highlight\">LÊ ĐÌNH BỦNG</span> (sinh khoảng năm 1850, mất khoảng năm 1922, thọ hơn 70 tuổi). Cụ người to béo, đầu tiên đi lưới như mọi người, dân làng gọi là Cụ Xã Bủng. Sau khi Cụ bà mất, cụ lấy Cụ Kê ở Lục Độ về, gia cảnh dần phát triển nghề làm nước mắm, nhà có khoảng 300 ang chượp và 4 thùng lọc. Gia đình trở nên khá giả, con cháu tiếp tục duy trì nghề truyền thống.</p>\n        \n        <p>Đồng thời, con cháu trong họ cũng tham gia các chức dịch làng xã đầu thế kỷ 20 như Lý trưởng, Tiên chỉ, Chánh Hội. Tiêu biểu như Cụ Tiên Bao, Cụ Tiên Tanh, Cụ Chánh Trúc, Cụ Tổng Yêm, Ông Bá Khôi, Ông Chánh Lãm, Ông Lý Tích... Sau cách mạng, nhiều người tham gia kháng chiến, làm cán bộ nhà nước. Đáng chú ý, ngành có 3 liệt sỹ hy sinh trong kháng chiến chống Mỹ.</p>\n\n        <h2>3. Nhà Thờ Họ và Việc Tế Lễ</h2>\n        <p>Về nhà thờ họ Lê, trước đây chưa có riêng. Hàng năm chỉ cúng giỗ vào ngày 18 tháng giêng tại nhà cụ LANG GẦY (Trưởng Tộc đời thứ 5). Sau này, việc thờ cúng được chuyển sang nhà Ông Lê Văn Phòng.</p>\n        \n        <p>Năm 1990, dòng họ đóng góp xây dựng nhà thờ tại khu đất do Ông Lê Văn Thành hiến tặng. Đến năm 1997, nhà thờ được tôn tạo khang trang. Hiện nay, lễ tế tổ hàng năm được tổ chức vào <span class=\"highlight\">ngày mồng 4 tháng giêng</span>, là dịp con cháu hội tụ đông đủ.</p>\n\n        <h2>4. Mộ Phần Tổ Tiên</h2>\n        <p>Mộ Cụ khởi thủy đã an vị tại khu đất hiện nay từ lâu đời. Sau nhiều lần di chuyển do đất đai sạt lở (1957-1958) và quy hoạch, đến năm 2000, dòng họ đã đưa các ngôi mộ quan trọng về khu mộ chung của Ngành, bao gồm mộ Cụ Bà thủy tổ, Cụ tổ đời thứ 4 LÊ ĐÌNH BỦNG, Cụ LÊ VĂN BAO và Cụ LÊ VĂN KHÔI.</p>\n        \n        <p>Đến năm 2019, toàn bộ ngôi mộ của các Cụ đã được di chuyển trang trọng lên <span class=\"highlight\">nghĩa trang mới Ninh Tiếp - Nghĩa Lộ</span>.</p>\n\n        <h2>5. Quá Trình Biên Soạn Gia Phả</h2>\n        <p>Bản gia phả được hình thành qua nhiều giai đoạn: Năm 1972 (Cụ Lê Văn Yêm), năm 2002 (Cụ Lê Văn Tăng). Năm 2010, ông Lê Văn Tiềm in ấn 50 bản phát cho các chi ngành.</p>\n        \n        <p>Cuốn gia phả hiện tại được cập nhật đến mùa Xuân Bính Ngọ năm 2026, với sự đóng góp thông tin từ các gia đình và sự hiệu đính của ông Lê Văn Điềm, Trương Tất Hường và người ghi chép Lê Hồng Giang.</p>\n        \n        <div class=\"footer-note\">\n            \"Việc ghi chép gia phả này nhằm giúp cho con cháu dù ở nơi đâu cũng luôn nhớ về nguồn gốc, tổ tiên và quê hương ĐẤT TỔ GIA LỘC.\"\n        </div>\n    </div>\n\n"
 }
