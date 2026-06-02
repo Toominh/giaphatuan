@@ -103,16 +103,16 @@
     .giodio-title { font-size: 20px; font-weight: 700; color: #e8c870; flex: 1; letter-spacing: 0.01em; }
     .giodio-badge { background: #2a1a00; color: #c89040; font-size: 13px; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #5a3800; }
     .giodio-body { overflow-y: auto; flex: 1; }
-    .giodio-month-header { padding: 14px 24px 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8da5be; border-bottom: 1px solid #081828; background: #070f1a; position: sticky; top: 0; z-index: 2; }
+    .giodio-month-header { padding: 14px 24px 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #3a5878; border-bottom: 1px solid #081828; background: #070f1a; position: sticky; top: 0; z-index: 2; }
     .giodio-item { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid #081828; transition: background 0.12s; }
     .giodio-item:hover { background: rgba(20,50,100,0.25); }
     .giodio-day { font-size: 28px; font-weight: 800; color: #e8c870; min-width: 48px; text-align: center; line-height: 1; flex-shrink: 0; font-variant-numeric: tabular-nums; }
-    .giodio-day-label { font-size: 14px; color: #a2b6cc; text-align: center; margin-top: 3px; font-weight: 500; }
+    .giodio-day-label { font-size: 12px; color: #5a7898; text-align: center; margin-top: 3px; font-weight: 500; }
     .giodio-divider { width: 2px; height: 42px; background: #1a3050; border-radius: 2px; flex-shrink: 0; }
     .giodio-info { flex: 1; min-width: 0; }
     .giodio-name { font-size: 18px; font-weight: 700; line-height: 1.3; }
     .giodio-meta { font-size: 13px; color: #3a6888; margin-top: 4px; display: flex; gap: 10px; flex-wrap: wrap; }
-    .giodio-gen { font-size: 14px; color: #83ace1; background: #081828; padding: 2px 10px; border-radius: 20px; border: 1px solid #0e2440; align-self: center; flex-shrink: 0; }
+    .giodio-gen { font-size: 12px; color: #2a4870; background: #081828; padding: 2px 10px; border-radius: 20px; border: 1px solid #0e2440; align-self: center; flex-shrink: 0; }
     .giodio-empty { padding: 48px 24px; text-align: center; color: #1e3858; font-size: 16px; }
     /* Giới thiệu popup */
     .intro-overlay { position: fixed; inset: 0; background: #060e1c; z-index: 10000; display: flex; flex-direction: column; }
@@ -456,31 +456,31 @@
     .home-dropdown-danger:hover { background: rgba(180,40,40,0.1) !important; color: #e08080 !important; }
     .home-dropdown-sep { border: none; border-top: 1px solid rgba(180,140,60,0.1); margin: 3px 0; }
 
-    /* ── Floating About Button (Home) ──────────────────────────── */
+    /* ── Floating Export HTML Button (Home) ──────────────────────────── */
     .home-export-fab {
       position: fixed;
-      top: 28px;
+      bottom: 28px;
       right: 28px;
       width: 54px;
       height: 54px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(40,100,200,0.22) 0%, rgba(20,60,140,0.28) 100%);
-      border: 1.5px solid rgba(80,150,240,0.45);
-      color: #6aacf0;
+      background: linear-gradient(135deg, rgba(180,140,40,0.18) 0%, rgba(120,90,20,0.22) 100%);
+      border: 1.5px solid rgba(180,140,60,0.45);
+      color: #c8a840;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 18px rgba(60,120,220,0.15);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 18px rgba(180,140,40,0.12);
       transition: all 0.22s;
       z-index: 1000;
       padding: 0;
     }
     .home-export-fab:hover {
-      background: linear-gradient(135deg, rgba(50,120,230,0.32) 0%, rgba(30,80,180,0.38) 100%);
-      border-color: rgba(100,170,255,0.7);
-      color: #90c8ff;
-      box-shadow: 0 6px 32px rgba(0,0,0,0.6), 0 0 28px rgba(60,130,240,0.28);
+      background: linear-gradient(135deg, rgba(200,160,50,0.28) 0%, rgba(140,100,25,0.32) 100%);
+      border-color: rgba(220,175,60,0.7);
+      color: #e8c860;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.6), 0 0 28px rgba(180,140,40,0.22);
       transform: scale(1.07);
     }
     .home-export-fab:active { transform: scale(0.96); }
@@ -490,11 +490,11 @@
       top: 50%;
       transform: translateY(-50%);
       background: #07101c;
-      border: 1px solid rgba(80,150,240,0.3);
+      border: 1px solid rgba(180,140,60,0.3);
       border-radius: 8px;
       padding: 6px 13px;
       font-size: 12px;
-      color: #6aacf0;
+      color: #c8a840;
       white-space: nowrap;
       pointer-events: none;
       opacity: 0;
@@ -502,57 +502,6 @@
       box-shadow: 0 4px 16px rgba(0,0,0,0.5);
     }
     .home-export-fab:hover .home-export-fab-tooltip { opacity: 1; }
-
-    /* ── About Popup ─────────────────────────────────────────────── */
-    .about-overlay {
-      position: fixed; inset: 0;
-      background: rgba(3,8,18,0.88);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10000;
-    }
-    .about-panel {
-      background: #09162a;
-      border: 1px solid #1e4070;
-      border-radius: 16px;
-      width: 500px;
-      max-width: calc(100vw - 32px);
-      max-height: calc(100vh - 60px);
-      overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,30,0.9);
-      animation: aboutFadeIn 0.22s ease;
-    }
-    @keyframes aboutFadeIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: none; } }
-    .about-header {
-      padding: 22px 24px 16px;
-      border-bottom: 1px solid #0e2040;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .about-icon-wrap {
-      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, rgba(40,100,200,0.25), rgba(20,60,140,0.3));
-      border: 1.5px solid rgba(80,150,240,0.4);
-      display: flex; align-items: center; justify-content: center;
-      color: #6aacf0;
-    }
-    .about-title { font-size: 24px; font-weight: 700; color: #a0c8f0; flex: 1; font-family: "Palatino Linotype", serif; }
-    .about-close { background: none; border: none; color: #3a6080; font-size: 26px; cursor: pointer; padding: 0 2px; line-height: 1; transition: color 0.15s; }
-    .about-close:hover { color: #90b8d8; }
-    .about-body { padding: 20px 24px 24px; }
-    .about-section { margin-bottom: 18px; }
-    .about-section:last-child { margin-bottom: 0; }
-    .about-section-title {
-      font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      color: #2a5878; margin-bottom: 8px; display: flex; align-items: center; gap: 7px;
-    }
-    .about-section-title::after { content: ''; flex: 1; height: 1px; background: #0e2840; }
-    .about-desc { font-size: 17.5px; color: #7a9ab8; line-height: 1.75; }
-    .about-feature-list { display: flex; flex-direction: column; gap: 7px; margin: 0; padding: 0; list-style: none; }
-    .about-feature-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 17px; color: #7090b0; line-height: 1.55; }
-    .about-feature-list li::before { content: '◆'; color: #2a6090; font-size: 10px; margin-top: 5px; flex-shrink: 0; }
-    @media (max-width: 600px) {
-      .about-panel { width: 100% !important; max-width: 100% !important; max-height: 100% !important; height: 100%; border-radius: 0 !important; }
-      .about-overlay { padding: 0 !important; align-items: stretch !important; }
-    }
 
     .home-footer {
       padding: 20px 24px 28px;
@@ -680,9 +629,6 @@
       // Ngày giỗ
       if (node.deathAnniversary) line += ` ✦ ${node.deathAnniversary}`;
 
-      // Ghi chú
-      if (node.note) line += ` {${node.note}}`;
-
       let lines = [line];
       for (const child of (node.children || [])) {
         lines = lines.concat(treeToText(child, level + 1));
@@ -722,11 +668,6 @@
           content = content.replace(yearMatch[0], '').trim();
         }
 
-        // Ghi chú trong {}
-        let note = '';
-        const noteMatch = content.match(/\{(.+?)\}/);
-        if (noteMatch) { note = noteMatch[1].trim(); content = content.replace(noteMatch[0], '').trim(); }
-
         let deathAnniversary = '';
         // ✦ hoặc ~ ngày giỗ
         const annMatch = content.match(/[✦~]\s*(.+)$/);
@@ -739,7 +680,7 @@
         const name = content.trim();
         if (!name) throw new Error(`Dòng ${l.lineNum}: Thiếu tên`);
 
-        return { id: genId(), name, gender, birthYear, deathYear, deathAnniversary, note, isSpouse, generation: generation || 1, collapsed: false, children: [] };
+        return { id: genId(), name, gender, birthYear, deathYear, deathAnniversary, isSpouse, generation: generation || 1, collapsed: false, children: [] };
       }
 
       // Xây cây từ indent
@@ -812,7 +753,6 @@
       const [bYear, setBYear] = useState(initial?.birthYear || "");
       const [dYear, setDYear] = useState(initial?.deathYear || "");
       const [ann, setAnn] = useState(initial?.deathAnniversary || "");
-      const [note, setNote] = useState(initial?.note || "");
       const [isSpouse, setIsSpouse] = useState(initial?.isSpouse !== undefined ? initial.isSpouse : (isSpouseDefault || false));
       // Đời tự tính: bạn đời = cùng đời cha, con = đời cha + 1
       // Khi sửa: giữ nguyên đời cũ. Khi thêm mới: tính từ cha
@@ -821,7 +761,7 @@
         : (isSpouse ? parentGen : parentGen + 1);
       const save = () => {
         if (!name.trim()) return;
-        onSave({ name: name.trim(), gender, birthYear: bYear ? parseInt(bYear) : null, deathYear: dYear ? parseInt(dYear) : null, deathAnniversary: ann.trim(), note: note.trim(), isSpouse, generation: computedGen });
+        onSave({ name: name.trim(), gender, birthYear: bYear ? parseInt(bYear) : null, deathYear: dYear ? parseInt(dYear) : null, deathAnniversary: ann.trim(), isSpouse, generation: computedGen });
       };
       return (
         <div>
@@ -851,10 +791,6 @@
               pattern="\d{1,2}/\d{1,2}"
               maxLength={5}
             />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Ghi chú</label>
-            <input value={note} onChange={e => setNote(e.target.value)} placeholder="Ghi chú ngắn về thành viên..." />
           </div>
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 18 }}>
             <button onClick={onCancel} style={{ background: "transparent", color: "#5a7898" }}>Hủy</button>
@@ -1327,7 +1263,6 @@
               {yearStr && <span style={{ color: settings.colorYears, fontSize: fs * 0.87, fontStyle: "italic", marginLeft: 4 }}>{yearStr}</span>}
               {node.deathAnniversary && <span style={{ color: settings.colorAnniversary, fontSize: fs * 0.83, marginLeft: 6 }}>✦ {node.deathAnniversary}</span>}
               {desc > 0 && !hover && <span style={{ color: "#1e3858", fontSize: fs * 0.82, marginLeft: 6 }}>({desc})</span>}
-              {node.note && <span style={{ color: "#6a8aaa", fontSize: fs * 0.80, fontStyle: "italic", marginLeft: 8 }}>{'{' + node.note + '}'}</span>}
             </span>
 
             {hover && !dragMode && (
@@ -1408,11 +1343,10 @@
         <div className="text-view">
           <div className="syntax-hint">
             <b>Cú pháp:</b> &nbsp;
-            <code style={{color:'#3a7898'}}>Họ Tên (nữ) [năm sinh-năm mất] ✦ ngày giỗ {'{ghi chú}'} §đời</code> &nbsp;·&nbsp;
+            <code style={{color:'#3a7898'}}>Họ Tên (nữ) [năm sinh-năm mất] ✦ ngày giỗ §đời</code> &nbsp;·&nbsp;
             <code style={{color:'#2a6858'}}>+</code> = bạn đời &nbsp;·&nbsp;
             Thụt lề <b>6 dấu cách</b> (hoặc 1 Tab) = 1 cấp con &nbsp;·&nbsp;
-            <code style={{color:'#507858'}}>✦</code> hoặc <code style={{color:'#507858'}}>~</code> = ngày giỗ &nbsp;·&nbsp;
-            <code style={{color:'#507858'}}>{'{}'}</code> = ghi chú
+            <code style={{color:'#507858'}}>✦</code> hoặc <code style={{color:'#507858'}}>~</code> = ngày giỗ
           </div>
           <div className="text-toolbar">
             <button onClick={handleApply} disabled={!parsed} style={{ background: parsed ? "#0e3020" : "#080f18", color: parsed ? "#50c878" : "#2a4a38", border: parsed ? "1px solid #1a6030" : "1px solid #0a2018", fontWeight: 600 }}>
@@ -2059,7 +1993,7 @@
                             {item.name}
                           </div>
                           <div className="giodio-meta">
-                            {years && <span style={{ fontStyle: 'italic', color: '#bbd2e1' }}>{years}</span>}
+                            {years && <span style={{ fontStyle: 'italic', color: '#4a7898' }}>{years}</span>}
                             <span style={{ color: '#3a6888' }}>✦ {item.rawDate} âm lịch</span>
                           </div>
                         </div>
@@ -2467,7 +2401,64 @@
         setEditName(f.name);
       };
 
-      const [showAbout, setShowAbout] = React.useState(false);
+      const [exportingHTML, setExportingHTML] = React.useState(false);
+
+      const handleExportAllHTML = async () => {
+        if (exportingHTML) return;
+        setExportingHTML(true);
+        try {
+          const res = await fetch(window.location.href, { cache: 'no-store' });
+          if (!res.ok) throw new Error('Không tải được source HTML');
+          let htmlSource = await res.text();
+
+          // Thu thập toàn bộ dữ liệu tất cả gia phả
+          const allFamilies = getFamiliesIndex();
+          const snapshot = {
+            families: allFamilies,
+            trees: {},
+            settings: {},
+            intros: {},
+          };
+          for (const f of allFamilies) {
+            try { const t = localStorage.getItem(familyTreeKey(f.id)); if (t) snapshot.trees[f.id] = JSON.parse(t); } catch {}
+            try { const s = localStorage.getItem(familySettingsKey(f.id)); if (s) snapshot.settings[f.id] = JSON.parse(s); } catch {}
+            try { const i = localStorage.getItem(familyIntroKey(f.id)); if (i) snapshot.intros[f.id] = i; } catch {}
+          }
+
+          const injectedScript = `<script id="__gia_pha_embedded__">
+(function(){
+  try {
+    var snap = ${JSON.stringify(snapshot)};
+    localStorage.setItem('giapha_families_v1', JSON.stringify(snap.families));
+    for (var id in snap.trees)    localStorage.setItem('giapha_tree_'     + id, JSON.stringify(snap.trees[id]));
+    for (var id in snap.settings) localStorage.setItem('giapha_settings_' + id, JSON.stringify(snap.settings[id]));
+    for (var id in snap.intros)   localStorage.setItem('giapha_intro_'    + id, snap.intros[id]);
+  } catch(e){ console.warn('Embedded data error:', e); }
+})();
+<\/script>`;
+
+          if (htmlSource.includes('<head>')) {
+            htmlSource = htmlSource.replace('<head>', '<head>\n' + injectedScript);
+          } else if (htmlSource.includes('</head>')) {
+            htmlSource = htmlSource.replace('</head>', injectedScript + '\n</head>');
+          } else {
+            htmlSource = injectedScript + htmlSource;
+          }
+
+          const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `gia-pha-${new Date().toISOString().slice(0, 10)}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch (e) {
+          alert('Lỗi xuất file: ' + e.message);
+        }
+        setExportingHTML(false);
+      };
 
       const saveEdit = (id) => {
         const name = editName.trim();
@@ -2568,91 +2559,43 @@
                 })}
               </div>
             )}
-
-            {/* Create button — ngay dưới danh sách */}
-            {!autoLoading && (
-              <div style={{ marginTop: 18, display: 'flex', justifyContent: 'center' }}>
-                <button className="home-create-btn" onClick={() => setShowCreate(true)}>
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
-                    <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                  Tạo gia phả mới
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* Footer placeholder — giữ layout, không còn nút */}
-          <div className="home-footer" style={{ padding: 0, minHeight: 0, border: 'none' }} />
+          {/* Footer CTA */}
+          <div className="home-footer">
+            <button className="home-create-btn" onClick={() => setShowCreate(true)}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+                <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              Tạo gia phả mới
+            </button>
+          </div>
 
-          {/* ── Floating About Button ── */}
+          {/* ── Floating Export HTML Button ── */}
           <button
             className="home-export-fab"
-            onClick={() => setShowAbout(true)}
-            title="Giới thiệu ứng dụng"
+            onClick={handleExportAllHTML}
+            title="Xuất tất cả gia phả thành file HTML"
           >
-            <span className="home-export-fab-tooltip">Giới thiệu ứng dụng</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.6"/>
-              <line x1="12" y1="11" x2="12" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="12" cy="7.5" r="1.1" fill="currentColor"/>
-            </svg>
+            <span className="home-export-fab-tooltip">
+              {exportingHTML ? 'Đang xuất…' : 'Xuất tất cả gia phả (.html)'}
+            </span>
+            {exportingHTML ? (
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ animation: 'spin 1s linear infinite' }}>
+                <circle cx="11" cy="11" r="9" stroke="currentColor" strokeWidth="2" strokeOpacity="0.25"/>
+                <path d="M20 11a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2.5" y="2.5" width="17" height="17" rx="3" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                <text x="4.5" y="15.5" style={{fontSize:'7.5px', fontFamily:'monospace', fill:'currentColor', fontWeight:'bold', letterSpacing:'-0.5px'}}>{'</>'}</text>
+                <line x1="11" y1="6" x2="11" y2="13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                <polyline points="8,10.5 11,13.5 14,10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
           </button>
-
-          {/* ── About Popup ── */}
-          {showAbout && (
-            <div className="about-overlay" onMouseDown={e => { if (e.target === e.currentTarget) setShowAbout(false); }}>
-              <div className="about-panel">
-                <div className="about-header">
-                  <div className="about-icon-wrap">
-                    <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
-                      <line x1="18" y1="26" x2="18" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      <line x1="18" y1="19" x2="13" y2="14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-                      <line x1="18" y1="19" x2="23" y2="14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-                      <line x1="13" y1="14" x2="10" y2="11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                      <line x1="13" y1="14" x2="15" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                      <line x1="23" y1="14" x2="21" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                      <line x1="23" y1="14" x2="26" y2="11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                    </svg>
-                  </div>
-                  <div className="about-title">Quản Lý Gia Phả</div>
-                  <button className="about-close" onClick={() => setShowAbout(false)}>×</button>
-                </div>
-                <div className="about-body">
-                  <div className="about-section">
-                    <div className="about-section-title">Giới thiệu</div>
-                    <div className="about-desc">
-                      Ứng dụng <strong style={{color:'#a0c8f0'}}>Quản Lý Gia Phả</strong> giúp bạn xây dựng, lưu trữ và khám phá cây phả hệ dòng họ một cách trực quan ngay trên trình duyệt, không cần cài đặt hay đăng nhập. Toàn bộ dữ liệu được lưu cục bộ trên thiết bị của bạn.
-                    </div>
-                  </div>
-
-                  <div className="about-section">
-                    <div className="about-section-title">Tính năng nổi bật</div>
-                    <ul className="about-feature-list">
-                      <li>Quản lý nhiều gia phả độc lập trên cùng một thiết bị</li>
-                      <li>Thêm, sửa, xóa thành viên với đầy đủ thông tin: tên, giới tính, năm sinh/mất, vợ/chồng, ghi chú</li>
-                      <li>Hiển thị cây phả hệ dạng cây trực quan, hỗ trợ kéo thả sắp xếp thứ tự</li>
-                      <li>Xem ngày giỗ theo từng tháng âm lịch</li>
-                      <li>Chỉnh màu sắc, cỡ chữ và giao diện theo sở thích</li>
-                      <li>Viết lời giới thiệu dòng họ với trình soạn thảo HTML</li>
-                      <li>Nhập / xuất dữ liệu dạng JSON để sao lưu và khôi phục</li>
-                      <li>Tìm kiếm nhanh thành viên trong cây gia phả</li>
-                    </ul>
-                  </div>
-
-                  <div className="about-section">
-                    <div className="about-section-title">Lưu trữ dữ liệu</div>
-                    <div className="about-desc">
-                      Tất cả dữ liệu được lưu trong <strong style={{color:'#7aaccf'}}>localStorage</strong> của trình duyệt — không gửi lên máy chủ, không yêu cầu kết nối mạng sau khi tải trang. Hãy sao lưu định kỳ bằng chức năng <em>Xuất JSON</em> để tránh mất dữ liệu khi xóa cache.
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-            </div>
-          )}
+          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
 
           {/* Create modal */}
           {showCreate && (
@@ -2897,28 +2840,6 @@
         if (e.target.closest('button, input, select, a')) return;
         startPan(e.clientX, e.clientY);
       };
-
-      // Wheel scroll: cuộn dọc (hoặc ngang khi giữ Shift)
-      // Dùng ref để tránh re-render và đảm bảo luôn có giá trị pan mới nhất
-      const panStateRef = useRef(pan);
-      useEffect(() => { panStateRef.current = pan; }, [pan]);
-
-      useEffect(() => {
-        const el = viewportRef.current;
-        if (!el) return;
-        const onWheel = (e) => {
-          e.preventDefault();
-          const SPEED = 1.2;
-          const dx = e.shiftKey ? e.deltaY * SPEED : e.deltaX * SPEED;
-          const dy = e.shiftKey ? 0 : e.deltaY * SPEED;
-          setPan(prev => ({
-            x: Math.min(0, prev.x - dx),
-            y: Math.min(0, prev.y - dy),
-          }));
-        };
-        el.addEventListener('wheel', onWheel, { passive: false });
-        return () => el.removeEventListener('wheel', onWheel);
-      }, [loading]);
 
       // Swallow click after a pan drag so node buttons don't fire
       const handleViewportClickCapture = (e) => {
