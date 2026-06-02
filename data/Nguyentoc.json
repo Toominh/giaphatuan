@@ -1,0 +1,494 @@
+{
+  "version": "2",
+  "exportDate": "2026-06-02T15:58:30.422Z",
+  "tree": {
+    "id": "root",
+    "name": "Nguyễn Văn Hương",
+    "gender": "male",
+    "birthYear": null,
+    "deathYear": null,
+    "deathAnniversary": "",
+    "generation": 1,
+    "isSpouse": false,
+    "collapsed": false,
+    "children": [
+      {
+        "id": "mpwt8lssikitu",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwtbm4jev0d7",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Tảo",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtbvz8pwp8n",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Bân",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtc4x6uiiet",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Khải",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Nguyễn Văn Gấm",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwt8ymhi1sx4",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwtd1yje5zff",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Vịnh",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtdcymovvvv",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Thức",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtdqm1tfo18",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Tẫn",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Nguyễn Văn Phúng",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwt9bbcl0z2d",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwte3ukytf1b",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Tỉnh",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtecknb0i50",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Sứa",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Nguyễn Thị Miến",
+        "gender": "female",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwt9piofkoc7",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwtf0p8ved9d",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mpwtfckpa4ksf",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Thị Uy",
+                "gender": "female",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtfpbxk246e",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Tiềm",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              }
+            ],
+            "name": "Vợ 1",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": true,
+            "generation": 2
+          },
+          {
+            "id": "mpwtg6770lf4q",
+            "collapsed": true,
+            "children": [
+              {
+                "id": "mpwtgj6pq0ajy",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Thị Quy",
+                "gender": "female",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtgtoa65k53",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Khoa",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwth6g8tgi3a",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Khương",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwthffic9ygc",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Khôi",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              }
+            ],
+            "name": "Nguyễn Thị Lán",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": true,
+            "generation": 2
+          }
+        ],
+        "name": "Nguyễn Văn Trường - Thiêm",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwtaaou6kvvc",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwti071zeyrf",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mpwtira11uab2",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Hùng",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtjb66l46ya",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Mạnh",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtjpci0c7ck",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Cảng",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtjzod0vhna",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Thạnh",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              }
+            ],
+            "name": "Nguyễn Thị Hấn",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": true,
+            "generation": 2
+          },
+          {
+            "id": "mpwtifrke1q7w",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mpwtkk7eh5sex",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Thị Tiền",
+                "gender": "female",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtkwclhpwvg",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Thị Trinh",
+                "gender": "female",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtl7gh5oaql",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Thị Tầm",
+                "gender": "female",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              },
+              {
+                "id": "mpwtli4xy1muf",
+                "collapsed": false,
+                "children": [],
+                "name": "Nguyễn Văn Vang",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 3
+              }
+            ],
+            "name": "Nguyễn Thị Mai",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": true,
+            "generation": 2
+          }
+        ],
+        "name": "Nguyễn Văn Phích",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwtamc5xudgz",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwtlu9ojxhy8",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Thanh",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Nguyễn Văn Dưỡng",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwtaxyg4nbhx",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwtm886tw1rq",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Thành",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtmib03jd14",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Sơn",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtmrx8kos3i",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Văn Hải",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          },
+          {
+            "id": "mpwtn9fwf24at",
+            "collapsed": false,
+            "children": [],
+            "name": "Nguyễn Thị Hằng",
+            "gender": "female",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Nguyễn Văn Diệm",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      }
+    ]
+  },
+  "settings": {
+    "fontSize": 22,
+    "fontFamily": "'Courier New', monospace",
+    "colorMale": "#38bdf8",
+    "colorFemale": "#f05687",
+    "colorYears": "#c7d1dc",
+    "colorAnniversary": "#4d6655",
+    "colorGeneration": "#99db1f"
+  },
+  "intro": ""
+}

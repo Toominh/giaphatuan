@@ -1,4 +1,6 @@
 [
   { "name": "Họ Lê Văn",     "file": "HoLe.json" },
-  { "name": "Họ Nguyễn",     "file": "HoNguyen.json" }
+  { "name": "Họ Nguyễn",     "file": "HoNguyen.json" },
+  { "name": "Họ Đỗ",     "file": "HoDo.json" },
+  { "name": "Nguyễn tộc",     "file": "Nguyentoc.json" }
 ]

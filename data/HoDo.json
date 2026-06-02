@@ -1,0 +1,523 @@
+{
+  "version": "2",
+  "exportDate": "2026-06-02T15:42:26.979Z",
+  "tree": {
+    "id": "root",
+    "name": "Tổ ngãnh",
+    "gender": "male",
+    "birthYear": null,
+    "deathYear": null,
+    "deathAnniversary": "",
+    "generation": 1,
+    "isSpouse": false,
+    "collapsed": false,
+    "children": [
+      {
+        "id": "mpwsif9mr3kmg",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwsjdokwwia0",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mpwsjkoc0k8vb",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "mpwsjwpbotbgg",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "mpwsk9g2dh0p5",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "mpwskuue5sdlw",
+                            "collapsed": false,
+                            "children": [],
+                            "name": "Con trưởng ở Cẩm Phả",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          },
+                          {
+                            "id": "mpwslbasrjutm",
+                            "collapsed": false,
+                            "children": [],
+                            "name": "Đỗ Văn Trạc",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          }
+                        ],
+                        "name": "Đỗ Văn Úy",
+                        "gender": "male",
+                        "birthYear": null,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "isSpouse": false,
+                        "generation": 6
+                      }
+                    ],
+                    "name": "Cụ tổ",
+                    "gender": "male",
+                    "birthYear": null,
+                    "deathYear": null,
+                    "deathAnniversary": "",
+                    "isSpouse": false,
+                    "generation": 5
+                  }
+                ],
+                "name": "Cụ tổ",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 4
+              }
+            ],
+            "name": "Cụ tổ",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Cụ tổ",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      },
+      {
+        "id": "mpwsin7zf5zum",
+        "collapsed": false,
+        "children": [
+          {
+            "id": "mpwsltx4qlhwh",
+            "collapsed": false,
+            "children": [
+              {
+                "id": "mpwsm27v99huc",
+                "collapsed": false,
+                "children": [
+                  {
+                    "id": "mpwsmke03tfar",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "mpwsqee4u2nh4",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "mpwsqt957a8e2",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "mpwst3oypn34a",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Lấn",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwstgn7zvb4n",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Lần",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsttzuxmkrs",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Hồng",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsu5mp0i6vr",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Hiếm",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsugafkoy4m",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Tam",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsutoxx6c89",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Len",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsv7psq70o3",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Tá - Gí",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              }
+                            ],
+                            "name": "Đỗ Văn Dở",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          },
+                          {
+                            "id": "mpwsraf2y0qpp",
+                            "collapsed": false,
+                            "children": [],
+                            "name": "Đỗ Thị Bé",
+                            "gender": "female",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          },
+                          {
+                            "id": "mpwsrn6jvn2y6",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "mpwsvpixqa72h",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Doạng",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsw360f7vfj",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Đàm",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwswg6zq1ckx",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Vân",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwswqo509851",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Lún",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsx5uwoxyeo",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Lín",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsxhg3bsiyn",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Dạn",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              }
+                            ],
+                            "name": "Đỗ Văn Dờ",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          },
+                          {
+                            "id": "mpwssqw5l2b9k",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "mpwsxvzu0jnmu",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Am",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsy5xjc90fw",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Văn Cam",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsyfms0y7uk",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Lành",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsyot67wte0",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Đỗ Thị Lẽ",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              }
+                            ],
+                            "name": "Đỗ Văn Nguyên",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          }
+                        ],
+                        "name": "Đỗ Văn Thịnh",
+                        "gender": "male",
+                        "birthYear": null,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "isSpouse": false,
+                        "generation": 6
+                      }
+                    ],
+                    "name": "Đỗ Văn Khang",
+                    "gender": "male",
+                    "birthYear": null,
+                    "deathYear": null,
+                    "deathAnniversary": "",
+                    "isSpouse": false,
+                    "generation": 5
+                  },
+                  {
+                    "id": "mpwsn111fivhr",
+                    "collapsed": false,
+                    "children": [
+                      {
+                        "id": "mpwsnkgo2c4mm",
+                        "collapsed": false,
+                        "children": [
+                          {
+                            "id": "mpwsnsp7kilpf",
+                            "collapsed": false,
+                            "children": [
+                              {
+                                "id": "mpwso2l1m90qa",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Hà Minh Tuân",
+                                "gender": "male",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              },
+                              {
+                                "id": "mpwsoia18zluv",
+                                "collapsed": false,
+                                "children": [],
+                                "name": "Hà Thị Minh Loan",
+                                "gender": "female",
+                                "birthYear": null,
+                                "deathYear": null,
+                                "deathAnniversary": "",
+                                "isSpouse": false,
+                                "generation": 8
+                              }
+                            ],
+                            "name": "Hà Quang Tiến",
+                            "gender": "male",
+                            "birthYear": null,
+                            "deathYear": null,
+                            "deathAnniversary": "",
+                            "isSpouse": false,
+                            "generation": 7
+                          }
+                        ],
+                        "name": "Hà Quang Vện",
+                        "gender": "male",
+                        "birthYear": null,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "isSpouse": false,
+                        "generation": 6
+                      },
+                      {
+                        "id": "mpwsp0fbe1baz",
+                        "collapsed": false,
+                        "children": [],
+                        "name": "Đỗ Thị Đỏ",
+                        "gender": "female",
+                        "birthYear": null,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "isSpouse": false,
+                        "generation": 6
+                      },
+                      {
+                        "id": "mpwsp9p3d87o4",
+                        "collapsed": false,
+                        "children": [],
+                        "name": "Đỗ Văn Phương",
+                        "gender": "male",
+                        "birthYear": null,
+                        "deathYear": null,
+                        "deathAnniversary": "",
+                        "isSpouse": false,
+                        "generation": 6
+                      }
+                    ],
+                    "name": "Đỗ Văn Khái",
+                    "gender": "male",
+                    "birthYear": null,
+                    "deathYear": null,
+                    "deathAnniversary": "",
+                    "isSpouse": false,
+                    "generation": 5
+                  }
+                ],
+                "name": "Cụ tổ",
+                "gender": "male",
+                "birthYear": null,
+                "deathYear": null,
+                "deathAnniversary": "",
+                "isSpouse": false,
+                "generation": 4
+              }
+            ],
+            "name": "Cụ tổ",
+            "gender": "male",
+            "birthYear": null,
+            "deathYear": null,
+            "deathAnniversary": "",
+            "isSpouse": false,
+            "generation": 3
+          }
+        ],
+        "name": "Cụ tổ",
+        "gender": "male",
+        "birthYear": null,
+        "deathYear": null,
+        "deathAnniversary": "",
+        "isSpouse": false,
+        "generation": 2
+      }
+    ]
+  },
+  "settings": {
+    "fontSize": 22,
+    "fontFamily": "'Courier New', monospace",
+    "colorMale": "#38bdf8",
+    "colorFemale": "#f05687",
+    "colorYears": "#c7d1dc",
+    "colorAnniversary": "#4d6655",
+    "colorGeneration": "#99db1f"
+  },
+  "intro": ""
+}
