@@ -1,0 +1,3251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Gia Phả</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif; background: #060e1c; color: #c8d8f0; line-height: 1.5; }
+    input, select, textarea, button { font-family: inherit; font-size: 14px; }
+    input, select { background: #060f1c; border: 1px solid #1a3252; border-radius: 6px; padding: 7px 11px; color: #b8d0e8; outline: none; }
+    button { cursor: pointer; border-radius: 6px; padding: 5px 12px; border: 1px solid #1a3a60; background: #0a1e38; color: #5a9ad8; transition: 0.15s; }
+    button:hover { background: #0e2848; border-color: #2a4a70; }
+    .header { background: #08121e; border-bottom: 1px solid #0e2040; padding: 10px 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .header-title {
+    color: #fff;
+    font-weight: 600;
+    font-size: 24px;
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+    .node-line { display: flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 4px; margin-bottom: 1px; position: relative; transition: background 0.1s; white-space: nowrap; }
+    .node-line:hover { background: rgba(80,140,220,0.07); }
+    .node-line.dragging { opacity: 0.35; background: rgba(30,80,160,0.15); }
+    .node-line.drag-over-inside { background: rgba(40,120,80,0.18); outline: 1px dashed #2a8060; }
+    .node-line.drag-over-before { box-shadow: 0 -2px 0 0 #2a9060 inset; background: rgba(30,110,70,0.10); }
+    .node-line.drag-over-after  { box-shadow: 0 2px 0 0 #2a9060 inset; background: rgba(30,110,70,0.10); }
+    .toggle-btn { width: 22px; height: 22px; flex-shrink: 0; border-radius: 4px; border: 1px solid #1e4070; background: #08182e; color: #4a88c8; font-size: 13px; font-weight: bold; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .toggle-btn:disabled { opacity: 0.3; cursor: default; }
+    .drag-handle { width: 16px; height: 16px; flex-shrink: 0; cursor: grab; display: flex; align-items: center; justify-content: center; color: #1e3858; font-size: 39px; border-radius: 3px; transition: color 0.15s; user-select: none; }
+    .drag-handle:hover { color: #3a6898; }
+    .drag-handle:active { cursor: grabbing; }
+    .drag-mode-active .drag-handle { color: #2a5080; }
+
+    /* ── Floating drag menu ──────────────────────────────────────────────────── */
+    .drag-menu-overlay { position: fixed; inset: 0; z-index: 9998; }
+    .drag-menu { position: fixed; z-index: 9999; background: #081830; border: 2px solid #1a4070; border-radius: 14px; padding: 8px; box-shadow: 0 8px 32px rgba(0,0,60,0.6); display: flex; flex-direction: column; align-items: center; gap: 6px; user-select: none; }
+    .drag-menu-up { grid-column: 2; }
+    .drag-menu-left { grid-column: 1; grid-row: 2; }
+    .drag-menu-center { grid-column: 2; grid-row: 2; }
+    .drag-menu-right { grid-column: 3; grid-row: 2; }
+    .drag-menu-down { grid-column: 2; grid-row: 3; }
+    .drag-menu .drag-arrow-btn { width: 56px; height: 56px; padding: 0; display: flex; align-items: center; justify-content: center; background: rgba(30,80,160,0.85); border: 2px solid #2a6090; border-radius: 10px; color: #7ac8f8; font-size: 32px; font-weight: 700; cursor: pointer; transition: all 0.12s; flex-shrink: 0; line-height: 1; }
+    .drag-menu .drag-arrow-btn:hover { background: rgba(40,100,200,0.95); border-color: #3a8ac8; transform: scale(1.08); }
+    .drag-menu .drag-arrow-btn:active { transform: scale(0.95); }
+    .drag-menu .drag-close-btn { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid #1a3050; border-radius: 8px; color: #2a5080; font-size: 18px; cursor: pointer; transition: all 0.12s; }
+    .drag-menu .drag-close-btn:hover { color: #4a7aaa; border-color: #2a5080; }
+    
+    .name-male { color: #38bdf8; font-weight: 600; }
+    .name-female { color: #d65b82; font-weight: 600; }
+    .name-spouse { color: rgb(255,190,0); margin-right: 4px; font-weight: 700; }
+    .modal { position: fixed; inset: 0; background: rgba(3,8,18,0.88); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .modal-content { background: #09162a; border: 1px solid #183060; border-radius: 10px; padding: 20px 24px; width: 420px; max-width: calc(100vw - 32px); }
+    .modal-header { color: #6aaaf0; font-weight: 600; margin-bottom: 18px; display: flex; justify-content: space-between; }
+    .modal-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 20px; }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; color: #4a6888; font-size: 12px; font-weight: 500; margin-bottom: 5px; }
+    .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+    .form-row > * { flex: 1; }
+    .tree-viewport { overflow: hidden; flex: 1; position: relative; user-select: none; cursor: grab; touch-action: none; }
+    .tree-viewport.is-panning { cursor: grabbing; }
+    .tree-canvas { position: absolute; top: 0; left: 0; padding: 14px 18px 60px 18px; white-space: nowrap; will-change: transform; min-width: max-content; }
+    .legend { padding: 5px 18px; border-bottom: 1px solid #0a1e38; display: flex; gap: 16px; flex-wrap: nowrap; font-size: 11px; color: #2a4a68; overflow: hidden; flex-shrink: 0; align-items: center; }
+    .children { margin-left: 30px; border-left: 1px dashed #0e2440; padding-left: 10px; margin-top: 1px; }
+    .children > .spouse-wrapper { margin-left: -40px; }
+    /* Text editor view */
+    .text-view { display: flex; flex-direction: column; height: calc(100vh - 90px); }
+    .text-toolbar { padding: 8px 18px; background: #07111f; border-bottom: 1px solid #0a2040; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .text-editor { flex: 1; margin: 0; padding: 16px 20px; background: #040c18; color: #a8c8e8; font-family: 'Courier New', 'Consolas', monospace; font-size: 13.5px; line-height: 1.9; border: none; outline: none; resize: none; width: 100%; tab-size: 6; }
+    .text-editor::placeholder { color: #1a3a58; }
+    .parse-error { padding: 6px 14px; background: rgba(180,40,40,0.12); border: 1px solid #602020; border-radius: 5px; color: #d07070; font-size: 12px; }
+    .parse-ok { padding: 6px 14px; background: rgba(30,100,50,0.18); border: 1px solid #1a5030; border-radius: 5px; color: #50b870; font-size: 12px; }
+    .tab-btn { padding: 4px 14px; border-radius: 5px; font-size: 13px; border: 1px solid #1a3252; background: #070f1e; color: #3a6888; cursor: pointer; transition: 0.15s; }
+    .tab-btn.active { background: #0a2040; color: #6aacf0; border-color: #2a5080; }
+    .syntax-hint { font-size: 11px; color: #1e4060; line-height: 1.6; padding: 8px 18px; border-bottom: 1px solid #08192e; background: #050d1a; }
+    .syntax-hint b { color: #2a5878; }
+    .settings-panel { background: #07101e; border-bottom: 2px solid #0e2040; padding: 10px 14px 10px 14px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-start; position: relative; padding-right: 36px; }
+    .sp-row { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: flex-start; }
+    .sp-group { display: flex; flex-direction: column; gap: 5px; flex: 1 1 140px; min-width: 0; }
+    .sp-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #2a4a68; margin-bottom: 1px; }
+    .sp-colors { display: flex; flex-wrap: wrap; gap: 8px; }
+    .sp-color-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 5px 4px; border-radius: 6px; border: 1px solid transparent; transition: border-color 0.15s; position: relative; touch-action: manipulation; }
+    .sp-color-item:hover { border-color: #1a3a60; background: rgba(10,30,60,0.4); }
+    .sp-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.12); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .sp-color-label { font-size: 12px; color: #87a8c7; white-space: nowrap; text-align: center; }
+    .settings-section-title { color: #3a6888; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+    .color-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; cursor: pointer; }
+    .color-row:hover .color-label { color: #8ab8d8; }
+    .color-swatch { width: 30px; height: 20px; border-radius: 4px; border: 1px solid #1a3252; cursor: pointer; padding: 0; flex-shrink: 0; }
+    .color-label { font-size: 12px; min-width: 110px; transition: color 0.15s; }
+    .font-control { display: flex; align-items: center; gap: 6px; }
+    .font-btn { width: 26px; height: 26px; padding: 0; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; border-radius: 5px; flex-shrink: 0; }
+    .font-display { color: #a0c0e0; font-size: 15px; font-weight: 600; min-width: 32px; text-align: center; }
+    .font-slider { -webkit-appearance: none; appearance: none; width: 100px; height: 4px; background: #1a3252; border-radius: 2px; outline: none; border: none; cursor: pointer; }
+    .font-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #4a8ac8; cursor: pointer; }
+    .settings-preview { font-family: 'Courier New', monospace; line-height: 1.8; padding: 6px 10px; background: #040c18; border: 1px solid #0e2040; border-radius: 5px; white-space: nowrap; }
+    /* Ngày giỗ popup */
+    .giodio-overlay { position: fixed; inset: 0; background: rgba(3,8,18,0.85); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding-top: 60px; }
+    .giodio-panel { background: #08121e; border: 1px solid #1a3a60; border-radius: 14px; width: 580px; max-width: calc(100vw - 32px); max-height: calc(100vh - 100px); display: flex; flex-direction: column; box-shadow: 0 16px 60px rgba(0,0,30,0.85); overflow: hidden; }
+    .giodio-header { padding: 18px 24px 14px; border-bottom: 1px solid #0e2040; display: flex; align-items: center; gap: 12px; background: #07101c; flex-shrink: 0; }
+    .giodio-title { font-size: 20px; font-weight: 700; color: #e8c870; flex: 1; letter-spacing: 0.01em; }
+    .giodio-badge { background: #2a1a00; color: #c89040; font-size: 13px; font-weight: 700; padding: 4px 14px; border-radius: 20px; border: 1px solid #5a3800; }
+    .giodio-body { overflow-y: auto; flex: 1; }
+    .giodio-month-header { padding: 14px 24px 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #8da5be; border-bottom: 1px solid #081828; background: #070f1a; position: sticky; top: 0; z-index: 2; }
+    .giodio-item { display: flex; align-items: center; gap: 16px; padding: 14px 24px; border-bottom: 1px solid #081828; transition: background 0.12s; }
+    .giodio-item:hover { background: rgba(20,50,100,0.25); }
+    .giodio-day { font-size: 28px; font-weight: 800; color: #e8c870; min-width: 48px; text-align: center; line-height: 1; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .giodio-day-label { font-size: 14px; color: #a2b6cc; text-align: center; margin-top: 3px; font-weight: 500; }
+    .giodio-divider { width: 2px; height: 42px; background: #1a3050; border-radius: 2px; flex-shrink: 0; }
+    .giodio-info { flex: 1; min-width: 0; }
+    .giodio-name { font-size: 18px; font-weight: 700; line-height: 1.3; }
+    .giodio-meta { font-size: 13px; color: #3a6888; margin-top: 4px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .giodio-gen { font-size: 14px; color: #83ace1; background: #081828; padding: 2px 10px; border-radius: 20px; border: 1px solid #0e2440; align-self: center; flex-shrink: 0; }
+    .giodio-empty { padding: 48px 24px; text-align: center; color: #1e3858; font-size: 16px; }
+    /* Giới thiệu popup */
+    .intro-overlay { position: fixed; inset: 0; background: #060e1c; z-index: 10000; display: flex; flex-direction: column; }
+    .intro-topbar { background: #08121e; border-bottom: 1px solid #0e2040; padding: 10px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .intro-topbar-title { font-size: 16px; font-weight: 700; color: #6aaaf0; flex: 1; }
+    .intro-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+    .intro-content-area { flex: 1; overflow-y: auto; padding: 3px 3px; }
+    .intro-content-area.edit-mode { padding: 0; display: flex; flex-direction: column; }
+    .intro-editor { flex: 1; width: 100%; border: none; outline: none; resize: none; background: #07111f; color: #b8d0e8; font-family: "Courier New", monospace; font-size: 13px; line-height: 1.6; padding: 20px 28px; }
+    .intro-tabbar { background: #07111f; border-top: 1px solid #0e2040; display: flex; align-items: center; padding: 0 20px; gap: 2px; flex-shrink: 0; }
+    .intro-tab { padding: 10px 22px; font-size: 14px; font-weight: 600; color: #2a5070; border: none; background: transparent; border-top: 2px solid transparent; cursor: pointer; transition: color 0.15s; }
+    .intro-tab:hover { color: #4a80b0; }
+    .intro-tab.active { color: #6aaaf0; border-top-color: #6aaaf0; background: transparent; }
+    .intro-preview { color: #c8d8f0; line-height: 1.8; padding: 0px 10px; }
+    .intro-preview h1,.intro-preview h2,.intro-preview h3 { color: #6aaaf0; margin: 1.2em 0 0.5em; font-family: serif; }
+    .intro-preview h1 { font-size: 2em; border-bottom: 1px solid #0e2040; padding-bottom: 0.3em; }
+    .intro-preview h2 { font-size: 1.4em; }
+    .intro-preview h3 { font-size: 1.15em; color: #5a9ad0; }
+    .intro-preview p { margin: 0.7em 0; }
+    .intro-preview ul,.intro-preview ol { margin: 0.6em 0 0.6em 1.6em; }
+    .intro-preview li { margin-bottom: 0.3em; }
+    .intro-preview blockquote { border-left: 3px solid #1a4070; margin: 1em 0; padding: 8px 16px; color: #8ab0d0; font-style: italic; background: rgba(10,30,60,0.4); border-radius: 0 6px 6px 0; }
+    .intro-preview a { color: #5aaaf0; }
+    .intro-preview table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+    .intro-preview th,.intro-preview td { border: 1px solid #1a3a60; padding: 7px 12px; }
+    .intro-preview th { background: #0a1e38; color: #6aaaf0; }
+    .intro-preview hr { border: none; border-top: 1px solid #0e2040; margin: 1.5em 0; }
+    .expand-menu-wrap { position: relative; display: inline-block; }
+    .expand-dropdown { position: absolute; top: calc(100% + 5px); left: 0; background: #08121e; border: 1px solid #1a3a60; border-radius: 8px; min-width: 150px; z-index: 9000; box-shadow: 0 6px 24px rgba(0,0,20,0.7); overflow: hidden; }
+    .expand-dropdown-item { padding: 8px 14px; font-size: 13px; color: #5a9ad8; cursor: pointer; white-space: nowrap; transition: background 0.1s; }
+    .expand-dropdown-item:hover { background: rgba(60,120,200,0.15); color: #8ac8ff; }
+    .expand-dropdown-item.active { color: #60c878; background: rgba(30,100,50,0.12); }
+    .expand-dropdown-sep { border-bottom: 1px solid #0e2040; margin: 3px 0; }
+    .btn-active { background: #0e2e14 !important; color: #60c878 !important; border-color: #1e6030 !important; font-weight: 600; }
+    /* Nội tộc panel */
+    .noitoc-overlay { position: fixed; inset: 0; background: rgba(3,8,18,0.78); z-index: 9997; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .noitoc-panel { background: #07111f; width: 100%; max-width: 520px; max-height: 82vh; display: flex; flex-direction: column; border-radius: 12px; border: 1px solid #0e2040; box-shadow: 0 16px 64px rgba(0,0,0,0.7); overflow: hidden; }
+    .noitoc-header { padding: 14px 18px; border-bottom: 1px solid #0e2040; display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: #08121e; }
+    .noitoc-title { font-size: 20px; font-weight: 700; color: #6aaaf0; flex: 1; }
+    .noitoc-badge { background: #1a3a14; color: #60c878; font-size: 15px; font-weight: 700; padding: 3px 10px; border-radius: 20px; border: 1px solid #2a5a20; }
+    .noitoc-body { flex: 1; overflow-y: auto; padding: 0 0 24px 0; }
+    .noitoc-gen-header { display: flex; align-items: center; gap: 10px; padding: 12px 18px 10px; cursor: pointer; border-bottom: 1px solid #0a1e38; position: sticky; top: 0; z-index: 2; background: #07111f; user-select: none; }
+    .noitoc-gen-header:hover { background: #081828; }
+    .noitoc-gen-toggle { color: #3a6898; font-size: 16px; width: 14px; flex-shrink: 0; }
+    .noitoc-gen-label { font-size: 19px; font-weight: 700; color: #c8d8f0; }
+    .noitoc-gen-count { font-size: 16px; color: #2a5070; margin-left: 4px; }
+    .noitoc-member { padding: 10px 18px 10px 28px; border-bottom: 1px solid #081828; transition: background 0.1s; }
+    .noitoc-member:hover { background: rgba(20,50,100,0.3); }
+    .noitoc-member-row1 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .noitoc-order { font-size: 17px; color: #2a5070; flex-shrink: 0; min-width: 32px; }
+    .noitoc-name { font-size: 18px; font-weight: 700; color: #6aaaf0; }
+    .noitoc-date { font-size: 16px; color: #3a6888; font-style: italic; }
+    .noitoc-stats { display: flex; gap: 5px; flex-wrap: wrap; margin-left: auto; flex-shrink: 0; }
+    .noitoc-tag { font-size: 15px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+    .noitoc-tag-spouse { background: #1a2a3a; color: #5090c0; border: 1px solid #1e3a58; }
+    .noitoc-tag-child  { background: #1e2a10; color: #70a840; border: 1px solid #2a4018; }
+    .noitoc-tag-grand  { background: #2a1e08; color: #c08020; border: 1px solid #4a3010; }
+    .noitoc-ancestors { font-size: 15px; color: #2a7090; margin-top: 3px; padding-left: 40px; font-style: italic; }
+    /* Node info popup */
+    .info-popup-overlay { position: fixed; inset: 0; background: rgba(3,8,18,0.75); display: flex; align-items: center; justify-content: center; z-index: 9998; }
+    .info-popup { background: #09162a; border: 1px solid #1a3a60; border-radius: 12px; width: 420px; max-width: calc(100vw - 32px); max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 12px 48px rgba(0,0,30,0.8); }
+    .info-popup-header { padding: 16px 18px 12px; border-bottom: 1px solid #0e2040; display: flex; align-items: flex-start; gap: 10px; }
+    .info-popup-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .info-popup-title { flex: 1; }
+    .info-popup-name { font-size: 16px; font-weight: 700; line-height: 1.3; }
+    .info-popup-meta { font-size: 11px; color: #3a6888; margin-top: 3px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .info-popup-body { padding: 14px 18px; overflow-y: auto; }
+    .info-section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #2a5070; margin-bottom: 8px; margin-top: 14px; }
+    .info-section-title:first-child { margin-top: 0; }
+    .info-member-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 6px; margin-bottom: 3px; background: rgba(10,30,60,0.5); border: 1px solid #0d2040; }
+    .info-member-row:hover { background: rgba(20,50,100,0.5); border-color: #1a3a60; cursor: default; }
+    .info-member-name { font-weight: 600; font-size: 13px; flex: 1; }
+    .info-member-years { font-size: 11px; color: #3a6888; font-style: italic; }
+    .info-member-ann { font-size: 11px; color: #2a7848; margin-left: 4px; }
+    .info-empty { color: #1e3858; font-size: 12px; font-style: italic; padding: 6px 0; }
+    .info-popup-footer { padding: 10px 18px; border-top: 1px solid #0a1e38; display: flex; gap: 8px; justify-content: flex-end; }
+    /* Search modal */
+    .search-modal { position: fixed; inset: 0; background: rgba(3,8,18,0.88); display: flex; align-items: flex-start; justify-content: center; z-index: 9999; padding-top: 80px; }
+    .search-box { background: #09162a; border: 1px solid #183060; border-radius: 12px; width: 500px; max-width: calc(100vw - 32px); box-shadow: 0 8px 40px rgba(0,0,40,0.7); overflow: hidden; }
+    .search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #0e2040; }
+    .search-input-wrap .search-icon { color: #3a6888; font-size: 20px; flex-shrink: 0; }
+    .search-input-wrap input { flex: 1; background: transparent; border: none; outline: none; color: #c8d8f0; font-size: 19px; }
+    .search-input-wrap input::placeholder { color: #1e3858; }
+    .search-results { max-height: 380px; overflow-y: auto; }
+    .search-result-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #081828; transition: background 0.1s; }
+    .search-result-item:hover, .search-result-item.active { background: rgba(60,120,200,0.12); }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-name { font-weight: 600; font-size: 18px; }
+    .search-result-meta { font-size: 15px; color: #3a6888; margin-top: 2px; }
+    .search-result-gen { font-size: 15px; color: #2a5878; margin-left: auto; flex-shrink: 0; }
+    .search-empty { padding: 24px; text-align: center; color: #1e3858; font-size: 17px; }
+    .search-highlight { background: rgba(100,180,255,0.18); border-radius: 2px; color: #a8d8ff; }
+    .search-footer { padding: 8px 16px; border-top: 1px solid #081828; font-size: 15px; color: #1a3858; display: flex; gap: 14px; }
+
+    /* ── Data Popup ─────────────────────────────────────────────────────────── */
+    .data-overlay { position: fixed; inset: 0; background: rgba(2,6,18,0.78); z-index: 9999; display: flex; align-items: flex-start; justify-content: center; padding-top: 68px; }
+    .data-panel { background: #07132a; border: 1px solid #1a3a70; border-radius: 14px; width: 380px; max-width: calc(100vw - 32px); box-shadow: 0 16px 60px rgba(0,0,60,0.85); overflow: hidden; }
+    .data-panel-header { padding: 14px 18px 12px; border-bottom: 1px solid #0e2244; display: flex; align-items: center; gap: 10px; background: #060f22; }
+    .data-panel-title { color: #6aaaf0; font-weight: 700; font-size: 15px; flex: 1; }
+    .data-btn-row { padding: 10px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .data-action-btn { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 10px; border: 1px solid #122040; background: #081828; cursor: pointer; transition: all 0.15s; text-align: left; width: 100%; }
+    .data-action-btn:hover { border-color: #2a4a80; background: #0d2040; transform: translateX(2px); }
+    .data-action-btn .da-icon { font-size: 22px; flex-shrink: 0; width: 32px; text-align: center; }
+    .data-action-btn .da-text { flex: 1; }
+    .data-action-btn .da-title { font-size: 14px; font-weight: 600; color: #a0c8f0; display: block; margin-bottom: 2px; }
+    .data-action-btn .da-desc { font-size: 11px; color: #2a4a68; display: block; line-height: 1.4; }
+    .data-action-btn.danger { border-color: #3a1020; background: #120810; }
+    .data-action-btn.danger:hover { border-color: #6a2030; background: #1e0d14; }
+    .data-action-btn.danger .da-title { color: #d06070; }
+    .data-action-btn.sample { border-color: #1a3020; background: #091814; }
+    .data-action-btn.sample:hover { border-color: #2a6040; background: #0d2218; }
+    .data-action-btn.sample .da-title { color: #60c890; }
+    .data-panel-footer { padding: 8px 18px 12px; color: #1a3050; font-size: 10.5px; text-align: center; }
+    /* Hamburger menu */
+    .hmenu-wrap { position: relative; }
+    .hmenu-btn { font-size: 18px; padding: 5px 11px; letter-spacing: 1px; line-height: 1; }
+    .hmenu-dropdown { position: absolute; top: calc(100% + 6px); right: 0; background: #08121e; border: 1px solid #1a3a60; border-radius: 10px; min-width: 210px; z-index: 9100; box-shadow: 0 8px 32px rgba(0,0,20,0.8); overflow: hidden; }
+    .hmenu-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; font-size: 18px; color: #5a9ad8; cursor: pointer; transition: background 0.1s; border: none; background: transparent; width: 100%; text-align: left; white-space: nowrap; }
+    .hmenu-item:hover { background: rgba(60,120,200,0.14); color: #8ac8ff; }
+    .hmenu-item.is-active { color: #60c878 !important; background: rgba(30,100,50,0.12); }
+    .hmenu-sep { border: none; border-top: 1px solid #0e2040; margin: 4px 0; }
+    .hmenu-sub-label { padding: 5px 16px 2px; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: #2a4a68; text-transform: uppercase; display: block; }
+    .hmenu-sub-item { display: flex; align-items: center; gap: 10px; padding: 7px 16px 7px 28px; font-size: 17px; color: #4a8ac8; cursor: pointer; transition: background 0.1s; white-space: nowrap; border: none; background: transparent; width: 100%; text-align: left; }
+    .hmenu-sub-item:hover { background: rgba(60,120,200,0.12); color: #8ac8ff; }
+    .hmenu-sub-item.is-active { color: #60c878; }
+    /* ── Home Screen ─────────────────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+    .home-root {
+      background: #04090f;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(180,140,40,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(20,40,80,0.4) 0%, transparent 70%);
+    }
+
+    .home-header {
+      padding: 36px 24px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .home-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .home-logo-mark {
+      filter: drop-shadow(0 0 12px rgba(200,168,60,0.3));
+    }
+    .home-header-title {
+      font-family: 'Cinzel', 'Palatino Linotype', 'Book Antiqua', serif;
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e8d090;
+      text-shadow: 0 0 40px rgba(200,168,60,0.25), 0 2px 8px rgba(0,0,0,0.6);
+      line-height: 1;
+    }
+    .home-header-sub {
+      font-family: 'IM Fell English', Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      color: rgba(180,140,60,0.55);
+      letter-spacing: 0.06em;
+      margin-top: 5px;
+    }
+    .home-header-rule {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 28px;
+    }
+    .home-header-rule-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(180,140,60,0.35), transparent);
+    }
+    .home-header-rule-diamond {
+      color: rgba(180,140,60,0.45);
+      font-size: 8px;
+      line-height: 1;
+    }
+
+    .home-body {
+      flex: 1;
+      padding: 0 20px 16px;
+      max-width: 560px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .home-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 0 40px;
+      gap: 14px;
+    }
+    .home-empty-icon {
+      margin-bottom: 6px;
+      opacity: 0.7;
+    }
+    .home-empty-title {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      color: rgba(180,150,60,0.6);
+      letter-spacing: 0.06em;
+    }
+    .home-empty-desc {
+      font-size: 13px;
+      color: rgba(120,150,180,0.45);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .home-list { display: flex; flex-direction: column; gap: 10px; }
+    .home-list-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(180,140,60,0.35);
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+
+    .home-card {
+      background: linear-gradient(135deg, rgba(12,22,40,0.95) 0%, rgba(8,15,28,0.98) 100%);
+      border: 1px solid rgba(180,140,60,0.15);
+      border-radius: 10px;
+      padding: 14px 14px 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .home-card:hover {
+      border-color: rgba(180,140,60,0.4);
+      background: linear-gradient(135deg, rgba(16,28,50,0.98) 0%, rgba(10,18,34,1) 100%);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5), inset 0 0 40px rgba(180,140,60,0.03);
+    }
+    .home-card-accent {
+      position: absolute;
+      left: 0; top: 12%; bottom: 12%;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, rgba(180,140,60,0.5), transparent);
+      border-radius: 2px;
+    }
+    .home-card-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 6px rgba(180,140,60,0.2));
+    }
+    .home-card-name {
+      font-family: 'Cinzel', 'Palatino Linotype', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #d8c080;
+      letter-spacing: 0.03em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .home-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+      flex-wrap: nowrap;
+    }
+    .home-card-badge {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffffbf;
+      background: #2d52089c;
+      border: 1px solid rgba(180,140,40,0.2);
+      border-radius: 20px;
+      padding: 2px 9px;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
+    }
+    .home-card-date {
+      font-size: 11px;
+      color: rgba(100,130,160,0.45);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .home-card-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border-radius: 6px;
+      color: rgba(140,110,40,0.5);
+      transition: color 0.15s, background 0.15s;
+    }
+    .home-card-menu-btn:hover { color: rgba(200,168,60,0.8); }
+
+    .home-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      background: #07101c;
+      border: 1px solid rgba(180,140,60,0.2);
+      border-radius: 8px;
+      min-width: 170px;
+      z-index: 9500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+      overflow: hidden;
+    }
+    .home-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: rgba(180,210,240,0.7);
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+    .home-dropdown-item:hover { background: rgba(180,140,60,0.08); color: #d8c080; }
+    .home-dropdown-danger { color: rgba(200,100,100,0.7) !important; }
+    .home-dropdown-danger:hover { background: rgba(180,40,40,0.1) !important; color: #e08080 !important; }
+    .home-dropdown-sep { border: none; border-top: 1px solid rgba(180,140,60,0.1); margin: 3px 0; }
+
+    /* ── Floating About Button (Home) ──────────────────────────── */
+    .home-export-fab {
+      position: fixed;
+      bottom: 80px;
+      right: 30px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(40,100,200,0.22) 0%, rgba(20,60,140,0.28) 100%);
+      border: 1.5px solid rgba(80,150,240,0.45);
+      color: #6aacf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 18px rgba(60,120,220,0.15);
+      transition: all 0.22s;
+      z-index: 1000;
+      padding: 0;
+    }
+    .home-export-fab:hover {
+      background: linear-gradient(135deg, rgba(50,120,230,0.32) 0%, rgba(30,80,180,0.38) 100%);
+      border-color: rgba(100,170,255,0.7);
+      color: #90c8ff;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.6), 0 0 28px rgba(60,130,240,0.28);
+      transform: scale(1.07);
+    }
+    .home-export-fab:active { transform: scale(0.96); }
+    .home-export-fab-tooltip {
+      position: absolute;
+      right: 62px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #07101c;
+      border: 1px solid rgba(80,150,240,0.3);
+      border-radius: 8px;
+      padding: 6px 13px;
+      font-size: 12px;
+      color: #6aacf0;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .home-export-fab:hover .home-export-fab-tooltip { opacity: 1; }
+
+    /* ── About Popup ─────────────────────────────────────────────── */
+    .about-overlay {
+      position: fixed; inset: 0;
+      background: rgba(3,8,18,0.88);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10000;
+    }
+    .about-panel {
+      background: #09162a;
+      border: 1px solid #1e4070;
+      border-radius: 16px;
+      width: 500px;
+      max-width: calc(100vw - 32px);
+      max-height: calc(100vh - 60px);
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,30,0.9);
+      animation: aboutFadeIn 0.22s ease;
+    }
+    @keyframes aboutFadeIn { from { opacity: 0; transform: scale(0.96) translateY(12px); } to { opacity: 1; transform: none; } }
+    .about-header {
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid #0e2040;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .about-icon-wrap {
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(40,100,200,0.25), rgba(20,60,140,0.3));
+      border: 1.5px solid rgba(80,150,240,0.4);
+      display: flex; align-items: center; justify-content: center;
+      color: #6aacf0;
+    }
+    .about-title { font-size: 24px; font-weight: 700; color: #a0c8f0; flex: 1; font-family: "Palatino Linotype", serif; }
+    .about-close { background: none; border: none; color: #3a6080; font-size: 26px; cursor: pointer; padding: 0 2px; line-height: 1; transition: color 0.15s; }
+    .about-close:hover { color: #90b8d8; }
+    .about-body { padding: 20px 24px 24px; }
+    .about-section { margin-bottom: 18px; }
+    .about-section:last-child { margin-bottom: 0; }
+    .about-section-title {
+      font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #2a5878; margin-bottom: 8px; display: flex; align-items: center; gap: 7px;
+    }
+    .about-section-title::after { content: ''; flex: 1; height: 1px; background: #0e2840; }
+    .about-desc { font-size: 17.5px; color: #7a9ab8; line-height: 1.75; }
+    .about-feature-list { display: flex; flex-direction: column; gap: 7px; margin: 0; padding: 0; list-style: none; }
+    .about-feature-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 17px; color: #7090b0; line-height: 1.55; }
+    .about-feature-list li::before { content: '◆'; color: #2a6090; font-size: 10px; margin-top: 5px; flex-shrink: 0; }
+    @media (max-width: 600px) {
+      .about-panel { width: 100% !important; max-width: 100% !important; max-height: 100% !important; height: 100%; border-radius: 0 !important; }
+      .about-overlay { padding: 0 !important; align-items: stretch !important; }
+    }
+
+    .home-footer {
+      padding: 20px 24px 28px;
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid rgba(180,140,60,0.08);
+    }
+    .home-create-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(180,140,40,0.1);
+      color: #c8a840;
+      border: 1px solid rgba(180,140,40,0.3);
+      border-radius: 8px;
+      padding: 11px 28px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .home-create-btn:hover {
+      background: rgba(180,140,40,0.18);
+      border-color: rgba(180,140,40,0.55);
+      color: #e8c860;
+      box-shadow: 0 0 20px rgba(180,140,40,0.15);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useRef } = React;
+
+    function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+    function updateNode(node, id, fn) { return node.id === id ? fn(node) : { ...node, children: node.children.map(c => updateNode(c, id, fn)) }; }
+    function deleteNode(node, id) { return { ...node, children: node.children.filter(c => c.id !== id).map(c => deleteNode(c, id)) }; }
+    function countDesc(n) { return n.children.reduce((a, c) => a + 1 + countDesc(c), 0); }
+    function findNode(root, id) { if (root.id === id) return root; for (const c of root.children) { const f = findNode(c, id); if (f) return f; } return null; }
+
+    // ── Search: collect all nodes flat ──────────────────────────────────────────
+    function collectAllNodes(node, results = []) {
+      results.push(node);
+      for (const c of (node.children || [])) collectAllNodes(c, results);
+      return results;
+    }
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      const idx = text.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return text;
+      return (
+        <span>
+          {text.slice(0, idx)}
+          <span className="search-highlight">{text.slice(idx, idx + query.length)}</span>
+          {text.slice(idx + query.length)}
+        </span>
+      );
+    }
+    // Expand ancestors so a node is visible in tree
+    function expandPathTo(tree, targetId) {
+      function walk(node) {
+        if (node.id === targetId) return true;
+        for (const c of node.children) {
+          if (walk(c)) { return true; }
+        }
+        return false;
+      }
+      function expand(node) {
+        const hasTarget = walk(node);
+        const newChildren = node.children.map(expand);
+        if (hasTarget && node.id !== targetId) return { ...node, collapsed: false, children: newChildren };
+        return { ...node, children: newChildren };
+      }
+      return expand(tree);
+    }
+    function isAncestor(root, ancestorId, descendantId) {
+      function check(node, tid) { if (node.id === tid) return true; return node.children.some(c => check(c, tid)); }
+      const anc = findNode(root, ancestorId); if (!anc) return false; return check(anc, descendantId);
+    }
+    function extractNode(root, id) {
+      let extracted = null;
+      function walk(node) { const idx = node.children.findIndex(c => c.id === id); if (idx !== -1) { extracted = node.children[idx]; return { ...node, children: node.children.filter(c => c.id !== id) }; } return { ...node, children: node.children.map(walk) }; }
+      return [walk(root), extracted];
+    }
+    function insertAsChild(root, parentId, nodeToInsert) { return updateNode(root, parentId, n => ({ ...n, children: [...n.children, nodeToInsert] })); }
+    function insertAsSibling(root, siblingId, nodeToInsert, position) {
+      function walk(node) { const idx = node.children.findIndex(c => c.id === siblingId); if (idx !== -1) { const nc = [...node.children]; nc.splice(position === 'before' ? idx : idx + 1, 0, nodeToInsert); return { ...node, children: nc }; } return { ...node, children: node.children.map(walk) }; }
+      return walk(root);
+    }
+
+    // ─── TEXT ↔ TREE CONVERSION ────────────────────────────────────────────────
+    /*
+      Định dạng text:
+        Tên đầy đủ - biệt hiệu (nữ) [dd/mm] [năm sinh-năm mất] ✦ ngày giỗ
+        + Bạn đời (nữ) [...]
+              Con (thụt lề sâu hơn 6 spaces hoặc 1 tab)
+
+      Quy tắc:
+        - Bắt đầu bằng "+" → isSpouse = true
+        - "(nữ)" trong tên → gender = female
+        - "[dd/mm]" hoặc "[dd/mm âm lịch]" → deathAnniversary
+        - "[yyyy-yyyy]" hoặc "[yyyy-]" hoặc "[-yyyy]" → birthYear/deathYear
+        - "- tên khác" sau họ tên chính → gắn vào tên (giữ nguyên)
+        - Thụt lề: mỗi 6 spaces (hoặc 1 tab = 6sp) = 1 cấp con
+    */
+
+    const INDENT_UNIT = 6; // spaces per level
+
+    function treeToText(node, level = 0) {
+      const indent = ' '.repeat(level * INDENT_UNIT);
+      let line = indent;
+      if (node.isSpouse) line += '+ ';
+
+      // Tên
+      line += node.name;
+
+      // Giới tính nếu là nữ
+      if (node.gender === 'female') line += ' (nữ)';
+
+      // Năm sinh - mất
+      const by = node.birthYear, dy = node.deathYear;
+      if (by || dy) line += ` [${by || ''}-${dy || ''}]`;
+
+      // Ngày giỗ
+      if (node.deathAnniversary) line += ` ✦ ${node.deathAnniversary}`;
+
+      // Ghi chú
+      if (node.note) line += ` {${node.note}}`;
+
+      let lines = [line];
+      for (const child of (node.children || [])) {
+        lines = lines.concat(treeToText(child, level + 1));
+      }
+      return lines;
+    }
+
+    function textToTree(text) {
+      // Tách thành dòng, bỏ dòng trắng
+      const rawLines = text.split('\n');
+      const lines = rawLines.map((l, i) => {
+        // Đổi tab → 6 spaces
+        const expanded = l.replace(/\t/g, ' '.repeat(INDENT_UNIT));
+        const indent = expanded.length - expanded.trimStart().length;
+        const content = expanded.trimStart();
+        return { raw: l, lineNum: i + 1, indent, content };
+      }).filter(l => l.content.trim() !== '');
+
+      if (lines.length === 0) throw new Error('Không có dữ liệu');
+
+      function parseLine(l) {
+        let content = l.content;
+        let isSpouse = false;
+        if (content.startsWith('+ ')) { isSpouse = true; content = content.slice(2); }
+        else if (content.startsWith('+')) { isSpouse = true; content = content.slice(1).trimStart(); }
+
+        let gender = 'male';
+        // (nữ) bất kỳ chỗ nào
+        if (/\(nữ\)/i.test(content)) { gender = 'female'; content = content.replace(/\s*\(nữ\)/i, ''); }
+
+        let birthYear = null, deathYear = null;
+        // [yyyy-yyyy] hoặc [yyyy-] hoặc [-yyyy]
+        const yearMatch = content.match(/\[(\d{4})?-(\d{4})?\]/);
+        if (yearMatch) {
+          birthYear = yearMatch[1] ? parseInt(yearMatch[1]) : null;
+          deathYear = yearMatch[2] ? parseInt(yearMatch[2]) : null;
+          content = content.replace(yearMatch[0], '').trim();
+        }
+
+        // Ghi chú trong {}
+        let note = '';
+        const noteMatch = content.match(/\{(.+?)\}/);
+        if (noteMatch) { note = noteMatch[1].trim(); content = content.replace(noteMatch[0], '').trim(); }
+
+        let deathAnniversary = '';
+        // ✦ hoặc ~ ngày giỗ
+        const annMatch = content.match(/[✦~]\s*(.+)$/);
+        if (annMatch) { deathAnniversary = annMatch[1].trim(); content = content.slice(0, annMatch.index).trim(); }
+
+        let generation = null;
+        const genMatch = content.match(/§(\d+)/);
+        if (genMatch) { generation = parseInt(genMatch[1]); content = content.replace(genMatch[0], '').trim(); }
+
+        const name = content.trim();
+        if (!name) throw new Error(`Dòng ${l.lineNum}: Thiếu tên`);
+
+        return { id: genId(), name, gender, birthYear, deathYear, deathAnniversary, note, isSpouse, generation: generation || 1, collapsed: false, children: [] };
+      }
+
+      // Xây cây từ indent
+      // Stack lưu { node, indent }
+      const rootLine = lines[0];
+      const rootNode = parseLine(rootLine);
+
+      const stack = [{ node: rootNode, indent: rootLine.indent }];
+
+      for (let i = 1; i < lines.length; i++) {
+        const l = lines[i];
+        const node = parseLine(l);
+
+        // Tìm cha: pop stack cho đến khi stack top có indent < dòng hiện tại
+        while (stack.length > 1 && stack[stack.length - 1].indent >= l.indent) {
+          stack.pop();
+        }
+        const parent = stack[stack.length - 1].node;
+        parent.children.push(node);
+        stack.push({ node, indent: l.indent });
+      }
+
+      // Gán generation theo cấp nếu không có §
+      function assignGen(node, gen) {
+        if (!node._hasExplicitGen) node.generation = gen;
+        // Con của ai cũng đều là đời tiếp theo; isSpouse chỉ ảnh hưởng đến bản thân node đó
+        node.children.forEach(c => assignGen(c, c.isSpouse ? gen : gen + 1));
+      }
+      // Mark explicit gen
+      function markExplicit(node) {
+        // already parsed, nếu generation được set từ §, giữ nguyên
+        node.children.forEach(markExplicit);
+      }
+      assignGen(rootNode, rootNode.generation || 1);
+
+      return rootNode;
+    }
+
+    // ───────────────────────────────────────────────────────────────────────────
+
+    const KEY = "gia_pha_v1";
+    const SETTINGS_KEY = "gia_pha_settings_v1";
+    const INTRO_KEY = "giapha_intro_html";
+    const FONT_OPTIONS = [
+      { value: "'Courier New', monospace",                                    label: 'Courier New',   sample: 'Monospace cổ điển' },
+      { value: "'Georgia', 'Times New Roman', serif",                         label: 'Georgia',       sample: 'Serif trang trọng' },
+      { value: "'Palatino Linotype', 'Book Antiqua', Palatino, serif",        label: 'Palatino',      sample: 'Cổ thư pháp' },
+      { value: "'Garamond', 'EB Garamond', serif",                            label: 'Garamond',      sample: 'Cổ điển Châu Âu' },
+      { value: "'Times New Roman', Times, serif",                             label: 'Times New Roman', sample: 'Serif truyền thống' },
+      { value: "'Trebuchet MS', 'Segoe UI', sans-serif",                      label: 'Trebuchet',     sample: 'Sans sạch sẽ' },
+      { value: "'Verdana', Geneva, sans-serif",                               label: 'Verdana',       sample: 'Sans dễ đọc' },
+    ];
+    const DEFAULT_SETTINGS = {
+      fontSize: 22,
+      fontFamily: "'Courier New', monospace",
+      colorMale: '#38bdf8',
+      colorFemale: '#f05687',
+      colorYears: '#c7d1dc',
+      colorAnniversary: '#4d6655',
+      colorGeneration: '#99db1f',
+    };
+    const SettingsCtx = React.createContext(DEFAULT_SETTINGS);
+    const SAMPLE = {
+      id: "root", name: "Tổ tiên", gender: "male", birthYear: null, deathYear: null, deathAnniversary: "", generation: 1, isSpouse: false, collapsed: false, children: []
+    };
+
+    function MemberForm({ initial, parentGen, isSpouseDefault, onSave, onCancel }) {
+      const [name, setName] = useState(initial?.name || "");
+      const [gender, setGender] = useState(initial?.gender || "male");
+      const [bYear, setBYear] = useState(initial?.birthYear || "");
+      const [dYear, setDYear] = useState(initial?.deathYear || "");
+      const [ann, setAnn] = useState(initial?.deathAnniversary || "");
+      const [note, setNote] = useState(initial?.note || "");
+      const [isSpouse, setIsSpouse] = useState(initial?.isSpouse !== undefined ? initial.isSpouse : (isSpouseDefault || false));
+      // Đời tự tính: bạn đời = cùng đời cha, con = đời cha + 1
+      // Khi sửa: giữ nguyên đời cũ. Khi thêm mới: tính từ cha
+      const computedGen = initial
+        ? initial.generation
+        : (isSpouse ? parentGen : parentGen + 1);
+      const save = () => {
+        if (!name.trim()) return;
+        onSave({ name: name.trim(), gender, birthYear: bYear ? parseInt(bYear) : null, deathYear: dYear ? parseInt(dYear) : null, deathAnniversary: ann.trim(), note: note.trim(), isSpouse, generation: computedGen });
+      };
+      return (
+        <div>
+          <div className="form-group"><label className="form-label">Họ và tên *</label><input value={name} onChange={e => setName(e.target.value)} placeholder="Nhập họ tên đầy đủ..." autoFocus onKeyDown={e => e.key === "Enter" && save()} /></div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Giới tính</label><select value={gender} onChange={e => setGender(e.target.value)}><option value="male">Nam</option><option value="female">Nữ</option></select></div>
+            <div className="form-group"><label className="form-label">Loại quan hệ</label><select value={isSpouse ? "yes" : "no"} onChange={e => setIsSpouse(e.target.value === "yes")}><option value="no">Con cái</option><option value="yes">Bạn đời (+)</option></select></div>
+          </div>
+          <div className="form-row">
+            <div className="form-group"><label className="form-label">Năm sinh</label><input type="number" inputMode="numeric" value={bYear} onChange={e => setBYear(e.target.value)} placeholder="VD: 1950" min="1600" max="2100" /></div>
+            <div className="form-group"><label className="form-label">Năm mất</label><input type="number" inputMode="numeric" value={dYear} onChange={e => setDYear(e.target.value)} placeholder="VD: 2020" min="1600" max="2100" /></div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Ngày giỗ (ngày/tháng âm lịch)</label>
+            <input
+              value={ann}
+              onChange={e => {
+                // Chỉ cho nhập số và /
+                let v = e.target.value.replace(/[^\d/]/g, '');
+                // Tự chèn / sau 2 số đầu
+                if (/^\d{2}$/.test(v) && !ann.includes('/')) v = v + '/';
+                if (v.length > 5) v = v.slice(0, 5);
+                setAnn(v);
+              }}
+              placeholder="dd/mm"
+              inputMode="numeric"
+              pattern="\d{1,2}/\d{1,2}"
+              maxLength={5}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Ghi chú</label>
+            <input value={note} onChange={e => setNote(e.target.value)} placeholder="Ghi chú ngắn về thành viên..." />
+          </div>
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 18 }}>
+            <button onClick={onCancel} style={{ background: "transparent", color: "#5a7898" }}>Hủy</button>
+            <button onClick={save} disabled={!name.trim()} style={{ background: name.trim() ? "#1440a0" : "#0c1a30", color: name.trim() ? "#a0c8f8" : "#3a5070", opacity: name.trim() ? 1 : 0.5 }}>Lưu</button>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Settings Panel ──────────────────────────────────────────────────────────
+    function SettingsPanel({ settings, onChange, onClose }) {
+      const colorFields = [
+        { label: 'Tên Nam',   key: 'colorMale' },
+        { label: 'Tên Nữ',   key: 'colorFemale' },
+        { label: 'Năm',       key: 'colorYears' },
+        { label: 'Ngày giỗ', key: 'colorAnniversary' },
+        { label: 'Số đời',   key: 'colorGeneration' },
+      ];
+      const previewFs   = settings.fontSize;
+      const previewFont = settings.fontFamily || FONT_OPTIONS[0].value;
+      const currentFont = FONT_OPTIONS.find(f => f.value === previewFont) || FONT_OPTIONS[0];
+
+      return (
+        <div className="settings-panel">
+          {/* ── Nút đóng ── */}
+          <button onClick={onClose} title="Đóng"
+            style={{ position:'absolute', top:8, right:10, background:'transparent', border:'none', color:'#fff', fontSize:20, lineHeight:1, cursor:'pointer', padding:'2px 6px', borderRadius:5 }}
+            onMouseEnter={e=>e.currentTarget.style.color='#6a8ab0'}
+            onMouseLeave={e=>e.currentTarget.style.color='#2a4a68'}
+          >×</button>
+
+          {/* ── Hàng 1: Cỡ chữ + Kiểu chữ ── */}
+          <div className="sp-row">
+            {/* Cỡ chữ */}
+            <div className="sp-group">
+              <div className="sp-label">Cỡ chữ</div>
+              <div style={{ display:'flex', alignItems:'center', gap:5 }}>
+                <button className="font-btn" onClick={() => onChange('fontSize', Math.max(10, settings.fontSize-1))}>−</button>
+                <span className="font-display">{settings.fontSize}</span>
+                <button className="font-btn" onClick={() => onChange('fontSize', Math.min(26, settings.fontSize+1))}>+</button>
+                <input type="range" className="font-slider" min={10} max={26} value={settings.fontSize}
+                  onChange={e => onChange('fontSize', parseInt(e.target.value))} style={{ width:70 }} />
+              </div>
+            </div>
+
+            {/* Kiểu chữ — combobox */}
+            <div className="sp-group" style={{ flex:'1 1 180px' }}>
+              <div className="sp-label">Kiểu chữ</div>
+              <select
+                value={previewFont}
+                onChange={e => onChange('fontFamily', e.target.value)}
+                style={{ width:'100%', background:'#060f1c', border:'1px solid #1a3252', borderRadius:6, padding:'5px 8px', color:'#7aaad8', fontSize:13 }}
+              >
+                {FONT_OPTIONS.map(f => (
+                  <option key={f.value} value={f.value}>{f.label}</option>
+                ))}
+              </select>
+              {/* Preview tên font hiện tại */}
+              <div style={{ marginTop:4, fontFamily: previewFont, fontSize: previewFs, color:'#4a7aaa', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                {currentFont.sample}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Hàng 2: Màu sắc ── */}
+          <div className="sp-group" style={{ width:'100%' }}>
+            <div className="sp-label">Màu sắc</div>
+            <div className="sp-colors">
+              {colorFields.map(({ label, key }) => (
+                <div key={key} className="sp-color-item" title={label} style={{ position:'relative' }}>
+                  <input id={'cp_'+key} type="color" value={settings[key]}
+                    onChange={e => onChange(key, e.target.value)}
+                    style={{ position:'absolute', inset:0, width:'100%', height:'100%', opacity:0, cursor:'pointer', zIndex:1, touchAction:'manipulation' }} />
+                  <div className="sp-swatch" style={{ background: settings[key] }} />
+                  <div className="sp-color-label">{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Preview ── */}
+          <div className="sp-group" style={{ width:'100%' }}>
+            <div className="sp-label">Xem trước</div>
+            <div className="settings-preview" style={{ fontSize: previewFs, fontFamily: previewFont }}>
+              <span style={{ color: settings.colorMale, fontWeight:600 }}>Lê Văn Lăm</span>
+              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs*0.85 }}>(đời 6)</span>
+              {' '}<span style={{ color: settings.colorYears, fontSize: previewFs*0.85, fontStyle:'italic' }}>(1897–1976)</span>
+              {' '}<span style={{ color: settings.colorAnniversary, fontSize: previewFs*0.82 }}>✦ 5/8</span>
+              <br/>
+              <span style={{ color: settings.colorFemale, fontWeight:600 }}>+ Nguyễn Thị Huệ</span>
+              {' '}<span style={{ color: settings.colorGeneration, fontSize: previewFs*0.85 }}>(đời 6)</span>
+            </div>
+          </div>
+
+          {/* ── Reset ── */}
+          <div style={{ display:'flex', alignItems:'flex-end', paddingBottom:2 }}>
+            <button onClick={() => onChange('reset')}
+              style={{ fontSize:15, color:'#87a8c7', background:'transparent', border:'1px solid #1a3050', borderRadius:5, padding:'4px 10px', whiteSpace:'nowrap' }}>
+              ⟳ Mặc định
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Data Popup ──────────────────────────────────────────────────────────────
+    function DataPopup({ tree, settings, setTree, setSettings, onClose, storageKeys }) {
+      const { KEY, SETTINGS_KEY, INTRO_KEY_F } = storageKeys;
+      const [status, setStatus] = React.useState(null); // { type: 'ok'|'err', msg }
+      const [loadingMsg, setLoadingMsg] = React.useState('');
+
+      React.useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [onClose]);
+
+      // ── 1. Xuất data JSON ────────────────────────────────────────────────────
+      const handleExport = () => {
+        try {
+          const intro = localStorage.getItem(INTRO_KEY_F) || '';
+          const payload = {
+            version: '2',
+            exportDate: new Date().toISOString(),
+            tree,
+            settings,
+            intro,
+          };
+          const json = JSON.stringify(payload, null, 2);
+          const blob = new Blob([json], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `gia-pha-${new Date().toISOString().slice(0, 10)}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setStatus({ type: 'ok', msg: '✓ Đã xuất file thành công' });
+        } catch (e) {
+          setStatus({ type: 'err', msg: '✗ Lỗi: ' + e.message });
+        }
+      };
+
+      // ── 1b. Xuất file HTML ───────────────────────────────────────────────────
+      const handleExportHTML = async () => {
+        setLoadingMsg('Đang tạo file HTML…');
+        setStatus(null);
+        try {
+          // Fetch source HTML gốc (tránh dùng outerHTML vì React đã làm biến dạng)
+          const res = await fetch(window.location.href, { cache: 'no-store' });
+          if (!res.ok) throw new Error('Không tải được source HTML');
+          let htmlSource = await res.text();
+
+          // Snapshot dữ liệu hiện tại
+          const intro = localStorage.getItem(INTRO_KEY_F) || '';
+          const payload = JSON.stringify({ version: '2', tree, settings, intro });
+
+          // Script chạy sớm, ghi data vào localStorage trước khi React mount
+          const injectedScript = `<script id="__gia_pha_embedded__">
+(function(){
+  try {
+    var d = ${payload};
+    var families = [];
+    try { families = JSON.parse(localStorage.getItem('giapha_families') || '[]'); } catch(e){}
+    var fid = (families[0] && families[0].id) ? families[0].id : 'gp_' + Date.now();
+    if (!families.find(function(f){ return f.id === fid; })) {
+      families.unshift({ id: fid, name: d.tree ? (d.tree.name || 'Gia phả') : 'Gia phả', createdAt: Date.now() });
+      localStorage.setItem('giapha_families', JSON.stringify(families));
+    }
+    localStorage.setItem('giapha_tree_' + fid, JSON.stringify(d.tree));
+    localStorage.setItem('giapha_settings_' + fid, JSON.stringify(d.settings));
+    if (d.intro) localStorage.setItem('giapha_intro_' + fid, d.intro);
+  } catch(e){ console.warn('Embedded data error:', e); }
+})();
+<\/script>`;
+
+          // Chèn vào ngay sau <head> để chạy trước mọi thứ
+          if (htmlSource.includes('<head>')) {
+            htmlSource = htmlSource.replace('<head>', '<head>\n' + injectedScript);
+          } else if (htmlSource.includes('</head>')) {
+            htmlSource = htmlSource.replace('</head>', injectedScript + '\n</head>');
+          } else {
+            htmlSource = injectedScript + htmlSource;
+          }
+
+          const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `gia-pha-${new Date().toISOString().slice(0, 10)}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setLoadingMsg('');
+          setStatus({ type: 'ok', msg: '✓ Đã xuất file HTML – mở file để dùng offline' });
+        } catch (e) {
+          setLoadingMsg('');
+          setStatus({ type: 'err', msg: '✗ Lỗi: ' + e.message });
+        }
+      };
+
+
+      const handleImport = () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json,application/json';
+        input.onchange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          setLoadingMsg('Đang đọc file…');
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            setLoadingMsg('');
+            try {
+              const data = JSON.parse(ev.target.result);
+              applyImportedData(data);
+            } catch {
+              setStatus({ type: 'err', msg: '✗ File không hợp lệ hoặc không phải JSON' });
+            }
+          };
+          reader.onerror = () => { setLoadingMsg(''); setStatus({ type: 'err', msg: '✗ Không đọc được file' }); };
+          reader.readAsText(file);
+        };
+        input.click();
+      };
+
+      // ── 3. Nhập dữ liệu mẫu ─────────────────────────────────────────────────
+      const [sampleFiles, setSampleFiles] = React.useState(null); // null=ẩn, []=đang load, [...]=danh sách
+      const [samplePicking, setSamplePicking] = React.useState(false);
+
+      const handleOpenSamplePicker = async () => {
+        setSampleFiles([]);
+        setSamplePicking(true);
+        setStatus(null);
+        try {
+          const res = await fetch('./data/index.json', { cache: 'no-store' });
+          if (!res.ok) throw new Error(`Không tìm thấy data/index.json (HTTP ${res.status})`);
+          const list = await res.json(); // mảng { name, file } hoặc mảng string
+          const normalized = list.map(item =>
+            typeof item === 'string'
+              ? { name: item.replace(/\.json$/i, '').replace(/[-_]/g, ' '), file: item }
+              : item
+          );
+          setSampleFiles(normalized);
+        } catch (e) {
+          setSampleFiles(null);
+          setSamplePicking(false);
+          setStatus({ type: 'err', msg: '✗ ' + e.message });
+        }
+      };
+
+      const handleLoadSampleFile = async (file) => {
+        setSamplePicking(false);
+        setSampleFiles(null);
+        setLoadingMsg(`Đang tải ${file}…`);
+        setStatus(null);
+        try {
+          const res = await fetch(`./data/${file}`, { cache: 'no-store' });
+          if (!res.ok) throw new Error(`HTTP ${res.status} – không tìm thấy data/${file}`);
+          const data = await res.json();
+          applyImportedData(data);
+          setLoadingMsg('');
+        } catch (e) {
+          setLoadingMsg('');
+          setStatus({ type: 'err', msg: '✗ ' + e.message });
+        }
+      };
+
+      // Shared helper: apply imported payload (full export or bare tree)
+      const applyImportedData = (data) => {
+        // Full export format { version, tree, settings, intro }
+        if (data.tree && data.tree.id && Array.isArray(data.tree.children)) {
+          setTree(data.tree);
+          if (data.settings && typeof data.settings === 'object') {
+            const ns = { ...DEFAULT_SETTINGS, ...data.settings };
+            setSettings(ns);
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(ns));
+          }
+          if (typeof data.intro === 'string' && data.intro.trim()) {
+            localStorage.setItem(INTRO_KEY_F, data.intro);
+          }
+          const members = countDesc(data.tree) + 1;
+          setStatus({ type: 'ok', msg: `✓ Đã nhập thành công · ${members} thành viên` });
+        }
+        // Bare tree format (just the root node)
+        else if (data.id && Array.isArray(data.children)) {
+          setTree(data);
+          const members = countDesc(data) + 1;
+          setStatus({ type: 'ok', msg: `✓ Đã nhập thành công · ${members} thành viên` });
+        }
+        else {
+          setStatus({ type: 'err', msg: '✗ Định dạng JSON không hợp lệ' });
+        }
+      };
+
+      // ── 4. Xóa bộ nhớ trình duyệt ───────────────────────────────────────────
+      const handleClearStorage = () => {
+        if (!window.confirm('Xóa toàn bộ dữ liệu đã lưu?\n\n• Gia phả\n• Cài đặt (font, màu)\n• Nội dung giới thiệu\n\nHành động này không thể hoàn tác!')) return;
+        try {
+          localStorage.removeItem(KEY);
+          localStorage.removeItem(SETTINGS_KEY);
+          localStorage.removeItem(INTRO_KEY_F);
+          setTree(SAMPLE);
+          setSettings(DEFAULT_SETTINGS);
+          setStatus({ type: 'ok', msg: '✓ Đã xóa bộ nhớ trình duyệt' });
+        } catch (e) {
+          setStatus({ type: 'err', msg: '✗ Lỗi: ' + e.message });
+        }
+      };
+
+      return (
+        <div className="data-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="data-panel">
+            {/* Header */}
+            <div className="data-panel-header">
+              <span style={{ fontSize: 20 }}>💾</span>
+              <span className="data-panel-title">Dữ liệu</span>
+              <button onClick={onClose} className="modal-close" style={{ fontSize: 20 }}>×</button>
+            </div>
+
+            {/* Status bar */}
+            {(status || loadingMsg) && (
+              <div style={{
+                padding: '7px 18px',
+                fontSize: 12,
+                background: status?.type === 'ok' ? 'rgba(20,80,40,0.3)' : status?.type === 'err' ? 'rgba(80,20,20,0.3)' : 'rgba(20,40,80,0.3)',
+                color: status?.type === 'ok' ? '#50c878' : status?.type === 'err' ? '#e06070' : '#6aaaf0',
+                borderBottom: '1px solid #0e2040',
+              }}>
+                {loadingMsg || status?.msg}
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="data-btn-row">
+              {/* Xuất */}
+              <button className="data-action-btn" onClick={handleExport}>
+                <span className="da-icon">⬇️</span>
+                <span className="da-text">
+                  <span className="da-title">Xuất data JSON</span>
+                  <span className="da-desc">Tải về file .json chứa gia phả, cài đặt và giới thiệu</span>
+                </span>
+              </button>
+
+              {/* Nhập */}
+              <button className="data-action-btn" onClick={handleImport}>
+                <span className="da-icon">⬆️</span>
+                <span className="da-text">
+                  <span className="da-title">Nhập data JSON</span>
+                  <span className="da-desc">Khôi phục từ file .json đã xuất trước đó</span>
+                </span>
+              </button>
+
+              {/* Dữ liệu mẫu */}
+              <button className="data-action-btn sample" onClick={handleOpenSamplePicker}>
+                <span className="da-icon">📋</span>
+                <span className="da-text">
+                  <span className="da-title">Nhập dữ liệu mẫu</span>
+                  <span className="da-desc">Chọn file từ thư mục <code style={{ color: '#3a8060', fontSize: 10 }}>data/</code></span>
+                </span>
+              </button>
+
+              {/* Picker danh sách file mẫu */}
+              {samplePicking && (
+                <div style={{ background: '#060f1c', border: '1px solid #1a3a58', borderRadius: 8, overflow: 'hidden' }}>
+                  <div style={{ padding: '7px 12px', borderBottom: '1px solid #0e2040', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#2a5070' }}>Chọn dữ liệu mẫu</span>
+                    <button onClick={() => { setSamplePicking(false); setSampleFiles(null); }}
+                      style={{ background: 'transparent', border: 'none', color: '#2a4a68', fontSize: 16, padding: '0 4px', lineHeight: 1 }}>×</button>
+                  </div>
+                  {sampleFiles && sampleFiles.length === 0 && (
+                    <div style={{ padding: '12px 14px', color: '#2a5070', fontSize: 12 }}>Đang tải danh sách…</div>
+                  )}
+                  {sampleFiles && sampleFiles.length > 0 && sampleFiles.map((item, i) => (
+                    <button key={i}
+                      onClick={() => handleLoadSampleFile(item.file)}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '9px 14px', background: 'transparent', border: 'none', borderBottom: i < sampleFiles.length - 1 ? '1px solid #0a1e30' : 'none', textAlign: 'left', color: '#5a9ad8', fontSize: 13, transition: 'background 0.1s' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(20,60,120,0.2)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, opacity: 0.6 }}>
+                        <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                        <path d="M3.5 5h7M3.5 7.5h5M3.5 10h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                      </svg>
+                      <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.name}</span>
+                      <span style={{ fontSize: 10, color: '#1e4060', fontFamily: 'monospace', flexShrink: 0 }}>{item.file}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Xóa */}
+              <button className="data-action-btn danger" onClick={handleClearStorage}>
+                <span className="da-icon">🗑️</span>
+                <span className="da-text">
+                  <span className="da-title">Xóa bộ nhớ trình duyệt</span>
+                  <span className="da-desc">Xóa toàn bộ dữ liệu localStorage của ứng dụng này</span>
+                </span>
+              </button>
+            </div>
+
+            <div className="data-panel-footer">
+              Dữ liệu lưu trữ: gia phả · cài đặt hiển thị · nội dung giới thiệu
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const DragCtx = React.createContext(null);
+
+    function TreeNode({ node, onUpdate, onDelete, isRoot, showModal, dragMode, parentGen, showInfo, parentNode }) {
+      const { moveNode } = React.useContext(DragCtx);
+      const settings = React.useContext(SettingsCtx);
+      const [hover, setHover] = useState(false);
+      const [moving, setMoving] = useState(false);
+      const [mousePos, setMousePos] = useState(null);
+      const hasKids = node.children?.length > 0;
+      const desc = countDesc(node);
+      const fs = settings.fontSize;
+      const yearStr = (() => {
+        if (node.birthYear && node.deathYear) return `(${node.birthYear}–${node.deathYear})`;
+        if (node.birthYear) return `(${node.birthYear}– )`;
+        if (node.deathYear) return `( –${node.deathYear})`;
+        return "";
+      })();
+      const toggle = () => onUpdate(node.id, n => ({ ...n, collapsed: !n.collapsed }));
+
+      const handleDragHandleClick = (e) => {
+        e.stopPropagation();
+        setMousePos({ x: e.clientX, y: e.clientY });
+        setMoving(v => !v);
+      };
+
+      const handleMenuAction = (dir) => {
+        moveNode(node.id, dir);
+        setMoving(false);
+        setMousePos(null);
+      };
+
+      const closeDragMenu = () => {
+        setMoving(false);
+        setMousePos(null);
+      };
+
+      return (
+        <div data-node-id={node.id}>
+          <div className="node-line" onMouseEnter={() => setHover(true)} onMouseLeave={() => { setHover(false); }}>
+            {/* Icon kéo thả */}
+            {dragMode && !isRoot ? (
+              <span
+                className="drag-handle"
+                title="Di chuyển node"
+                onClick={handleDragHandleClick}
+                style={{ cursor:'pointer', color: moving ? '#7ac8f8' : undefined, userSelect:'none' }}
+              >⠿</span>
+            ) : <span style={{ width:16, flexShrink:0 }} />}
+
+            <button className="toggle-btn" onClick={hasKids ? toggle : undefined} disabled={!hasKids}>{hasKids ? (node.collapsed ? "+" : "−") : "·"}</button>
+            <span style={{ fontFamily: settings.fontFamily || "'Courier New', monospace", fontSize: fs, lineHeight: 2.5 }}>
+              {node.isSpouse && <span style={{ color: '#ecbf00', marginRight: 4, fontWeight: 700 }}>+</span>}
+              <span
+                style={{ color: node.gender === 'female' ? settings.colorFemale : settings.colorMale, fontWeight: 600, cursor: 'pointer', borderBottom: hover ? '1px dashed rgba(100,160,240,0.3)' : '1px solid transparent' }}
+                onClick={e => { e.stopPropagation(); if (!dragMode) showInfo(node.isSpouse && parentNode ? { node, parentNode, isRoot } : { node, isRoot }); }}
+                title="Click để xem chi tiết"
+              >{node.name}</span>
+              <span style={{ color: settings.colorGeneration, fontSize: fs * 0.87, marginLeft: 5 }}>(đời {node.generation})</span>
+              {yearStr && <span style={{ color: settings.colorYears, fontSize: fs * 0.87, fontStyle: "italic", marginLeft: 4 }}>{yearStr}</span>}
+              {node.deathAnniversary && <span style={{ color: settings.colorAnniversary, fontSize: fs * 0.83, marginLeft: 6 }}>✦ {node.deathAnniversary}</span>}
+              {desc > 0 && !hover && <span style={{ color: "#1e3858", fontSize: fs * 0.82, marginLeft: 6 }}>({desc})</span>}
+              {node.note && <span style={{ color: "#6a8aaa", fontSize: fs * 0.80, fontStyle: "italic", marginLeft: 8 }}>{'{' + node.note + '}'}</span>}
+            </span>
+
+            {hover && !dragMode && (
+              <span style={{ display: "flex", gap: 4, marginLeft: 6, flexShrink: 0 }}>
+                <button onClick={() => showModal({ type: "add", nodeId: node.id, parentGen: node.generation, parentName: node.name })} style={{ fontSize: 11, padding: "1px 8px", background: "#081828", color: "#5090d0" }}>+ Thêm</button>
+                <button onClick={() => showModal({ type: "edit", nodeId: node.id, node, parentGen: parentGen ?? node.generation })} style={{ fontSize: 11, padding: "1px 8px", background: "#10180a", color: "#70a840" }}>✎ Sửa</button>
+                {!isRoot && <button onClick={() => { if (window.confirm(`Xóa "${node.name}"${hasKids ? ` và ${desc} con cháu` : ""}?`)) onDelete(node.id); }} style={{ fontSize: 11, padding: "1px 8px", background: "#180808", color: "#d05060" }}>✕ Xóa</button>}
+              </span>
+            )}
+          </div>
+
+          {/* Floating drag menu */}
+          {moving && mousePos && (
+            <>
+              <div className="drag-menu-overlay" onClick={closeDragMenu} />
+              <div className="drag-menu" style={{
+                left: Math.min(mousePos.x + 12, window.innerWidth - 180),
+                top: Math.min(mousePos.y + 12, window.innerHeight - 200)
+              }} onClick={e => e.stopPropagation()}>
+                {/* Up */}
+                <button className="drag-arrow-btn drag-menu-up" onClick={() => handleMenuAction('up')} title="Lên – cùng cấp">↑</button>
+                {/* Left, Center, Right */}
+                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                  <button className="drag-arrow-btn drag-menu-left" onClick={() => handleMenuAction('left')} title="Ra ngoài – lên 1 cấp">←</button>
+                  <button className="drag-close-btn" onClick={closeDragMenu} title="Đóng">✕</button>
+                  <button className="drag-arrow-btn drag-menu-right" onClick={() => handleMenuAction('right')} title="Vào trong – xuống 1 cấp">→</button>
+                </div>
+                {/* Down */}
+                <button className="drag-arrow-btn drag-menu-down" onClick={() => handleMenuAction('down')} title="Xuống – cùng cấp">↓</button>
+              </div>
+            </>
+          )}
+
+          {!node.collapsed && hasKids && (
+            <div className="children">{node.children.map(child =>
+              child.isSpouse
+                ? <div key={child.id} className="spouse-wrapper"><TreeNode node={child} onUpdate={onUpdate} onDelete={onDelete} isRoot={false} showModal={showModal} dragMode={dragMode} parentGen={node.generation} showInfo={showInfo} parentNode={node} /></div>
+                : <TreeNode key={child.id} node={child} onUpdate={onUpdate} onDelete={onDelete} isRoot={false} showModal={showModal} dragMode={dragMode} parentGen={node.generation} showInfo={showInfo} />
+            )}</div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Text Editor View ────────────────────────────────────────────────────────
+    function TextEditor({ tree, onImport, onCancel }) {
+      const [text, setText] = useState(() => treeToText(tree).join('\n'));
+      const [status, setStatus] = useState(null); // null | {ok, msg}
+      const [parsed, setParsed] = useState(null);
+
+      const validate = (val) => {
+        try {
+          const t = textToTree(val);
+          setParsed(t);
+          setStatus({ ok: true, msg: `✓ Hợp lệ · ${countDesc(t) + 1} thành viên` });
+        } catch (e) {
+          setParsed(null);
+          setStatus({ ok: false, msg: '✗ ' + e.message });
+        }
+      };
+
+      useEffect(() => { validate(text); }, []);
+
+      const handleChange = (e) => {
+        setText(e.target.value);
+        validate(e.target.value);
+      };
+
+      const handleApply = () => {
+        if (parsed) onImport(parsed);
+      };
+
+      const handleCopy = () => {
+        navigator.clipboard.writeText(text).then(() => setStatus({ ok: true, msg: '✓ Đã sao chép vào clipboard' }));
+      };
+
+      return (
+        <div className="text-view">
+          <div className="syntax-hint">
+            <b>Cú pháp:</b> &nbsp;
+            <code style={{color:'#3a7898'}}>Họ Tên (nữ) [năm sinh-năm mất] ✦ ngày giỗ {'{ghi chú}'} §đời</code> &nbsp;·&nbsp;
+            <code style={{color:'#2a6858'}}>+</code> = bạn đời &nbsp;·&nbsp;
+            Thụt lề <b>6 dấu cách</b> (hoặc 1 Tab) = 1 cấp con &nbsp;·&nbsp;
+            <code style={{color:'#507858'}}>✦</code> hoặc <code style={{color:'#507858'}}>~</code> = ngày giỗ &nbsp;·&nbsp;
+            <code style={{color:'#507858'}}>{'{}'}</code> = ghi chú
+          </div>
+          <div className="text-toolbar">
+            <button onClick={handleApply} disabled={!parsed} style={{ background: parsed ? "#0e3020" : "#080f18", color: parsed ? "#50c878" : "#2a4a38", border: parsed ? "1px solid #1a6030" : "1px solid #0a2018", fontWeight: 600 }}>
+              ✓ Áp dụng vào cây
+            </button>
+            <button onClick={handleCopy} style={{ fontSize: 12 }}>⎘ Sao chép</button>
+            <button onClick={onCancel} style={{ fontSize: 12, color: "#4a6888", background: "transparent" }}>← Quay lại</button>
+            {status && (
+              <span className={status.ok ? "parse-ok" : "parse-error"}>{status.msg}</span>
+            )}
+          </div>
+          <textarea
+            className="text-editor"
+            value={text}
+            onChange={handleChange}
+            spellCheck={false}
+            placeholder={"Lê Đình Tục §6\n+ Bà cụ (nữ) §6\n      Lê Chân Kim [1950-2020] ✦ 5/8 âm lịch §7\n      + Vợ (nữ) §7\n            Lê Đình Đài §8"}
+          />
+        </div>
+      );
+    }
+
+    // ── Nội Tộc Panel ───────────────────────────────────────────────────────────
+    function buildNoiTocData(root) {
+      // Collect all non-spouse members with ancestry info
+      const byGen = {};
+      // orderMap: gen → running index
+      const orderMap = {};
+
+      function walk(node, ancestors, fatherId, motherId) {
+        if (node.isSpouse) return; // skip bạn đời
+
+        const gen = node.generation;
+        if (!byGen[gen]) byGen[gen] = [];
+        if (!orderMap[gen]) orderMap[gen] = 0;
+        orderMap[gen]++;
+
+        // Spouses (dấu +)
+        const spouses = (node.children || []).filter(c => c.isSpouse);
+        const spouseCount = spouses.length;
+
+        // Con ruột (không tính bạn đời): con trực tiếp + con qua bạn đời
+        const directKids = (node.children || []).filter(c => !c.isSpouse);
+        const kidsViaSpouse = spouses.flatMap(s => (s.children || []).filter(c => !c.isSpouse));
+        const allKids = [...directKids, ...kidsViaSpouse];
+        const childCount = allKids.length;
+
+        // Cháu (con của con, không tính bạn đời)
+        let grandCount = 0;
+        for (const kid of allKids) {
+          const kidDirectKids = (kid.children || []).filter(c => !c.isSpouse);
+          const kidSpouses = (kid.children || []).filter(c => c.isSpouse);
+          const kidKidsViaSpouse = kidSpouses.flatMap(s => (s.children || []).filter(c => !c.isSpouse));
+          grandCount += kidDirectKids.length + kidKidsViaSpouse.length;
+        }
+
+        // 2 đời trước (ông cố và cha) — lưu tên + id để tô màu
+        const ancestorList = ancestors.slice(-2);
+        const ancestorNames = ancestorList.map(a => a.name);
+
+        // groupKey = fatherId::motherId — cùng cha mẹ cùng nhóm màu
+        const groupKey = fatherId !== null ? (fatherId + '::' + (motherId || '')) : null;
+
+        byGen[gen].push({
+          id: node.id,
+          name: node.name,
+          gender: node.gender,
+          birthYear: node.birthYear,
+          deathYear: node.deathYear,
+          deathAnniversary: node.deathAnniversary,
+          spouseCount,
+          childCount,
+          grandCount,
+          ancestorNames,
+          fatherId,
+          motherId,
+          groupKey,
+          order: orderMap[gen],
+        });
+
+        const newAncestors = [...ancestors, { name: node.name, id: node.id }];
+        // Walk con trực tiếp (non-spouse) của node — không biết mẹ
+        for (const child of (node.children || []).filter(c => !c.isSpouse)) {
+          walk(child, newAncestors, node.id, null);
+        }
+        // Walk con của từng bạn đời — biết cả cha lẫn mẹ
+        for (const spouse of (node.children || []).filter(c => c.isSpouse)) {
+          for (const sc of (spouse.children || []).filter(c => !c.isSpouse)) {
+            walk(sc, newAncestors, node.id, spouse.id);
+          }
+        }
+      }
+
+      walk(root, [], null, null);
+      return byGen;
+    }
+
+    function NoiTocPanel({ tree, onClose }) {
+      const genData = React.useMemo(() => tree ? buildNoiTocData(tree) : {}, [tree]);
+      const gens = Object.keys(genData).map(Number).sort((a, b) => a - b);
+      const totalNội = gens.reduce((s, g) => s + genData[g].length, 0);
+      const [collapsed, setCollapsed] = React.useState({});
+
+      const toggleGen = (g) => setCollapsed(prev => ({ ...prev, [g]: !prev[g] }));
+      const collapseAll = () => setCollapsed(Object.fromEntries(gens.map(g => [g, true])));
+      const expandAll  = () => setCollapsed({});
+      const allCollapsed = gens.every(g => collapsed[g]);
+
+      // Chỉ hiện năm sinh/mất, không hiện ngày giỗ
+      const fmtDate = (m) => {
+        if (m.birthYear && m.deathYear) return `${m.birthYear}–${m.deathYear}`;
+        if (m.birthYear) return `${m.birthYear}`;
+        return '';
+      };
+
+      const spouseLabel = (gender, count) => {
+        if (count === 0) return null;
+        return gender === 'female' ? `${count} chồng` : `${count} vợ`;
+      };
+
+      // ── Tô màu đường dẫn cha/mẹ ──────────────────────────────────────────────
+      // Palette: mỗi fatherId có 1 màu cha; mỗi groupKey (cha+mẹ) có 1 màu riêng
+      // Màu cùng cha cùng mẹ: sắc sáng; cùng cha khác mẹ: sắc nhạt hơn
+      const FATHER_HUES = [210, 160, 40, 280, 15, 340, 90, 190, 250, 310, 70, 130];
+      const ancestorColorMap = React.useMemo(() => {
+        // Gom tất cả member trong tất cả đời
+        const allMembers = gens.flatMap(g => genData[g]);
+        // Gán hue cho từng fatherId theo thứ tự xuất hiện
+        const fatherHue = {};
+        let fatherIdx = 0;
+        // Gom groupKeys theo từng fatherId
+        const groupsByFather = {};
+        for (const m of allMembers) {
+          if (!m.fatherId) continue;
+          if (!(m.fatherId in fatherHue)) {
+            fatherHue[m.fatherId] = FATHER_HUES[fatherIdx % FATHER_HUES.length];
+            fatherIdx++;
+          }
+          if (!groupsByFather[m.fatherId]) groupsByFather[m.fatherId] = new Set();
+          groupsByFather[m.fatherId].add(m.groupKey);
+        }
+        // Gán màu cho từng groupKey
+        const colorMap = {}; // groupKey → { textColor, borderColor, label }
+        for (const [fid, hue] of Object.entries(fatherHue)) {
+          const groups = [...groupsByFather[fid]];
+          groups.forEach((gk, i) => {
+            const hasMultiMother = groups.length > 1;
+            if (!hasMultiMother) {
+              // Chỉ 1 mẹ: màu đồng nhất
+              colorMap[gk] = {
+                color: `hsl(${hue}, 60%, 62%)`,
+                border: `hsl(${hue}, 40%, 30%)`,
+              };
+            } else {
+              // Nhiều mẹ: cùng hue cha, lightness khác nhau để phân biệt mẹ
+              const lightness = 68 - i * 16; // 68, 52, 36...
+              const saturation = 65 - i * 10;
+              colorMap[gk] = {
+                color: `hsl(${hue}, ${Math.max(saturation,30)}%, ${Math.max(lightness,38)}%)`,
+                border: `hsl(${hue}, 35%, 28%)`,
+              };
+            }
+          });
+        }
+        return colorMap;
+      }, [genData, gens]);
+
+      return (
+        <div className="noitoc-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="noitoc-panel" onMouseDown={e => e.stopPropagation()}>
+            <div className="noitoc-header">
+              <span style={{ fontSize: 20 }}>👨‍👩‍👧‍👦</span>
+              <span className="noitoc-title">Nội tộc</span>
+              <span className="noitoc-badge">{totalNội} người</span>
+              <button
+                onClick={allCollapsed ? expandAll : collapseAll}
+                title={allCollapsed ? "Mở rộng tất cả" : "Thu nhỏ tất cả"}
+                style={{ fontSize: 14, padding: "3px 9px", background: "#081828", color: "#4a7aaa", border: "1px solid #1a3a58", marginLeft: 4 }}
+              >{allCollapsed ? "⊞" : "⊟"}</button>
+              <button className="modal-close" onClick={onClose} style={{ marginLeft: 4 }}>×</button>
+            </div>
+
+            <div className="noitoc-body">
+              {gens.map(g => {
+                const members = genData[g];
+                const isCollapsed = collapsed[g];
+                return (
+                  <div key={g}>
+                    <div className="noitoc-gen-header" onClick={() => toggleGen(g)}>
+                      <span className="noitoc-gen-toggle">{isCollapsed ? '▶' : '▼'}</span>
+                      <span className="noitoc-gen-label">Đời {g}</span>
+                      <span className="noitoc-gen-count">({members.length} thành viên)</span>
+                    </div>
+                    {!isCollapsed && members.map((m) => {
+                      const date = fmtDate(m);
+                      const orderLabel = `${g}.${m.order}.`;
+                      const sl = spouseLabel(m.gender, m.spouseCount);
+                      return (
+                        <div key={m.id} className="noitoc-member">
+                          <div className="noitoc-member-row1">
+                            <span className="noitoc-order">{orderLabel}</span>
+                            <span className="noitoc-name" style={{ color: m.gender === 'female' ? '#d65b82' : '#6aaaf0' }}>{m.name}</span>
+                            {date && <span className="noitoc-date">{date}</span>}
+                            <div className="noitoc-stats">
+                              {sl && <span className="noitoc-tag noitoc-tag-spouse">{sl}</span>}
+                              {m.childCount > 0 && <span className="noitoc-tag noitoc-tag-child">{m.childCount} con</span>}
+                              {m.grandCount > 0 && <span className="noitoc-tag noitoc-tag-grand">{m.grandCount} cháu</span>}
+                            </div>
+                          </div>
+                          {m.ancestorNames.length > 0 && (() => {
+                            const col = m.groupKey && ancestorColorMap[m.groupKey];
+                            return (
+                              <div
+                                className="noitoc-ancestors"
+                                style={col ? {
+                                  color: col.color,
+                                  borderLeft: `3px solid ${col.border}`,
+                                  paddingLeft: 8,
+                                  marginLeft: 36,
+                                  borderRadius: 2,
+                                  fontStyle: 'italic',
+                                } : {}}
+                              >
+                                {m.ancestorNames.join(' / ')}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Node Info Popup ──────────────────────────────────────────────────────────
+    function NodeInfoPopup({ node, parentNode, onClose, onEdit, onAdd, onDelete, isRoot }) {
+      const settings = React.useContext(SettingsCtx);
+
+      useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, []);
+
+      // Nếu node là bạn đời (isSpouse), hiện từ góc nhìn của cặp đôi:
+      // - parentNode là người chồng/vợ chính
+      // - node hiện tại là bạn đời
+      // Lấy tất cả bạn đời của parentNode (để hiện "bạn đời khác" nếu có)
+      // và con cái từ node bạn đời hiện tại
+      const isSpouseView = !!(node.isSpouse && parentNode);
+
+      // Dữ liệu khi click vào NODE CHÍNH (không phải bạn đời)
+      const spouses = (node.children || []).filter(c => c.isSpouse);
+      const directChildren = (node.children || []).filter(c => !c.isSpouse);
+      const spouseGroups = spouses.map(s => ({ spouse: s, children: (s.children || []).filter(c => !c.isSpouse) }));
+      const totalChildren = directChildren.length + spouseGroups.reduce((a, g) => a + g.children.length, 0);
+
+      // Dữ liệu khi click vào NODE BẠN ĐỜI — hiện từ góc nhìn cặp đôi
+      // parentNode = người chính, node = bạn đời được click
+      const partnerSpouses = isSpouseView ? (parentNode.children || []).filter(c => c.isSpouse) : [];
+      const partnerChildren = isSpouseView ? (node.children || []).filter(c => !c.isSpouse) : [];
+      const partnerDirectChildren = isSpouseView ? (parentNode.children || []).filter(c => !c.isSpouse) : [];
+
+      const yearStr = (n) => {
+        if (n.birthYear && n.deathYear) return `${n.birthYear}–${n.deathYear}`;
+        if (n.birthYear) return `sinh ${n.birthYear}`;
+        if (n.deathYear) return `mất ${n.deathYear}`;
+        return '';
+      };
+
+      const myYears = yearStr(node);
+      const myColor = node.gender === 'female' ? settings.colorFemale : settings.colorMale;
+      const avatar = node.isSpouse ? '⚭' : (node.gender === 'female' ? '♀' : '♂');
+      const avatarBg = node.gender === 'female' ? 'rgba(240,128,160,0.12)' : 'rgba(106,172,240,0.12)';
+
+      const MemberRow = ({ m, isSpouseRow, spouseIndex }) => {
+        const col = m.gender === 'female' ? settings.colorFemale : settings.colorMale;
+        const ys = yearStr(m);
+        const rowStyle = isSpouseRow
+          ? { background: 'rgba(240,128,160,0.07)', border: '1px solid rgba(240,128,160,0.18)' }
+          : {};
+        return (
+          <div className="info-member-row" style={rowStyle}>
+            <span style={{ color: col, fontSize: 15, flexShrink: 0 }}>
+              {m.isSpouse ? '⚭' : (m.gender === 'female' ? '♀' : '♂')}
+            </span>
+            <span className="info-member-name" style={{ color: col }}>
+              {isSpouseRow && spouseIndex && <span style={{ color: '#3a5878', fontSize: 10, marginRight: 5, fontWeight: 400 }}>Vợ/chồng {spouseIndex}:</span>}
+              {m.name}
+            </span>
+            {ys && <span className="info-member-years">{ys}</span>}
+            {m.deathAnniversary && <span className="info-member-ann">✦ {m.deathAnniversary}</span>}
+            <span style={{ fontSize: 10, color: '#1e3858', flexShrink: 0 }}>đời {m.generation}</span>
+          </div>
+        );
+      };
+
+      return (
+        <div className="info-popup-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="info-popup">
+
+            {/* ── TRƯỜNG HỢP: click vào BẠN ĐỜI → hiện cặp đôi ── */}
+            {isSpouseView ? (<>
+              {/* Header: hiện cả 2 người trong cặp */}
+              <div className="info-popup-header" style={{ flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
+                  <span style={{ fontSize: 11, color: '#3a6888', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>⚭ Thông tin cặp đôi</span>
+                  <button className="modal-close" onClick={onClose}>×</button>
+                </div>
+                {/* Người chính */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div className="info-popup-avatar" style={{ background: parentNode.gender === 'female' ? 'rgba(240,128,160,0.12)' : 'rgba(106,172,240,0.12)', color: parentNode.gender === 'female' ? settings.colorFemale : settings.colorMale, width: 32, height: 32, fontSize: 16 }}>
+                    {parentNode.gender === 'female' ? '♀' : '♂'}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: parentNode.gender === 'female' ? settings.colorFemale : settings.colorMale }}>{parentNode.name}</div>
+                    <div style={{ fontSize: 11, color: '#3a6888' }}>
+                      Đời {parentNode.generation}
+                      {yearStr(parentNode) && <span style={{ marginLeft: 6, fontStyle: 'italic', color: settings.colorYears }}>{yearStr(parentNode)}</span>}
+                      {parentNode.deathAnniversary && <span style={{ marginLeft: 6, color: settings.colorAnniversary }}>✦ {parentNode.deathAnniversary}</span>}
+                    </div>
+                  </div>
+                </div>
+                {/* Dấu nối */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingLeft: 6 }}>
+                  <span style={{ color: '#1a3858', fontSize: 12 }}>⚭</span>
+                  <span style={{ color: '#1a3858', fontSize: 11 }}>
+                    {partnerSpouses.length > 1
+                      ? `Bạn đời thứ ${partnerSpouses.findIndex(s => s.id === node.id) + 1}/${partnerSpouses.length}`
+                      : 'Bạn đời'}
+                  </span>
+                </div>
+                {/* Bạn đời (node được click) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div className="info-popup-avatar" style={{ background: node.gender === 'female' ? 'rgba(240,128,160,0.12)' : 'rgba(106,172,240,0.12)', color: node.gender === 'female' ? settings.colorFemale : settings.colorMale, width: 32, height: 32, fontSize: 16 }}>
+                    {node.gender === 'female' ? '♀' : '♂'}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: node.gender === 'female' ? settings.colorFemale : settings.colorMale }}>{node.name}</div>
+                    <div style={{ fontSize: 11, color: '#3a6888' }}>
+                      Đời {node.generation}
+                      {yearStr(node) && <span style={{ marginLeft: 6, fontStyle: 'italic', color: settings.colorYears }}>{yearStr(node)}</span>}
+                      {node.deathAnniversary && <span style={{ marginLeft: 6, color: settings.colorAnniversary }}>✦ {node.deathAnniversary}</span>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body: con của cặp này */}
+              <div className="info-popup-body">
+                <div className="info-section-title">👶 Con của cặp này ({partnerChildren.length + partnerDirectChildren.length})</div>
+                {partnerChildren.length === 0 && partnerDirectChildren.length === 0
+                  ? <div className="info-empty">Chưa có con cái</div>
+                  : <>
+                    {partnerDirectChildren.map(c => <MemberRow key={c.id} m={c} />)}
+                    {partnerChildren.map(c => <MemberRow key={c.id} m={c} />)}
+                  </>
+                }
+                {/* Nếu parentNode có nhiều bạn đời khác */}
+                {partnerSpouses.length > 1 && (
+                  <>
+                    <div className="info-section-title" style={{ marginTop: 14 }}>⚭ Các bạn đời khác của {parentNode.name}</div>
+                    {partnerSpouses.filter(s => s.id !== node.id).map(s => (
+                      <div key={s.id} style={{ marginBottom: 8 }}>
+                        <MemberRow m={s} isSpouseRow={true} />
+                        {(s.children || []).filter(c => !c.isSpouse).length > 0 && (
+                          <div style={{ paddingLeft: 16, borderLeft: '2px solid #0e2840', marginTop: 3 }}>
+                            <div style={{ fontSize: 10, color: '#1e3858', marginBottom: 3, paddingLeft: 2 }}>👶 Con ({(s.children || []).filter(c => !c.isSpouse).length})</div>
+                            {(s.children || []).filter(c => !c.isSpouse).map(c => <MemberRow key={c.id} m={c} />)}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+            </>) : (<>
+
+            {/* ── TRƯỜNG HỢP: click vào NODE CHÍNH ── */}
+            <div className="info-popup-header">
+              <div className="info-popup-avatar" style={{ background: avatarBg, color: myColor }}>{avatar}</div>
+              <div className="info-popup-title">
+                <div className="info-popup-name" style={{ color: myColor }}>
+                  {node.name}
+                </div>
+                <div className="info-popup-meta">
+                  <span style={{ color: settings.colorGeneration }}>Đời {node.generation}</span>
+                  {myYears && <span style={{ color: settings.colorYears, fontStyle: 'italic' }}>{myYears}</span>}
+                  {node.deathAnniversary && <span style={{ color: settings.colorAnniversary }}>✦ {node.deathAnniversary}</span>}
+                  <span style={{ color: '#1a3858' }}>{node.gender === 'female' ? 'Nữ' : 'Nam'}</span>
+                </div>
+              </div>
+              <button className="modal-close" onClick={onClose} style={{ alignSelf: 'flex-start' }}>×</button>
+            </div>
+
+            <div className="info-popup-body">
+              <div className="info-section-title">⚭ Bạn đời &amp; Con cái ({spouses.length} bạn đời · {totalChildren} con)</div>
+
+              {spouses.length === 0 && directChildren.length === 0 && (
+                <div className="info-empty">Chưa có thông tin bạn đời và con cái</div>
+              )}
+
+              {directChildren.length > 0 && (
+                <div style={{ marginBottom: 10 }}>
+                  <div style={{ fontSize: 11, color: '#2a5070', marginBottom: 5, paddingLeft: 4, borderLeft: '2px solid #1a3a58', paddingRight: 4 }}>
+                    Con chung ({directChildren.length})
+                  </div>
+                  {directChildren.map(c => <MemberRow key={c.id} m={c} />)}
+                </div>
+              )}
+
+              {spouseGroups.map((g, i) => (
+                <div key={g.spouse.id} style={{ marginBottom: 12 }}>
+                  <div style={{ marginBottom: 4 }}>
+                    <MemberRow m={g.spouse} isSpouseRow={true} spouseIndex={spouses.length > 1 ? i + 1 : null} />
+                  </div>
+                  {g.children.length > 0 ? (
+                    <div style={{ paddingLeft: 16, borderLeft: '2px solid #0e2840' }}>
+                      <div style={{ fontSize: 10, color: '#1e3858', marginBottom: 4, paddingLeft: 2 }}>
+                        👶 Con ({g.children.length})
+                      </div>
+                      {g.children.map(c => <MemberRow key={c.id} m={c} />)}
+                    </div>
+                  ) : (
+                    <div style={{ paddingLeft: 16, borderLeft: '2px solid #0e2840' }}>
+                      <div className="info-empty" style={{ paddingLeft: 2 }}>Chưa có con</div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {spouses.length === 0 && directChildren.length > 0 && (
+                <div style={{ marginTop: 8, fontSize: 11, color: '#1a3858', fontStyle: 'italic' }}>Không có thông tin bạn đời</div>
+              )}
+            </div>
+            </>)}
+
+            {/* Footer actions */}
+            <div className="info-popup-footer">
+              <button onClick={onAdd} style={{ fontSize: 12, background: '#081828', color: '#5090d0', border: '1px solid #1a3a60' }}>+ Thêm</button>
+              <button onClick={onEdit} style={{ fontSize: 12, background: '#10180a', color: '#70a840', border: '1px solid #1e4020' }}>✎ Sửa</button>
+              {!isRoot && onDelete && <button onClick={onDelete} style={{ fontSize: 12, background: '#180808', color: '#d05060', border: '1px solid #4a1020' }}>✕ Xóa</button>}
+              <button onClick={onClose} style={{ fontSize: 12, color: '#4a6888', background: 'transparent' }}>Đóng</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Search Modal Component ───────────────────────────────────────────────────
+    function SearchModal({ tree, settings, onClose, onNavigate }) {
+      const [query, setQuery] = useState('');
+      const [activeIdx, setActiveIdx] = useState(0);
+      const inputRef = useRef(null);
+
+      useEffect(() => { inputRef.current?.focus(); }, []);
+
+      const results = React.useMemo(() => {
+        if (!query.trim() || !tree) return [];
+        const q = query.trim().toLowerCase();
+        return collectAllNodes(tree).filter(n =>
+          n.name.toLowerCase().includes(q)
+        ).slice(0, 50);
+      }, [query, tree]);
+
+      useEffect(() => { setActiveIdx(0); }, [results]);
+
+      const handleKey = (e) => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, results.length - 1)); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, 0)); }
+        else if (e.key === 'Enter') { if (results[activeIdx]) onNavigate(results[activeIdx].id); }
+        else if (e.key === 'Escape') { onClose(); }
+      };
+
+      return (
+        <div className="search-modal" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="search-box">
+            <div className="search-input-wrap">
+              <svg className="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{color: '#3a6888', flexShrink: 0}}>
+                <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.8"/>
+                <line x1="12" y1="12" x2="18" y2="18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+                onKeyDown={handleKey}
+                placeholder="Tìm kiếm thành viên theo tên..."
+              />
+              {query && <button onClick={() => setQuery('')} style={{ background: 'none', border: 'none', color: '#2a4a68', fontSize: 22, padding: '0 4px', lineHeight: 1 }}>×</button>}
+            </div>
+
+            <div className="search-results">
+              {!query.trim() && (
+                <div className="search-empty">Nhập tên để tìm kiếm thành viên trong gia phả</div>
+              )}
+              {query.trim() && results.length === 0 && (
+                <div className="search-empty">Không tìm thấy thành viên nào khớp với "<b style={{color:'#4a7aaa'}}>{query}</b>"</div>
+              )}
+              {results.map((node, i) => {
+                const yearStr = (() => {
+                  if (node.birthYear && node.deathYear) return `${node.birthYear}–${node.deathYear}`;
+                  if (node.birthYear) return `sinh ${node.birthYear}`;
+                  if (node.deathYear) return `mất ${node.deathYear}`;
+                  return '';
+                })();
+                const meta = [yearStr, node.deathAnniversary ? `✦ ${node.deathAnniversary}` : ''].filter(Boolean).join('  ');
+                const nameColor = node.gender === 'female' ? (settings?.colorFemale || '#d65b82') : (settings?.colorMale || '#6aacf0');
+                const yearColor = settings?.colorYears || '#4a6888';
+                const genColor = settings?.colorGeneration || '#2a5878';
+                const annColor = settings?.colorAnniversary || '#c8a040';
+                
+                return (
+                  <div
+                    key={node.id}
+                    className={"search-result-item" + (i === activeIdx ? " active" : "")}
+                    onClick={() => onNavigate(node.id)}
+                    onMouseEnter={() => setActiveIdx(i)}
+                  >
+                    <span style={{ color: nameColor, fontSize: 18, flexShrink: 0 }}>
+                      {node.isSpouse ? '⚭' : (node.gender === 'female' ? '♀' : '♂')}
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="search-result-name" style={{ color: nameColor }}>
+                        {node.isSpouse && <span style={{ color: '#d65b82', marginRight: 4 }}>+</span>}
+                        {highlightMatch(node.name, query)}
+                      </div>
+                      {meta && (
+                        <div className="search-result-meta" style={{ color: yearColor }}>
+                          {meta.includes('✦') 
+                            ? meta.split('✦').map((part, idx) => 
+                                idx === 0 ? part : <span key={idx} style={{color: annColor}}>✦{part}</span>
+                              )
+                            : meta
+                          }
+                        </div>
+                      )}
+                    </div>
+                    <span className="search-result-gen" style={{ color: genColor }}>Đời {node.generation}</span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="search-footer">
+              <span>↑↓ Điều hướng</span>
+              <span>↵ Chọn</span>
+              <span>Esc Đóng</span>
+              {results.length > 0 && <span style={{ marginLeft: 'auto', color: '#2a5878' }}>{results.length} kết quả</span>}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── Ngày Giỗ Popup ───────────────────────────────────────────────────────────
+    function NgayGioPopup({ tree, onClose }) {
+      React.useEffect(() => {
+        const h = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', h);
+        return () => window.removeEventListener('keydown', h);
+      }, [onClose]);
+
+      // Thu thập tất cả node có deathAnniversary
+      const items = React.useMemo(() => {
+        if (!tree) return [];
+        const list = [];
+        function walk(node) {
+          // Cả nội tộc lẫn bạn đời đều có thể có ngày giỗ
+          if (node.deathAnniversary && node.deathAnniversary.trim()) {
+            const raw = node.deathAnniversary.trim();
+            // Parse dd/mm hoặc d/m
+            const m = raw.match(/^(\d{1,2})[\/\-\.](\d{1,2})/);
+            if (m) {
+              const day = parseInt(m[1], 10);
+              const month = parseInt(m[2], 10);
+              list.push({ ...node, parsedDay: day, parsedMonth: month, rawDate: raw });
+            }
+          }
+          for (const c of node.children || []) walk(c);
+        }
+        walk(tree);
+        // Sắp xếp tăng dần theo tháng → ngày
+        list.sort((a, b) => a.parsedMonth !== b.parsedMonth ? a.parsedMonth - b.parsedMonth : a.parsedDay - b.parsedDay);
+        return list;
+      }, [tree]);
+
+      const MONTHS_VI = ['Tháng Giêng','Tháng Hai','Tháng Ba','Tháng Tư','Tháng Năm','Tháng Sáu','Tháng Bảy','Tháng Tám','Tháng Chín','Tháng Mười','Tháng Mười Một','Tháng Chạp'];
+
+      // Nhóm theo tháng
+      const grouped = React.useMemo(() => {
+        const map = {};
+        for (const item of items) {
+          if (!map[item.parsedMonth]) map[item.parsedMonth] = [];
+          map[item.parsedMonth].push(item);
+        }
+        return map;
+      }, [items]);
+
+      const months = Object.keys(grouped).map(Number).sort((a,b) => a-b);
+
+      return (
+        <div className="giodio-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="giodio-panel">
+            <div className="giodio-header">
+              <span style={{ fontSize: 26 }}>🕯️</span>
+              <span className="giodio-title">Ngày Giỗ</span>
+              <span className="giodio-badge">{items.length} người</span>
+              <button className="modal-close" onClick={onClose} style={{ fontSize: 22 }}>×</button>
+            </div>
+
+            <div className="giodio-body">
+              {items.length === 0 && (
+                <div className="giodio-empty">Chưa có thông tin ngày giỗ nào được ghi lại</div>
+              )}
+              {months.map(mo => (
+                <div key={mo}>
+                  <div className="giodio-month-header">
+                    ☽ {MONTHS_VI[mo - 1]} (Âm lịch)
+                  </div>
+                  {grouped[mo].map(item => {
+                    const nameColor = item.isSpouse
+                      ? (item.gender === 'female' ? '#f090b8' : '#80b8f0')
+                      : (item.gender === 'female' ? '#d65b82' : '#6aaaf0');
+                    const years = item.birthYear && item.deathYear
+                      ? `${item.birthYear} – ${item.deathYear}`
+                      : item.deathYear ? `Mất ${item.deathYear}`
+                      : item.birthYear ? `Sinh ${item.birthYear}` : '';
+                    return (
+                      <div key={item.id} className="giodio-item">
+                        <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 52 }}>
+                          <div className="giodio-day">{String(item.parsedDay).padStart(2,'0')}</div>
+                          <div className="giodio-day-label">tháng {item.parsedMonth}</div>
+                        </div>
+                        <div className="giodio-divider" />
+                        <div className="giodio-info">
+                          <div className="giodio-name" style={{ color: nameColor }}>
+                            {item.isSpouse && <span style={{ color: '#c070a0', marginRight: 6, fontWeight: 400, fontSize: 15 }}>⚭</span>}
+                            {item.name}
+                          </div>
+                          <div className="giodio-meta">
+                            {years && <span style={{ fontStyle: 'italic', color: '#bbd2e1' }}>{years}</span>}
+                            <span style={{ color: '#3a6888' }}>✦ {item.rawDate} âm lịch</span>
+                          </div>
+                        </div>
+                        <div className="giodio-gen">Đời {item.generation}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── GioiThieu Popup ──────────────────────────────────────────────────────────
+    const DEFAULT_INTRO_HTML = ` <h1>Gia Phả Họ Lê</h1>
+<p>Đây là trang giới thiệu về gia phả dòng họ. Bạn có thể chỉnh sửa nội dung này trong tab <strong>Chỉnh sửa</strong>.</p>
+
+<h2>Lịch sử dòng họ</h2>
+<p>Dòng họ được lập từ thế kỷ XVIII, khởi nguồn từ vùng đất...</p>
+
+<h2>Truyền thống</h2>
+<ul>
+  <li>Hiếu học, coi trọng đạo nghĩa</li>
+  <li>Đoàn kết, tương thân tương ái</li>
+  <li>Gìn giữ văn hóa và phong tục cha ông</li>
+</ul>
+
+<blockquote>
+  &ldquo;Uống nước nhớ nguồn, ăn quả nhớ kẻ trồng cây&rdquo;
+</blockquote>
+
+<h2>Liên hệ</h2>
+<p>Để biết thêm thông tin, vui lòng liên hệ trưởng tộc.</p>`;
+
+    function GioiThieuPopup({ onClose, introKey }) {
+      const [tab, setTab] = React.useState('view'); // 'view' | 'edit'
+      const [html, setHtml] = React.useState(() => {
+        try { return localStorage.getItem(introKey) || DEFAULT_INTRO_HTML; } catch { return DEFAULT_INTRO_HTML; }
+      });
+      const [draft, setDraft] = React.useState(html);
+      const [saved, setSaved] = React.useState(false);
+
+      const saveContent = () => {
+        setHtml(draft);
+        try { localStorage.setItem(introKey, draft); } catch {}
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      };
+
+      const switchTab = (t) => {
+        if (t === 'edit') setDraft(html);
+        setTab(t);
+      };
+
+      React.useEffect(() => {
+        const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, [onClose]);
+
+      return (
+        <div className="intro-overlay">
+          <div className="intro-topbar">
+            <span style={{ fontSize: 20 }}>📜</span>
+            <span className="intro-topbar-title">Giới thiệu</span>
+            <button onClick={onClose} className="modal-close" style={{ fontSize: 22, padding: '0 8px' }}>×</button>
+          </div>
+
+          <div className="intro-body">
+            {tab === 'view' ? (
+              <div className="intro-content-area">
+                <div
+                  className="intro-preview"
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
+              </div>
+            ) : (
+              <div className="intro-content-area edit-mode">
+                <textarea
+                  className="intro-editor"
+                  value={draft}
+                  onChange={e => setDraft(e.target.value)}
+                  spellCheck={false}
+                  placeholder="Nhập nội dung HTML ở đây..."
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="intro-tabbar">
+            <button
+              className={"intro-tab" + (tab === 'view' ? ' active' : '')}
+              onClick={() => switchTab('view')}
+            >👁 Xem</button>
+            <button
+              className={"intro-tab" + (tab === 'edit' ? ' active' : '')}
+              onClick={() => switchTab('edit')}
+            >✎ Chỉnh sửa</button>
+            {tab === 'edit' && (
+              <button
+                onClick={saveContent}
+                style={{
+                  marginLeft: 14,
+                  fontSize: 13,
+                  padding: '5px 18px',
+                  background: saved ? '#0e2e14' : '#0a2848',
+                  color: saved ? '#60c878' : '#6aaaf0',
+                  border: saved ? '1px solid #1e5030' : '1px solid #1a4070',
+                  fontWeight: 600,
+                  transition: 'all 0.3s',
+                }}
+              >{saved ? '✓ Đã lưu' : '💾 Cập nhật'}</button>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ── ExpandMenu Component ────────────────────────────────────────────────────
+    function ExpandMenu({ tree, transformAll }) {
+      const [open, setOpen] = React.useState(false);
+      const [activeGen, setActiveGen] = React.useState(null); // null = tất cả
+      const ref = React.useRef(null);
+
+      // Tính đời tối đa trong cây
+      const maxGen = React.useMemo(() => {
+        if (!tree) return 1;
+        function maxDepth(n) { return Math.max(n.generation, ...(n.children || []).map(maxDepth)); }
+        return maxDepth(tree);
+      }, [tree]);
+
+      // Đời có thể chọn: 1 → maxGen-1
+      const genOptions = [];
+      for (let g = 1; g <= maxGen - 1; g++) genOptions.push(g);
+
+      // Close on outside click
+      React.useEffect(() => {
+        if (!open) return;
+        const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+      }, [open]);
+
+      const applyExpand = (upToGen) => {
+        setActiveGen(upToGen);
+        setOpen(false);
+        if (upToGen === null) {
+          // Mở rộng tất cả
+          transformAll(n => ({ ...n, collapsed: false }));
+        } else {
+          // Mở rộng đến đời upToGen, thu gọn các đời sau
+          transformAll(n => ({ ...n, collapsed: n.generation >= upToGen }));
+        }
+      };
+
+      const label = activeGen === null ? 'Mở rộng ▾' : `Mở rộng đến đời ${activeGen} ▾`;
+
+      return (
+        <div className="expand-menu-wrap" ref={ref}>
+          <button
+            onClick={() => setOpen(v => !v)}
+            style={{ fontSize: 12, background: open ? '#0e2040' : '#0a1e38', color: '#5a9ad8', border: '1px solid #1a3a60' }}
+          >{label}</button>
+          {open && (
+            <div className="expand-dropdown">
+              <div
+                className={"expand-dropdown-item" + (activeGen === null ? " active" : "")}
+                onClick={() => applyExpand(null)}
+              >Tất cả</div>
+              <div className="expand-dropdown-sep" />
+              {genOptions.map(g => (
+                <div
+                  key={g}
+                  className={"expand-dropdown-item" + (activeGen === g ? " active" : "")}
+                  onClick={() => applyExpand(g)}
+                >Đến đời {g}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ───────────────────────────────────────────────────────────────────────────
+    // ── Multi-family storage helpers ────────────────────────────────────────────
+    const FAMILIES_INDEX_KEY = "giapha_families_v1"; // [{id, name, createdAt}]
+    function getFamiliesIndex() {
+      try { return JSON.parse(localStorage.getItem(FAMILIES_INDEX_KEY)) || []; } catch { return []; }
+    }
+    function saveFamiliesIndex(list) { localStorage.setItem(FAMILIES_INDEX_KEY, JSON.stringify(list)); }
+    function familyTreeKey(id)     { return `giapha_tree_${id}`; }
+    function familySettingsKey(id) { return `giapha_settings_${id}`; }
+    function familyIntroKey(id)    { return `giapha_intro_${id}`; }
+
+    // ── Family Card Component ────────────────────────────────────────────────────
+    function FamilyCard({ f, memberCount, date, isEditing, editName, setEditName, onOpen, onStartEdit, onSaveEdit, onCancelEdit, onDelete }) {
+      const [menuOpen, setMenuOpen] = React.useState(false);
+      const menuRef = React.useRef(null);
+
+      React.useEffect(() => {
+        if (!menuOpen) return;
+        const h = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false); };
+        document.addEventListener('mousedown', h);
+        document.addEventListener('touchstart', h);
+        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
+      }, [menuOpen]);
+
+      return (
+        <div
+          className="home-card"
+          onClick={() => !isEditing && !menuOpen && onOpen(f)}
+        >
+          {/* Left accent line */}
+          <div className="home-card-accent" />
+
+          {/* SVG Scroll icon */}
+          <div className="home-card-icon">
+            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="19" cy="19" r="18" fill="rgba(180,140,60,0.07)" stroke="rgba(180,140,60,0.25)" strokeWidth="1"/>
+              {/* Tree symbol */}
+              <line x1="19" y1="27" x2="19" y2="18" stroke="#c8a84a" strokeWidth="1.8" strokeLinecap="round"/>
+              <line x1="19" y1="21" x2="14" y2="16" stroke="#a88030" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="19" y1="21" x2="24" y2="16" stroke="#a88030" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="14" y1="16" x2="11" y2="13" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
+              <line x1="14" y1="16" x2="16" y2="12" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
+              <line x1="24" y1="16" x2="22" y2="12" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
+              <line x1="24" y1="16" x2="27" y2="13" stroke="#806020" strokeWidth="1.3" strokeLinecap="round"/>
+              {/* Roots */}
+              <line x1="19" y1="27" x2="15" y2="31" stroke="#806020" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.7"/>
+              <line x1="19" y1="27" x2="23" y2="31" stroke="#806020" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.7"/>
+            </svg>
+          </div>
+
+          {/* Info */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {isEditing ? (
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }} onClick={e => e.stopPropagation()}>
+                <input
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
+                  autoFocus
+                  onKeyDown={e => { if (e.key === 'Enter') onSaveEdit(f.id); if (e.key === 'Escape') onCancelEdit(); }}
+                  style={{ flex: 1, fontSize: 15, fontWeight: 700, background: '#06101e', border: '1px solid #8a6a20', borderRadius: 5, padding: '5px 10px', color: '#e8d090', fontFamily: "'Palatino Linotype', serif" }}
+                />
+                <button onClick={() => onSaveEdit(f.id)} style={{ background: '#1a3818', color: '#70c870', border: '1px solid #2a6030', borderRadius: 5, padding: '5px 12px', fontSize: 13, flexShrink: 0 }}>✓</button>
+                <button onClick={onCancelEdit} style={{ background: 'transparent', color: '#5a7080', border: '1px solid #1a2a38', borderRadius: 5, padding: '5px 10px', fontSize: 13, flexShrink: 0 }}>✕</button>
+              </div>
+            ) : (
+              <div className="home-card-name">{f.name}</div>
+            )}
+            {!isEditing && (
+              <div className="home-card-meta">
+                <span className="home-card-badge">{memberCount} thành viên</span>
+                <span className="home-card-date">Tạo ngày {date}</span>
+              </div>
+            )}
+          </div>
+
+          {/* ⋯ menu */}
+          {!isEditing && (
+            <div ref={menuRef} style={{ position: 'relative', flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+              <button className="home-card-menu-btn" onClick={e => { e.stopPropagation(); setMenuOpen(v => !v); }} title="Tùy chọn"
+                style={{ background: menuOpen ? 'rgba(180,140,60,0.12)' : 'transparent', borderColor: menuOpen ? 'rgba(180,140,60,0.3)' : 'transparent' }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="3" r="1.4" fill="currentColor"/>
+                  <circle cx="8" cy="8" r="1.4" fill="currentColor"/>
+                  <circle cx="8" cy="13" r="1.4" fill="currentColor"/>
+                </svg>
+              </button>
+              {menuOpen && (
+                <div className="home-dropdown">
+                  <button className="home-dropdown-item"
+                    onClick={e => { setMenuOpen(false); onStartEdit(e, f); }}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{flexShrink:0}}>
+                      <path d="M9 2L11 4L4.5 10.5L2 11L2.5 8.5Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" fill="none"/>
+                    </svg>
+                    Đổi tên
+                  </button>
+                  <div className="home-dropdown-sep" />
+                  <button className="home-dropdown-item home-dropdown-danger"
+                    onClick={e => { setMenuOpen(false); onDelete(f.id, f.name); }}>
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style={{flexShrink:0}}>
+                      <rect x="2" y="4" width="9" height="8" rx="1" stroke="currentColor" strokeWidth="1.3" fill="none"/>
+                      <line x1="1" y1="4" x2="12" y2="4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                      <line x1="5" y1="2" x2="8" y2="2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+                      <line x1="5.5" y1="6.5" x2="5.5" y2="9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                      <line x1="7.5" y1="6.5" x2="7.5" y2="9.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                    </svg>
+                    Xóa gia phả
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Home Screen ─────────────────────────────────────────────────────────────
+    function HomeScreen({ onOpen }) {
+      const [families, setFamilies] = useState(getFamiliesIndex);
+      const [showCreate, setShowCreate] = useState(false);
+      const [newName, setNewName] = useState('');
+      const [creating, setCreating] = useState(false);
+      const [editingId, setEditingId] = useState(null);
+      const [editName, setEditName] = useState('');
+      const [autoLoading, setAutoLoading] = useState(false);
+
+      // Tự động tạo gia phả mẫu khi lần đầu mở (chưa có gia phả nào)
+      useEffect(() => {
+        const existing = getFamiliesIndex();
+        if (existing.length > 0) return; // Đã có gia phả, không làm gì
+
+        const loadSampleFamilies = async () => {
+          setAutoLoading(true);
+          try {
+            const res = await fetch('./data/index.json', { cache: 'no-store' });
+            if (!res.ok) return; // Không có file index, bỏ qua
+            const list = await res.json();
+            if (!Array.isArray(list) || list.length === 0) return;
+
+            const normalized = list.map(item =>
+              typeof item === 'string'
+                ? { name: item.replace(/\.json$/i, ''), file: item }
+                : item
+            );
+
+            const newFamilies = [];
+            for (const item of normalized) {
+              try {
+                const fileRes = await fetch(`./data/${item.file}`, { cache: 'no-store' });
+                if (!fileRes.ok) continue;
+                const data = await fileRes.json();
+
+                const id = genId();
+                // Tên gia phả = tên file (bỏ .json, giữ nguyên ký tự)
+                const familyName = item.name;
+
+                // Lưu cây
+                const tree = data.tree || (data.id ? data : null);
+                if (tree) localStorage.setItem(familyTreeKey(id), JSON.stringify(tree));
+                if (data.settings) localStorage.setItem(familySettingsKey(id), JSON.stringify(data.settings));
+                if (data.intro) localStorage.setItem(familyIntroKey(id), data.intro);
+
+                newFamilies.push({ id, name: familyName, createdAt: Date.now() });
+              } catch (e) {
+                // Bỏ qua file lỗi, tiếp tục
+              }
+            }
+
+            if (newFamilies.length > 0) {
+              saveFamiliesIndex(newFamilies);
+              setFamilies(newFamilies);
+            }
+          } catch (e) {
+            // Không có thư mục data hoặc lỗi mạng, bỏ qua
+          } finally {
+            setAutoLoading(false);
+          }
+        };
+
+        loadSampleFamilies();
+      }, []); // Chỉ chạy 1 lần khi mount
+
+      const handleCreate = async () => {
+        const name = newName.trim();
+        if (!name) return;
+        setCreating(true);
+        const id = genId();
+        try {
+          const res = await fetch('./datamau.json', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            const tree = data.tree || (data.id ? data : null);
+            if (tree) localStorage.setItem(familyTreeKey(id), JSON.stringify(tree));
+            if (data.settings) localStorage.setItem(familySettingsKey(id), JSON.stringify(data.settings));
+            if (data.intro) localStorage.setItem(familyIntroKey(id), data.intro);
+          }
+        } catch {}
+        const entry = { id, name, createdAt: Date.now() };
+        const next = [...families, entry];
+        saveFamiliesIndex(next);
+        setFamilies(next);
+        setNewName('');
+        setShowCreate(false);
+        setCreating(false);
+        onOpen(entry);
+      };
+
+      const handleDelete = (id, name) => {
+        if (!window.confirm(`Xóa gia phả "${name}"? Dữ liệu sẽ mất vĩnh viễn.`)) return;
+        localStorage.removeItem(familyTreeKey(id));
+        localStorage.removeItem(familySettingsKey(id));
+        localStorage.removeItem(familyIntroKey(id));
+        const next = families.filter(f => f.id !== id);
+        saveFamiliesIndex(next);
+        setFamilies(next);
+      };
+
+      const startEdit = (e, f) => {
+        e.stopPropagation();
+        setEditingId(f.id);
+        setEditName(f.name);
+      };
+
+      const [showAbout, setShowAbout] = React.useState(false);
+
+      const saveEdit = (id) => {
+        const name = editName.trim();
+        if (!name) { setEditingId(null); return; }
+        const next = families.map(f => f.id === id ? { ...f, name } : f);
+        saveFamiliesIndex(next);
+        setFamilies(next);
+        setEditingId(null);
+      };
+
+      return (
+        <div className="home-root">
+          {/* Header */}
+          <div className="home-header">
+            <div className="home-header-inner">
+              {/* Logo mark */}
+              <div className="home-logo-mark">
+                <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+                  <circle cx="18" cy="18" r="17" stroke="rgba(200,168,60,0.5)" strokeWidth="1.2"/>
+                  <circle cx="18" cy="18" r="13" stroke="rgba(200,168,60,0.2)" strokeWidth="0.8"/>
+                  <line x1="18" y1="26" x2="18" y2="16" stroke="#c8a840" strokeWidth="1.8" strokeLinecap="round"/>
+                  <line x1="18" y1="19" x2="13" y2="14" stroke="#b09030" strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="18" y1="19" x2="23" y2="14" stroke="#b09030" strokeWidth="1.5" strokeLinecap="round"/>
+                  <line x1="13" y1="14" x2="10" y2="11" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
+                  <line x1="13" y1="14" x2="15" y2="10" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
+                  <line x1="23" y1="14" x2="21" y2="10" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
+                  <line x1="23" y1="14" x2="26" y2="11" stroke="#907020" strokeWidth="1.2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <div className="home-header-title">Gia Phả</div>
+                <div className="home-header-sub">Lưu giữ · Kết nối · Truyền đời</div>
+              </div>
+            </div>
+            {/* Decorative rule */}
+            <div className="home-header-rule">
+              <div className="home-header-rule-line"/>
+              <div className="home-header-rule-diamond">◆</div>
+              <div className="home-header-rule-line"/>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="home-body">
+            {autoLoading ? (
+              <div className="home-empty">
+                <div className="home-empty-icon" style={{ opacity: 0.9 }}>
+                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none" style={{ animation: 'spin 1.5s linear infinite' }}>
+                    <circle cx="36" cy="36" r="30" stroke="rgba(180,140,60,0.15)" strokeWidth="3"/>
+                    <path d="M36 6a30 30 0 0 1 30 30" stroke="rgba(180,140,60,0.6)" strokeWidth="3" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div className="home-empty-title" style={{ color: 'rgba(180,150,60,0.8)' }}>Đang tải gia phả mẫu…</div>
+                <div className="home-empty-desc">Hệ thống đang tự động tạo dữ liệu từ thư mục data/</div>
+              </div>
+            ) : families.length === 0 ? (
+              <div className="home-empty">
+                <div className="home-empty-icon">
+                  <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+                    <circle cx="36" cy="36" r="34" stroke="rgba(180,140,60,0.2)" strokeWidth="1.5"/>
+                    <circle cx="36" cy="36" r="26" stroke="rgba(180,140,60,0.1)" strokeWidth="1"/>
+                    <line x1="36" y1="52" x2="36" y2="32" stroke="rgba(180,140,60,0.4)" strokeWidth="2.5" strokeLinecap="round"/>
+                    <line x1="36" y1="38" x2="26" y2="28" stroke="rgba(160,120,40,0.4)" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="36" y1="38" x2="46" y2="28" stroke="rgba(160,120,40,0.4)" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="26" y1="28" x2="20" y2="22" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
+                    <line x1="26" y1="28" x2="29" y2="21" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
+                    <line x1="46" y1="28" x2="43" y2="21" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
+                    <line x1="46" y1="28" x2="52" y2="22" stroke="rgba(140,100,30,0.3)" strokeWidth="1.8" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div className="home-empty-title">Chưa có gia phả nào</div>
+                <div className="home-empty-desc">Tạo gia phả đầu tiên để bắt đầu<br/>lưu giữ lịch sử dòng họ của bạn</div>
+              </div>
+            ) : (
+              <div className="home-list">
+                <div className="home-list-label">Danh sách gia phả</div>
+                {families.map(f => {
+                  let memberCount = 0;
+                  try { const t = JSON.parse(localStorage.getItem(familyTreeKey(f.id))); if (t) memberCount = countDesc(t) + 1; } catch {}
+                  const date = new Date(f.createdAt).toLocaleDateString('vi-VN');
+                  const isEditing = editingId === f.id;
+                  return (
+                    <FamilyCard
+                      key={f.id}
+                      f={f}
+                      memberCount={memberCount}
+                      date={date}
+                      isEditing={isEditing}
+                      editName={editName}
+                      setEditName={setEditName}
+                      onOpen={onOpen}
+                      onStartEdit={startEdit}
+                      onSaveEdit={saveEdit}
+                      onCancelEdit={() => setEditingId(null)}
+                      onDelete={handleDelete}
+                    />
+                  );
+                })}
+              </div>
+            )}
+
+            {/* Create button — ngay dưới danh sách */}
+            {!autoLoading && (
+              <div style={{ marginTop: 18, display: 'flex', justifyContent: 'center' }}>
+                <button className="home-create-btn" onClick={() => setShowCreate(true)}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+                    <line x1="8" y1="2" x2="8" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="2" y1="8" x2="14" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  Tạo gia phả mới
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Footer placeholder — giữ layout, không còn nút */}
+          <div className="home-footer" style={{ padding: 0, minHeight: 0, border: 'none' }} />
+
+          {/* ── Floating About Button ── */}
+          <button
+            className="home-export-fab"
+            onClick={() => setShowAbout(true)}
+            title="Giới thiệu ứng dụng"
+          >
+            <span className="home-export-fab-tooltip">Giới thiệu ứng dụng</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.6"/>
+              <line x1="12" y1="11" x2="12" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="12" cy="7.5" r="1.1" fill="currentColor"/>
+            </svg>
+          </button>
+
+          {/* ── About Popup ── */}
+          {showAbout && (
+            <div className="about-overlay" onMouseDown={e => { if (e.target === e.currentTarget) setShowAbout(false); }}>
+              <div className="about-panel">
+                <div className="about-header">
+                  <div className="about-icon-wrap">
+                    <svg width="26" height="26" viewBox="0 0 36 36" fill="none">
+                      <line x1="18" y1="26" x2="18" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <line x1="18" y1="19" x2="13" y2="14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                      <line x1="18" y1="19" x2="23" y2="14" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                      <line x1="13" y1="14" x2="10" y2="11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                      <line x1="13" y1="14" x2="15" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                      <line x1="23" y1="14" x2="21" y2="10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                      <line x1="23" y1="14" x2="26" y2="11" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                    </svg>
+                  </div>
+                  <div className="about-title">Quản Lý Gia Phả</div>
+                  <button className="about-close" onClick={() => setShowAbout(false)}>×</button>
+                </div>
+                <div className="about-body">
+                  <div className="about-section">
+                    <div className="about-section-title">Giới thiệu</div>
+                    <div className="about-desc">
+                      Ứng dụng <strong style={{color:'#a0c8f0'}}>Quản Lý Gia Phả</strong> giúp bạn xây dựng, lưu trữ và khám phá cây phả hệ dòng họ một cách trực quan ngay trên trình duyệt, không cần cài đặt hay đăng nhập. Toàn bộ dữ liệu được lưu cục bộ trên thiết bị của bạn.
+                    </div>
+                  </div>
+
+                  <div className="about-section">
+                    <div className="about-section-title">Tính năng nổi bật</div>
+                    <ul className="about-feature-list">
+                      <li>Quản lý nhiều gia phả độc lập trên cùng một thiết bị</li>
+                      <li>Thêm, sửa, xóa thành viên với đầy đủ thông tin: tên, giới tính, năm sinh/mất, vợ/chồng, ghi chú</li>
+                      <li>Hiển thị cây phả hệ dạng cây trực quan, hỗ trợ kéo thả sắp xếp thứ tự</li>
+                      <li>Xem ngày giỗ theo từng tháng âm lịch</li>
+                      <li>Chỉnh màu sắc, cỡ chữ và giao diện theo sở thích</li>
+                      <li>Viết lời giới thiệu dòng họ với trình soạn thảo HTML</li>
+                      <li>Nhập / xuất dữ liệu dạng JSON để sao lưu và khôi phục</li>
+                      <li>Tìm kiếm nhanh thành viên trong cây gia phả</li>
+                    </ul>
+                  </div>
+
+                  <div className="about-section">
+                    <div className="about-section-title">Lưu trữ dữ liệu</div>
+                    <div className="about-desc">
+                      Tất cả dữ liệu được lưu trong <strong style={{color:'#7aaccf'}}>localStorage</strong> của trình duyệt — không gửi lên máy chủ, không yêu cầu kết nối mạng sau khi tải trang. Hãy sao lưu định kỳ bằng chức năng <em>Xuất JSON</em> để tránh mất dữ liệu khi xóa cache.
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Create modal */}
+          {showCreate && (
+            <div className="modal" onMouseDown={e => { if (e.target === e.currentTarget) setShowCreate(false); }}>
+              <div className="modal-content" style={{ width: 380 }}>
+                <div className="modal-header">
+                  <span>Tạo gia phả mới</span>
+                  <button className="modal-close" onClick={() => setShowCreate(false)}>×</button>
+                </div>
+                <div className="form-group" style={{ marginTop: 4 }}>
+                  <label className="form-label">Tên gia phả *</label>
+                  <input
+                    value={newName}
+                    onChange={e => setNewName(e.target.value)}
+                    placeholder="VD: Gia phả họ Lê, Dòng họ Nguyễn..."
+                    autoFocus
+                    onKeyDown={e => e.key === 'Enter' && handleCreate()}
+                    style={{ width: '100%' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 18 }}>
+                  <button onClick={() => setShowCreate(false)} style={{ background: 'transparent', color: '#5a7898' }}>Hủy</button>
+                  <button onClick={handleCreate} disabled={!newName.trim() || creating}
+                    style={{ background: newName.trim() ? 'rgba(180,140,40,0.18)' : '#0c1a30', color: newName.trim() ? '#e8c860' : '#3a5070', border: newName.trim() ? '1px solid rgba(180,140,40,0.4)' : '1px solid #1a3050', opacity: newName.trim() ? 1 : 0.5 }}>
+                    {creating ? 'Đang tạo...' : 'Tạo'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Expand Gen Dropdown (topbar) ────────────────────────────────────────────
+    function ExpandGenDropdown({ tree, transformAll }) {
+      const [open, setOpen] = React.useState(false);
+      const ref = React.useRef(null);
+
+      React.useEffect(() => {
+        if (!open) return;
+        const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', h);
+        document.addEventListener('touchstart', h);
+        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
+      }, [open]);
+
+      const maxGen = React.useMemo(() => {
+        if (!tree) return 1;
+        function maxDepth(n) { return Math.max(n.generation, ...(n.children || []).map(maxDepth)); }
+        return maxDepth(tree);
+      }, [tree]);
+
+      const genOptions = [];
+      for (let g = 1; g <= maxGen - 1; g++) genOptions.push(g);
+
+      const apply = (fn) => { transformAll(fn); setOpen(false); };
+
+      return (
+        <div ref={ref} style={{ position: 'relative', flexShrink: 0 }}>
+          <button
+            onClick={() => setOpen(v => !v)}
+            title="Mở rộng đến đời"
+            style={{ display: 'flex', alignItems: 'center', gap: 5, height: 32, padding: '0 9px', background: open ? '#0a2040' : '#0a1e38', color: open ? '#6aacf0' : '#5a9ad8', border: open ? '1px solid #2a5080' : '1px solid #1a3a60', borderRadius: 6, fontSize: 13 }}
+          >
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="2" y1="3.5" x2="13" y2="3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="2" y1="7.5" x2="10" y2="7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <line x1="2" y1="11.5" x2="7" y2="11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <polyline points="11,8 13.5,10.5 11,13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            </svg>
+            <svg width="9" height="9" viewBox="0 0 9 9" fill="none" style={{ opacity: 0.6 }}>
+              <polyline points="1,3 4.5,6.5 8,3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          {open && (
+            <div style={{ position: 'absolute', top: 'calc(100% + 5px)', right: 0, background: '#08121e', border: '1px solid #1a3a60', borderRadius: 8, minWidth: 160, zIndex: 9100, boxShadow: '0 8px 32px rgba(0,0,20,0.8)', overflow: 'hidden' }}>
+              <div style={{ padding: '5px 14px 3px', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em', color: '#2a4a68', textTransform: 'uppercase' }}>Mở rộng đến đời</div>
+              <button
+                onClick={() => apply(n => ({ ...n, collapsed: false }))}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 14px', fontSize: 17, color: '#5a9ad8', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(60,120,200,0.14)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >↕ Tất cả</button>
+              <div style={{ borderTop: '1px solid #0e2040', margin: '2px 0' }} />
+              {genOptions.map(g => (
+                <button key={g}
+                  onClick={() => apply(n => ({ ...n, collapsed: n.generation >= g }))}
+                  style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', fontSize: 17, color: '#4a8ac8', background: 'transparent', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(60,120,200,0.12)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >→ Đến đời {g}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ── Hamburger Menu ──────────────────────────────────────────────────────────
+    function HamburgerMenu({ view, setView, dragMode, setDragMode, showSettings, setShowSettings,
+      showNgayGio, setShowNgayGio, showData, setShowData, showGioiThieu, setShowGioiThieu,
+      showNoiToc, setShowNoiToc }) {
+      const [open, setOpen] = React.useState(false);
+      const ref = React.useRef(null);
+      React.useEffect(() => {
+        if (!open) return;
+        const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', h);
+        document.addEventListener('touchstart', h);
+        return () => { document.removeEventListener('mousedown', h); document.removeEventListener('touchstart', h); };
+      }, [open]);
+      const close = () => setOpen(false);
+
+      return (
+        <div className="hmenu-wrap" ref={ref}>
+          <button className="hmenu-btn" onClick={() => setOpen(v => !v)} title="Menu" style={{ background: open ? '#0e2040' : '#0a1e38', border: '1px solid #1a3a60', color: '#5a9ad8' }}>☰</button>
+          {open && (
+            <div className="hmenu-dropdown">
+              {/* Chế độ xem */}
+              <span className="hmenu-sub-label">Chế độ xem</span>
+              <button className={"hmenu-sub-item" + (view === 'tree' ? ' is-active' : '')}
+                onClick={() => { setView('tree'); close(); }}>🌳 Cây gia phả</button>
+              <button className={"hmenu-sub-item" + (view === 'text' ? ' is-active' : '')}
+                onClick={() => { setView('text'); close(); }}>📝 Nhập text</button>
+
+              <hr className="hmenu-sep" />
+              {/* Công cụ cây */}
+              <span className="hmenu-sub-label">Công cụ</span>
+              <button className={"hmenu-sub-item" + (dragMode ? ' is-active' : '')}
+                onClick={() => { setDragMode(v => !v); close(); }}>
+                {dragMode ? '✓ Đang kéo thả' : '⠿ Kéo thả node'}
+              </button>
+
+              <hr className="hmenu-sep" />
+              {/* Nội dung */}
+              <span className="hmenu-sub-label">Nội dung</span>
+              <button className="hmenu-item" style={{ color: '#c89040' }}
+                onClick={() => { setShowNgayGio(true); close(); }}>🕯️ Ngày Giỗ</button>
+              <button className={"hmenu-item" + (showNoiToc ? ' is-active' : '')}
+                onClick={() => { setShowNoiToc(v => !v); close(); }}>👥 Nội tộc</button>
+              <button className="hmenu-item"
+                onClick={() => { setShowGioiThieu(true); close(); }}>📜 Giới thiệu</button>
+
+              <hr className="hmenu-sep" />
+              {/* Hệ thống */}
+              <span className="hmenu-sub-label">Hệ thống</span>
+              <button className={"hmenu-item" + (showData ? ' is-active' : '')}
+                onClick={() => { setShowData(v => !v); close(); }}>💾 Data</button>
+              <button className={"hmenu-item" + (showSettings ? ' is-active' : '')}
+                onClick={() => { setShowSettings(v => !v); close(); }}>⚙ Cài đặt</button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ───────────────────────────────────────────────────────────────────────────
+    function App({ familyId, familyName, onBack }) {
+      const KEY          = familyTreeKey(familyId);
+      const SETTINGS_KEY = familySettingsKey(familyId);
+      const INTRO_KEY_F  = familyIntroKey(familyId);
+      const [tree, setTree] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [modal, setModal] = useState(null);
+      const [dragMode, setDragMode] = useState(false);
+      const [pendingTree, setPendingTree] = useState(null); // preview trước khi Cập nhật
+      const [view, setView] = useState('tree'); // 'tree' | 'text'
+      const [showSettings, setShowSettings] = useState(false);
+      const [showSearch, setShowSearch] = useState(false);
+      const [showData, setShowData] = useState(false);
+      const [showNoiToc, setShowNoiToc] = useState(false);
+      const [showGioiThieu, setShowGioiThieu] = useState(false);
+      const [showNgayGio, setShowNgayGio] = useState(false);
+      const [infoPopup, setInfoPopup] = useState(null); // node object
+      const [settings, setSettings] = useState(() => {
+        try { const s = localStorage.getItem(SETTINGS_KEY); return s ? { ...DEFAULT_SETTINGS, ...JSON.parse(s) } : DEFAULT_SETTINGS; }
+        catch { return DEFAULT_SETTINGS; }
+      });
+
+      const handleSettingsChange = useCallback((key, value) => {
+        if (key === 'reset') { setSettings(DEFAULT_SETTINGS); localStorage.setItem(SETTINGS_KEY, JSON.stringify(DEFAULT_SETTINGS)); return; }
+        setSettings(prev => { const next = { ...prev, [key]: value }; localStorage.setItem(SETTINGS_KEY, JSON.stringify(next)); return next; });
+      }, []);
+
+      // ── Pan / drag-to-scroll ──────────────────────────────────────────────────
+      const viewportRef = useRef(null);
+      const panRef = useRef({ active: false, moved: false, startX: 0, startY: 0, offX: 0, offY: 0 });
+      const [pan, setPan] = useState({ x: 0, y: 0 });
+      const [isPanning, setIsPanning] = useState(false);
+
+      const startPan = useCallback((clientX, clientY) => {
+        panRef.current = { active: true, moved: false, startX: clientX, startY: clientY, offX: pan.x, offY: pan.y };
+        setIsPanning(true);
+      }, [pan]);
+
+      // Clamp pan: không cho kéo canvas xuống dưới hay sang phải quá gốc (0,0)
+      const clampPan = (x, y) => ({ x: Math.min(0, x), y: Math.min(0, y) });
+
+      // Global mouse handlers registered once
+      useEffect(() => {
+        const onMove = (e) => {
+          if (!panRef.current.active) return;
+          const dx = e.clientX - panRef.current.startX;
+          const dy = e.clientY - panRef.current.startY;
+          if (Math.abs(dx) > 4 || Math.abs(dy) > 4) panRef.current.moved = true;
+          if (panRef.current.moved) setPan(clampPan(panRef.current.offX + dx, panRef.current.offY + dy));
+        };
+        const onUp = () => { if (panRef.current.active) { panRef.current.active = false; setIsPanning(false); } };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+        return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
+      }, []);
+
+      // Touch pan (non-passive so we can preventDefault)
+      useEffect(() => {
+        const el = viewportRef.current; if (!el) return;
+        const onStart = (e) => {
+          if (e.touches.length !== 1) return;
+          const t = e.touches[0];
+          panRef.current = { active: true, moved: false, startX: t.clientX, startY: t.clientY, offX: pan.x, offY: pan.y };
+          setIsPanning(true);
+        };
+        const onMove = (e) => {
+          if (!panRef.current.active || e.touches.length !== 1) return;
+          e.preventDefault();
+          const t = e.touches[0];
+          const dx = t.clientX - panRef.current.startX;
+          const dy = t.clientY - panRef.current.startY;
+          panRef.current.moved = true;
+          setPan(clampPan(panRef.current.offX + dx, panRef.current.offY + dy));
+        };
+        const onEnd = () => { panRef.current.active = false; setIsPanning(false); };
+        el.addEventListener('touchstart', onStart, { passive: true });
+        el.addEventListener('touchmove', onMove, { passive: false });
+        el.addEventListener('touchend', onEnd, { passive: true });
+        return () => { el.removeEventListener('touchstart', onStart); el.removeEventListener('touchmove', onMove); el.removeEventListener('touchend', onEnd); };
+      }, [pan, loading]); // re-attach when pan changes so offX/offY are fresh; also re-run when loading→false so viewport is ready
+
+      const handleViewportMouseDown = (e) => {
+        // Skip if clicking on an interactive element
+        if (e.target.closest('button, input, select, a')) return;
+        startPan(e.clientX, e.clientY);
+      };
+
+      // Wheel scroll: cuộn dọc (hoặc ngang khi giữ Shift)
+      // Dùng ref để tránh re-render và đảm bảo luôn có giá trị pan mới nhất
+      const panStateRef = useRef(pan);
+      useEffect(() => { panStateRef.current = pan; }, [pan]);
+
+      useEffect(() => {
+        const el = viewportRef.current;
+        if (!el) return;
+        const onWheel = (e) => {
+          e.preventDefault();
+          const SPEED = 1.2;
+          const dx = e.shiftKey ? e.deltaY * SPEED : e.deltaX * SPEED;
+          const dy = e.shiftKey ? 0 : e.deltaY * SPEED;
+          setPan(prev => ({
+            x: Math.min(0, prev.x - dx),
+            y: Math.min(0, prev.y - dy),
+          }));
+        };
+        el.addEventListener('wheel', onWheel, { passive: false });
+        return () => el.removeEventListener('wheel', onWheel);
+      }, [loading]);
+
+      // Swallow click after a pan drag so node buttons don't fire
+      const handleViewportClickCapture = (e) => {
+        if (panRef.current.moved) { e.stopPropagation(); panRef.current.moved = false; }
+      };
+
+      useEffect(() => { const saved = localStorage.getItem(KEY); setTree(saved ? JSON.parse(saved) : SAMPLE); setLoading(false); }, []);
+      useEffect(() => { if (loading || !tree) return; localStorage.setItem(KEY, JSON.stringify(tree)); }, [tree, loading]);
+
+      const handleUpdate = useCallback((id, fn) => setTree(prev => updateNode(prev, id, fn)), []);
+      const handleDelete = useCallback((id) => setTree(prev => deleteNode(prev, id)), []);
+
+      // ── Search: keyboard shortcut & navigate ─────────────────────────────────
+      useEffect(() => {
+        const onKey = (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'f') { e.preventDefault(); setShowSearch(true); }
+          if (e.key === 'Escape') setShowSearch(false);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+      }, []);
+
+      const handleSearchNavigate = useCallback((nodeId) => {
+        setShowSearch(false);
+        setView('tree');
+        // Expand path to the node
+        setTree(prev => prev ? expandPathTo(prev, nodeId) : prev);
+        // Scroll to node after render
+        setTimeout(() => {
+          const el = document.querySelector(`[data-node-id="${nodeId}"]`);
+          if (el) {
+            const vpRect = viewportRef.current?.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+            if (vpRect) {
+              const dx = (vpRect.left + vpRect.width / 2) - (elRect.left + elRect.width / 2);
+              const dy = (vpRect.top + vpRect.height / 2) - (elRect.top + elRect.height / 2);
+              setPan(p => clampPan(p.x + dx, p.y + dy));
+              // Highlight effect
+              el.style.background = 'rgba(100,180,255,0.18)';
+              el.style.borderRadius = '4px';
+              setTimeout(() => { el.style.background = ''; el.style.borderRadius = ''; }, 1500);
+            }
+          }
+        }, 80);
+      }, []);
+      // Tính lại số đời cho toàn cây
+      const recalcGenerations = (node, gen) => {
+        const updated = { ...node, generation: gen };
+        updated.children = updated.children.map(child =>
+          recalcGenerations(child, child.isSpouse ? gen : gen + 1)
+        );
+        return updated;
+      };
+
+      // Tìm parent của một node
+      const findParent = (root, targetId, parent = null) => {
+        if (root.id === targetId) return parent;
+        for (const c of root.children) {
+          const found = findParent(c, targetId, root);
+          if (found !== undefined) return found;
+        }
+        return undefined;
+      };
+
+      // Di chuyển node theo hướng mũi tên, lưu vào pendingTree
+      const moveNode = useCallback((nodeId, dir) => {
+        const src = pendingTree || tree;
+        if (!src) return;
+
+        setPendingTree(prev => {
+          const base = prev || tree;
+          const parent = findParent(base, nodeId);
+          if (!parent) return base; // root không di chuyển
+
+          const idx = parent.children.findIndex(c => c.id === nodeId);
+          const node = parent.children[idx];
+          let newTree = base;
+
+          if (dir === 'up' && idx > 0) {
+            // Hoán đổi với anh/chị trước
+            const newChildren = [...parent.children];
+            [newChildren[idx - 1], newChildren[idx]] = [newChildren[idx], newChildren[idx - 1]];
+            newTree = updateNode(base, parent.id, n => ({ ...n, children: newChildren }));
+
+          } else if (dir === 'down' && idx < parent.children.length - 1) {
+            // Hoán đổi với em sau
+            const newChildren = [...parent.children];
+            [newChildren[idx], newChildren[idx + 1]] = [newChildren[idx + 1], newChildren[idx]];
+            newTree = updateNode(base, parent.id, n => ({ ...n, children: newChildren }));
+
+          } else if (dir === 'left') {
+            // Ra ngoài: tách khỏi parent, trở thành anh/em của parent (con của grandparent)
+            const grandParent = findParent(base, parent.id);
+            if (!grandParent) return base; // parent là root, không thể ra ngoài
+            const [treeWithout, extracted] = extractNode(base, nodeId);
+            const parentIdx = grandParent.children.findIndex(c => c.id === parent.id);
+            newTree = updateNode(treeWithout, grandParent.id, n => {
+              const nc = [...n.children];
+              nc.splice(parentIdx + 1, 0, extracted);
+              return { ...n, children: nc };
+            });
+
+          } else if (dir === 'right') {
+            // Vào trong: trở thành con của anh/chị liền trước (nếu có), hoặc con đầu tiên của em liền sau
+            const prevSibling = parent.children.slice(0, idx).reverse().find(c => !c.isSpouse);
+            if (!prevSibling) return base;
+            const [treeWithout, extracted] = extractNode(base, nodeId);
+            newTree = updateNode(treeWithout, prevSibling.id, n => ({ ...n, children: [...n.children, extracted] }));
+
+          } else {
+            return base;
+          }
+
+          return recalcGenerations(newTree, newTree.generation || 1);
+        });
+      }, [tree, pendingTree]);
+
+      const handleCommitMove = () => {
+        if (pendingTree) { setTree(pendingTree); setPendingTree(null); }
+      };
+      const handleCancelMove = () => { setPendingTree(null); };
+
+      const handleAdd = (form) => { const child = { id: genId(), collapsed: false, children: [], ...form }; handleUpdate(modal.nodeId, n => ({ ...n, children: [...n.children, child] })); setModal(null); };
+      const handleEdit = (form) => { handleUpdate(modal.nodeId, n => ({ ...n, ...form })); setModal(null); };
+      const transformAll = (fn) => setTree(prev => { function walk(n) { return { ...fn(n), children: n.children.map(walk) }; } return walk(prev); });
+
+      if (loading) return <div style={{ background: "#060e1c", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#3a6898", fontFamily: "monospace" }}>Đang tải gia phả...</div>;
+
+      const totalMembers = tree ? countDesc(tree) + 1 : 0;
+
+      return (
+        <SettingsCtx.Provider value={settings}>
+        <DragCtx.Provider value={{ moveNode }}>
+          <div style={{ background: "#0f172a", height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }} className={dragMode ? "drag-mode-active" : ""}>
+            <div className="header">
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flex: 1, minWidth: 0 }}>
+                <button onClick={onBack} style={{ fontSize: 15, background: 'transparent', border: '1px solid #1a3252', color: '#fff', padding: '4px 10px', flexShrink: 0 }}>←</button>
+                <span style={{ fontSize: 18, flexShrink: 0 }}></span>
+                <span className="header-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{familyName}</span>
+                <span style={{display: 'none', background: '#085700', color: '#fff', fontWeight: 700, fontSize: 13, padding: '2px 10px', borderRadius: 20, flexShrink: 0 }}>{totalMembers} người</span>
+              </div>
+              {/* Mở rộng đời - dropdown */}
+              <ExpandGenDropdown tree={tree} transformAll={transformAll} />
+              {/* Tìm kiếm luôn hiện */}
+              <button
+                onClick={() => setShowSearch(v => !v)}
+                title="Tìm kiếm (Ctrl+F)"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 32, padding: 0, background: showSearch ? '#0a2040' : '#0a1e38', color: showSearch ? '#6aacf0' : '#5a9ad8', border: showSearch ? '1px solid #2a5080' : '1px solid #1a3a60', borderRadius: 6 }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.6"/>
+                  <line x1="10.2" y1="10.2" x2="14" y2="14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                </svg>
+              </button>
+              {/* Hamburger menu */}
+              <HamburgerMenu
+                view={view} setView={setView}
+                dragMode={dragMode} setDragMode={setDragMode}
+                showSettings={showSettings} setShowSettings={setShowSettings}
+                showNgayGio={showNgayGio} setShowNgayGio={setShowNgayGio}
+                showData={showData} setShowData={setShowData}
+                showGioiThieu={showGioiThieu} setShowGioiThieu={setShowGioiThieu}
+                showNoiToc={showNoiToc} setShowNoiToc={setShowNoiToc}
+              />
+            </div>
+
+            {showSettings && (
+              <SettingsPanel settings={settings} onChange={handleSettingsChange} onClose={() => setShowSettings(false)} />
+            )}
+
+            {view === 'tree' && (
+              <>
+                <div style={{ position: 'relative', flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    ref={viewportRef}
+                    className={"tree-viewport" + (isPanning ? " is-panning" : "")}
+                    onMouseDown={handleViewportMouseDown}
+                    onClickCapture={handleViewportClickCapture}
+                    style={{ flex: 1 }}
+                  >
+                    <div className="tree-canvas" style={{ transform: `translate(${pan.x}px, ${pan.y}px)` }}>
+                      {(pendingTree || tree) && <TreeNode node={pendingTree || tree} onUpdate={handleUpdate} onDelete={handleDelete} isRoot={true} showModal={setModal} dragMode={dragMode} parentGen={(pendingTree || tree).generation} showInfo={setInfoPopup} />}
+                    </div>
+                  </div>
+
+                  {/* Banner Cập nhật khi có thay đổi chờ */}
+                  {pendingTree && (
+                    <div style={{ position:'absolute', bottom:20, left:'50%', transform:'translateX(-50%)', display:'flex', alignItems:'center', gap:10, background:'rgba(6,14,28,0.97)', border:'1px solid #2a5080', borderRadius:10, padding:'10px 16px', boxShadow:'0 6px 24px rgba(0,0,0,0.6)', zIndex:600, whiteSpace:'nowrap' }}>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{flexShrink:0}}>
+                        <circle cx="8" cy="8" r="7" stroke="#e8a020" strokeWidth="1.4"/>
+                        <line x1="8" y1="4.5" x2="8" y2="8.5" stroke="#e8a020" strokeWidth="1.6" strokeLinecap="round"/>
+                        <circle cx="8" cy="11" r="0.9" fill="#e8a020"/>
+                      </svg>
+                      <span style={{fontSize:13, color:'#c0a060'}}>Chưa lưu thay đổi</span>
+                      <button onClick={handleCommitMove}
+                        style={{background:'rgba(20,80,40,0.9)', color:'#60d878', border:'1px solid #2a6030', borderRadius:6, padding:'4px 14px', fontSize:13, fontWeight:600}}
+                        onMouseEnter={e=>e.currentTarget.style.background='rgba(30,110,55,0.95)'}
+                        onMouseLeave={e=>e.currentTarget.style.background='rgba(20,80,40,0.9)'}
+                      >✓ Cập nhật</button>
+                      <button onClick={handleCancelMove}
+                        style={{background:'rgba(60,20,20,0.7)', color:'#e06070', border:'1px solid #4a1818', borderRadius:6, padding:'4px 10px', fontSize:13}}
+                        onMouseEnter={e=>e.currentTarget.style.background='rgba(90,25,25,0.9)'}
+                        onMouseLeave={e=>e.currentTarget.style.background='rgba(60,20,20,0.7)'}
+                      >✕ Hủy</button>
+                    </div>
+                  )}
+                  {/* Nút về đầu cây */}
+                  {(pan.x !== 0 || pan.y !== 0) && (
+                    <button
+                      onClick={() => setPan({ x: 0, y: 0 })}
+                      title="Về đầu cây"
+                      style={{
+                        position: 'absolute', bottom: 150, right: 20,
+                        width: 44, height: 44, borderRadius: '50%',
+                        background: 'rgba(8,18,36,0.92)', border: '1.5px solid #2a5080',
+                        color: '#6aacf0', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 4px 16px rgba(0,0,30,0.6)', cursor: 'pointer',
+                        transition: 'background 0.15s, border-color 0.15s',
+                        zIndex: 500,
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(14,32,64,0.98)'; e.currentTarget.style.borderColor = '#4a80c0'; }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(8,18,36,0.92)'; e.currentTarget.style.borderColor = '#2a5080'; }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="9" stroke="currentColor" strokeWidth="1.4" strokeOpacity="0.35"/>
+                        <polyline points="10,14 10,7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                        <polyline points="6.5,10.5 10,7 13.5,10.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                        <line x1="7" y1="14" x2="13" y2="14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+
+            {view === 'text' && tree && (
+              <TextEditor
+                tree={tree}
+                onImport={(newTree) => { setTree(newTree); setView('tree'); }}
+                onCancel={() => setView('tree')}
+              />
+            )}
+
+            {showNgayGio && (
+              <NgayGioPopup tree={tree} onClose={() => setShowNgayGio(false)} />
+            )}
+
+            {showData && (
+              <DataPopup
+                tree={tree}
+                settings={settings}
+                setTree={setTree}
+                setSettings={setSettings}
+                onClose={() => setShowData(false)}
+                storageKeys={{ KEY, SETTINGS_KEY, INTRO_KEY_F }}
+              />
+            )}
+
+            {showGioiThieu && (
+              <GioiThieuPopup onClose={() => setShowGioiThieu(false)} introKey={INTRO_KEY_F} />
+            )}
+
+            {showNoiToc && (
+              <NoiTocPanel
+                tree={tree}
+                onClose={() => setShowNoiToc(false)}
+              />
+            )}
+
+            {infoPopup && (
+              <NodeInfoPopup
+                node={infoPopup.node}
+                parentNode={infoPopup.parentNode}
+                isRoot={infoPopup.isRoot}
+                onClose={() => setInfoPopup(null)}
+                onEdit={() => { setModal({ type: "edit", nodeId: infoPopup.node.id, node: infoPopup.node, parentGen: infoPopup.node.generation }); setInfoPopup(null); }}
+                onAdd={() => { setModal({ type: "add", nodeId: infoPopup.node.id, parentGen: infoPopup.node.generation, parentName: infoPopup.node.name }); setInfoPopup(null); }}
+                onDelete={() => {
+                  const n = infoPopup.node;
+                  const desc = countDesc(n);
+                  if (window.confirm(`Xóa "${n.name}"${desc > 0 ? ` và ${desc} con cháu` : ''}?`)) {
+                    handleDelete(n.id);
+                    setInfoPopup(null);
+                  }
+                }}
+              />
+            )}
+
+            {showSearch && (
+              <SearchModal
+                tree={tree}
+                settings={settings}
+                onClose={() => setShowSearch(false)}
+                onNavigate={handleSearchNavigate}
+              />
+            )}
+
+            {modal && (
+              <div className="modal" onMouseDown={e => { if (e.target === e.currentTarget) setModal(null); }}>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <div>
+                      <div>{modal.type === "add" ? "Thêm thành viên" : "Sửa thông tin"}</div>
+                      {modal.type === "add" && modal.parentName && <div style={{ color: "#2a4a68", fontSize: 12, marginTop: 2 }}>Thêm vào: <span style={{ color: "#4a7aaa" }}>{modal.parentName}</span></div>}
+                    </div>
+                    <button className="modal-close" onClick={() => setModal(null)}>×</button>
+                  </div>
+                  {modal.type === "add" && <MemberForm parentGen={modal.parentGen} isSpouseDefault={false} onSave={handleAdd} onCancel={() => setModal(null)} />}
+                  {modal.type === "edit" && <MemberForm initial={modal.node} parentGen={modal.parentGen ?? modal.node.generation} isSpouseDefault={modal.node.isSpouse} onSave={handleEdit} onCancel={() => setModal(null)} />}
+                </div>
+              </div>
+            )}
+          </div>
+        </DragCtx.Provider>
+        </SettingsCtx.Provider>
+      );
+    }
+
+    function Root() {
+      const [currentFamily, setCurrentFamily] = useState(null);
+      if (!currentFamily) {
+        return <HomeScreen onOpen={f => setCurrentFamily(f)} />;
+      }
+      return <App familyId={currentFamily.id} familyName={currentFamily.name} onBack={() => setCurrentFamily(null)} />;
+    }
+
+    ReactDOM.render(<Root />, document.getElementById('root'));
+  </script>
+</body>
+</html>
